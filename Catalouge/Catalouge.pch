@@ -1,0 +1,25 @@
+
+//
+//  Catalouge.pch
+//  Catalouge
+//
+//  Created by Shameem Ahamad on 5/21/15.
+//  Copyright (c) 2015 Shameem Ahamad. All rights reserved.
+//
+
+#ifndef Catalouge_Catalouge_pch
+#define Catalouge_Catalouge_pch
+
+#define TEXT_COLOR [UIColor colorWithRed:59/255 green:89/255 blue:152/255 alpha:1]
+
+
+#import "AppDelegate.h"
+#import "AppDataManager.h"
+#import "ApiHandler.h"
+#import "MBProgressHUD.h"
+#import "DataModels.h"
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#endif

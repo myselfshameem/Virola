@@ -7,7 +7,8 @@
 //
 
 #import "AppDelegate.h"
-
+#import "LoginViewController.h"
+#import "NSUserDefaults+UserDetail.h"
 @interface AppDelegate ()
 
 @end
@@ -17,6 +18,33 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    NSLog(@"HomeDirectory : %@",[NSHomeDirectory() stringByAppendingPathComponent:@"Documents/"]);
+
+    BOOL isUserLogedIn = [NSUserDefaults isUserLoggedIn];
+    if (!isUserLogedIn) {
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        LoginViewController *loginViewController = [storyboard instantiateViewControllerWithIdentifier:(isIPad() ? @"LoginViewController_iPad" : @"LoginViewController")];
+        [self.window setRootViewController:loginViewController];
+    }
+
+    UINavigationBar *nav = [UINavigationBar appearance];
+    UIImage *navBarImg = [UIImage imageNamed:@"navBariOS7"];
+    [nav setBackgroundImage:navBarImg forBarMetrics:UIBarMetricsDefault];
+    
+    [[UINavigationBar appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont fontWithName:@"MyriadPro-Bold" size:18],NSFontAttributeName,[UIColor whiteColor],NSForegroundColorAttributeName, nil]];
+    
+    
+    
+    
+    UIBarButtonItem *bar = [UIBarButtonItem appearanceWhenContainedIn:[UINavigationBar class], nil];
+    [bar setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor],NSForegroundColorAttributeName, nil] forState:UIControlStateNormal];
+    [bar setBackButtonBackgroundImage:[UIImage imageNamed:@"back_btn"] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    
+    UITabBarItem *tabBarItem = [UITabBarItem appearance];
+    [tabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont fontWithName:@"MyriadPro-Regular" size:10],NSFontAttributeName,[UIColor colorWithRed:60/255 green:60/255 blue:60/255 alpha:1],NSForegroundColorAttributeName, nil] forState:UIControlStateNormal];
+
+    [tabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor colorWithRed:59/255 green:89/255 blue:152/255 alpha:1],NSForegroundColorAttributeName, nil] forState:UIControlStateSelected];
+
     return YES;
 }
 

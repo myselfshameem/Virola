@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7531" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="MyriadPro-Regular.otf">
+            <string>MyriadPro-Regular</string>
+            <string>MyriadPro-Regular</string>
+            <string>MyriadPro-Regular</string>
+            <string>MyriadPro-Regular</string>
+        </mutableArray>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="Cell" id="KGk-i7-Jjw" customClass="CartTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="312" height="101"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WMp-fs-Zsx">
+                        <rect key="frame" x="0.0" y="0.0" width="312" height="90"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1y0-2c-MAd">
+                        <rect key="frame" x="14" y="10" width="54" height="70"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="54" id="T0L-27-syz"/>
+                            <constraint firstAttribute="height" constant="70" id="lAn-Di-60H"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Gold Strappy Sandal" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pRc-NK-oQC">
+                        <rect key="frame" x="77" y="8" width="206" height="20"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="20" id="mog-I0-cKK"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="MyriadPro-Regular" family="Myriad Pro" pointSize="18"/>
+                        <color key="textColor" red="0.23137254901960785" green="0.34901960784313724" blue="0.59607843137254901" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Article No.: 125-58985 Lorem ipsum" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6zI-bX-DQI">
+                        <rect key="frame" x="77" y="33" width="227" height="15"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="15" id="Sg4-m7-kya"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="MyriadPro-Regular" family="Myriad Pro" pointSize="13"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RSp-Ro-qCi">
+                        <rect key="frame" x="294" y="2" width="16" height="16"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="16" id="B85-70-QJm"/>
+                            <constraint firstAttribute="width" constant="16" id="fCL-oj-Dru"/>
+                        </constraints>
+                        <state key="normal" image="Cart_Cell_Delete.png">
+                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                        </state>
+                        <connections>
+                            <action selector="btnPressed:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="hPD-Cg-GXz"/>
+                        </connections>
+                    </button>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Rs. 2499.00" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ye2-Kv-sZK">
+                        <rect key="frame" x="78" y="70" width="167" height="20"/>
+                        <fontDescription key="fontDescription" name="MyriadPro-Regular" family="Myriad Pro" pointSize="18"/>
+                        <color key="textColor" red="0.2627450980392157" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button hidden="YES" opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="89D-Gp-Tnx">
+                        <rect key="frame" x="251" y="79" width="59" height="9"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="59" id="bXv-JV-aNM"/>
+                            <constraint firstAttribute="height" constant="9" id="k3t-it-Igh"/>
+                        </constraints>
+                        <state key="normal" image="Cart_Cell_View_Details.png">
+                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                        </state>
+                        <connections>
+                            <action selector="btnPressed:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="LAg-ML-NLL"/>
+                        </connections>
+                    </button>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cXb-xv-1vh">
+                        <rect key="frame" x="288" y="56" width="18" height="18"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6sn-Yy-3a9">
+                                <rect key="frame" x="1" y="1" width="16" height="16"/>
+                                <color key="backgroundColor" red="0.87058823529411766" green="0.87450980392156863" blue="0.88627450980392153" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="16" id="Zr0-oB-OaJ"/>
+                                    <constraint firstAttribute="height" constant="16" id="z93-v4-xcg"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="MyriadPro-Regular" family="Myriad Pro" pointSize="13"/>
+                                <color key="textColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="0.87058823529411766" green="0.87450980392156863" blue="0.88627450980392153" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="6sn-Yy-3a9" firstAttribute="top" secondItem="cXb-xv-1vh" secondAttribute="top" constant="1" id="Mol-Mu-OZF"/>
+                            <constraint firstAttribute="height" constant="18" id="Pcc-Of-iak"/>
+                            <constraint firstItem="6sn-Yy-3a9" firstAttribute="leading" secondItem="cXb-xv-1vh" secondAttribute="leading" constant="1" id="s3L-h7-Y2Q"/>
+                            <constraint firstAttribute="width" constant="18" id="ww2-Sj-K0Y"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                <constraints>
+                    <constraint firstItem="WMp-fs-Zsx" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="4N5-Sv-cOV"/>
+                    <constraint firstItem="RSp-Ro-qCi" firstAttribute="leading" secondItem="pRc-NK-oQC" secondAttribute="trailing" constant="11" id="5Dj-wb-6wq"/>
+                    <constraint firstAttribute="trailing" secondItem="WMp-fs-Zsx" secondAttribute="trailing" id="Axp-ru-VHg"/>
+                    <constraint firstItem="1y0-2c-MAd" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="14" id="FXT-Wn-jtQ"/>
+                    <constraint firstAttribute="trailing" secondItem="89D-Gp-Tnx" secondAttribute="trailing" constant="2" id="HdN-Ta-wAG"/>
+                    <constraint firstItem="6zI-bX-DQI" firstAttribute="top" secondItem="pRc-NK-oQC" secondAttribute="bottom" constant="5" id="OI2-PK-jwK"/>
+                    <constraint firstAttribute="trailing" secondItem="RSp-Ro-qCi" secondAttribute="trailing" constant="2" id="U1N-M9-roe"/>
+                    <constraint firstAttribute="bottom" secondItem="89D-Gp-Tnx" secondAttribute="bottom" constant="12" id="VE2-aP-FEu"/>
+                    <constraint firstItem="pRc-NK-oQC" firstAttribute="leading" secondItem="1y0-2c-MAd" secondAttribute="trailing" constant="9" id="XAL-Ue-BrM"/>
+                    <constraint firstItem="6zI-bX-DQI" firstAttribute="leading" secondItem="1y0-2c-MAd" secondAttribute="trailing" constant="9" id="YcI-Vg-1sB"/>
+                    <constraint firstItem="RSp-Ro-qCi" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="2" id="fyU-kg-UHA"/>
+                    <constraint firstItem="1y0-2c-MAd" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="hhf-t1-IAw"/>
+                    <constraint firstAttribute="bottom" secondItem="WMp-fs-Zsx" secondAttribute="bottom" constant="10" id="kEt-ym-OEx"/>
+                    <constraint firstItem="WMp-fs-Zsx" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="mQ5-Y7-7Gl"/>
+                    <constraint firstItem="6zI-bX-DQI" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="qJQ-8S-44N"/>
+                    <constraint firstItem="pRc-NK-oQC" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="txn-ZI-WK7"/>
+                    <constraint firstItem="89D-Gp-Tnx" firstAttribute="top" secondItem="cXb-xv-1vh" secondAttribute="bottom" constant="5" id="uYd-8p-kGn"/>
+                    <constraint firstAttribute="trailing" secondItem="cXb-xv-1vh" secondAttribute="trailing" constant="6" id="zFv-Ef-GNs"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="btn_Close" destination="RSp-Ro-qCi" id="a2y-fp-U2l"/>
+                <outlet property="btn_View_Details" destination="89D-Gp-Tnx" id="u2D-kO-4dN"/>
+                <outlet property="imgVw_Logo" destination="1y0-2c-MAd" id="qx3-01-QSO"/>
+                <outlet property="lbl_Description" destination="6zI-bX-DQI" id="1Mn-zo-Fmn"/>
+                <outlet property="lbl_Price" destination="ye2-Kv-sZK" id="Y8a-Js-CVr"/>
+                <outlet property="lbl_Quantity" destination="6sn-Yy-3a9" id="Gfa-hA-k69"/>
+                <outlet property="lbl_Title" destination="pRc-NK-oQC" id="Owj-Hi-UbS"/>
+                <outlet property="vw_qty" destination="6sn-Yy-3a9" id="44x-eZ-CxE"/>
+            </connections>
+            <point key="canvasLocation" x="239" y="219.5"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="Cart_Cell_Delete.png" width="16" height="16"/>
+        <image name="Cart_Cell_View_Details.png" width="59" height="9"/>
+    </resources>
+</document>
