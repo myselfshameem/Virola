@@ -1,7 +1,7 @@
 //
 //  ArticlesApiResponse.h
 //
-//  Created by iVend  on 5/30/15
+//  Created by iVend  on 8/3/15
 //  Copyright (c) 2015 __MyCompanyName__. All rights reserved.
 //
 

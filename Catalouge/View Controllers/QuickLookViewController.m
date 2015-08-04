@@ -17,8 +17,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.delegate = self;
+    self.dataSource = self;
+    
 }
+- (void)viewWillAppear:(BOOL)animated{
 
+    //[self reloadData];
+
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -38,19 +45,18 @@
  * @param controller The Preview Controller.
  * @result The number of items.
  */
-- (NSInteger)numberOfPreviewItemsInPreviewController:(QLPreviewController *)controller{
-
-    return 10;
+- (NSInteger) numberOfPreviewItemsInPreviewController: (QLPreviewController *) controller
+{
+    return [self.arrayOfDocuments count];
 }
 
-/*!
- * @abstract Returns the item that the preview controller should preview.
- * @param panel The Preview Controller.
- * @param index The index of the item to preview.
- * @result An item conforming to the QLPreviewItem protocol.
- */
-- (id <QLPreviewItem>)previewController:(QLPreviewController *)controller previewItemAtIndex:(NSInteger)index{
-    return controller.currentPreviewItem;
+- (id <QLPreviewItem>)previewController: (QLPreviewController *)controller previewItemAtIndex:(NSInteger)index
+{
+    Article_Image *article = [[self arrayOfDocuments] objectAtIndex:index];
+    NSString *fileName = [article.imagePath lastPathComponent];
+    NSString *filePath = [[[AppDataManager sharedAppDatamanager] imageDirPath] stringByAppendingPathComponent:fileName];
+    
+    return [NSURL fileURLWithPath:[[NSBundle mainBundle]pathForResource:@"Clinet_QRCode" ofType:@"png"]];
 }
 
 @end

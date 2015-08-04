@@ -1,7 +1,7 @@
 //
 //  Rawmaterials.m
 //
-//  Created by iVend  on 5/24/15
+//  Created by iVend  on 8/3/15
 //  Copyright (c) 2015 __MyCompanyName__. All rights reserved.
 //
 
@@ -9,6 +9,7 @@
 
 
 NSString *const kRawmaterialsRawmaterialgroupid = @"rawmaterialgroupid";
+NSString *const kRawmaterialsAbbrname = @"abbrname";
 NSString *const kRawmaterialsColorid = @"colorid";
 NSString *const kRawmaterialsName = @"name";
 NSString *const kRawmaterialsRawmaterialid = @"rawmaterialid";
@@ -23,10 +24,11 @@ NSString *const kRawmaterialsRawmaterialid = @"rawmaterialid";
 @implementation Rawmaterials
 
 @synthesize rawmaterialgroupid = _rawmaterialgroupid;
+@synthesize abbrname = _abbrname;
 @synthesize colorid = _colorid;
 @synthesize name = _name;
 @synthesize rawmaterialid = _rawmaterialid;
-
+@synthesize colors = _colors;
 
 + (Rawmaterials *)modelObjectWithDictionary:(NSDictionary *)dict
 {
@@ -42,6 +44,7 @@ NSString *const kRawmaterialsRawmaterialid = @"rawmaterialid";
     // passed into the model class doesn't break the parsing.
     if(self && [dict isKindOfClass:[NSDictionary class]]) {
             self.rawmaterialgroupid = [self objectOrNilForKey:kRawmaterialsRawmaterialgroupid fromDictionary:dict];
+            self.abbrname = [self objectOrNilForKey:kRawmaterialsAbbrname fromDictionary:dict];
             self.colorid = [self objectOrNilForKey:kRawmaterialsColorid fromDictionary:dict];
             self.name = [self objectOrNilForKey:kRawmaterialsName fromDictionary:dict];
             self.rawmaterialid = [self objectOrNilForKey:kRawmaterialsRawmaterialid fromDictionary:dict];
@@ -56,6 +59,7 @@ NSString *const kRawmaterialsRawmaterialid = @"rawmaterialid";
 {
     NSMutableDictionary *mutableDict = [NSMutableDictionary dictionary];
     [mutableDict setValue:self.rawmaterialgroupid forKey:kRawmaterialsRawmaterialgroupid];
+    [mutableDict setValue:self.abbrname forKey:kRawmaterialsAbbrname];
     [mutableDict setValue:self.colorid forKey:kRawmaterialsColorid];
     [mutableDict setValue:self.name forKey:kRawmaterialsName];
     [mutableDict setValue:self.rawmaterialid forKey:kRawmaterialsRawmaterialid];
@@ -83,6 +87,7 @@ NSString *const kRawmaterialsRawmaterialid = @"rawmaterialid";
     self = [super init];
 
     self.rawmaterialgroupid = [aDecoder decodeObjectForKey:kRawmaterialsRawmaterialgroupid];
+    self.abbrname = [aDecoder decodeObjectForKey:kRawmaterialsAbbrname];
     self.colorid = [aDecoder decodeObjectForKey:kRawmaterialsColorid];
     self.name = [aDecoder decodeObjectForKey:kRawmaterialsName];
     self.rawmaterialid = [aDecoder decodeObjectForKey:kRawmaterialsRawmaterialid];
@@ -93,16 +98,19 @@ NSString *const kRawmaterialsRawmaterialid = @"rawmaterialid";
 {
 
     [aCoder encodeObject:_rawmaterialgroupid forKey:kRawmaterialsRawmaterialgroupid];
+    [aCoder encodeObject:_abbrname forKey:kRawmaterialsAbbrname];
     [aCoder encodeObject:_colorid forKey:kRawmaterialsColorid];
     [aCoder encodeObject:_name forKey:kRawmaterialsName];
     [aCoder encodeObject:_rawmaterialid forKey:kRawmaterialsRawmaterialid];
 }
 
 - (Colors*)colors{
-    
-        NSString *query = [NSString stringWithFormat:@"SELECT * FROM Colors WHERE colorid = '%@'",_colorid];
-        NSArray *arr = [[CXSSqliteHelper sharedSqliteHelper] runQuery:query asObject:[Colors class]];
-        _colors = [arr count] ? [arr firstObject] : nil;
+
+    if (!_colors) {
+        NSArray *arr = [[CXSSqliteHelper sharedSqliteHelper] runQuery:[NSString stringWithFormat:@"SELECT * FROM Colors WHERE %@",[[self colorid] sqliteString]] asObject:[Colors class]];
+        [arr count] ? _colors = [arr firstObject] : nil;
+    }
     return _colors;
 }
+
 @end

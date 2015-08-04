@@ -404,23 +404,27 @@ static CXSSqliteHelper *sqliteHelper = nil;
 - (void)insertRawMaterials:(NSArray*)rawMaterials{
 
 
+    __block NSInteger totalRecords = [rawMaterials count];
     
     [self deleteFromTable:@"DELETE FROM Rawmaterial_Master"];
 
     [rawMaterials enumerateObjectsUsingBlock:^(Rawmaterials *rawmaterials, NSUInteger idx, BOOL *stop) {
         
-        
 
-//        [self deleteFromTable:@"Rawmaterial_Master" Where:[NSDictionary dictionaryWithObjectsAndKeys:
-//                                    rawmaterials.rawmaterialid,@"rawmaterialid",
-//                                    nil]];
-        
+
+        if (idx %5 == 0) {
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:PROGRESS_COUNT object:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:totalRecords],@"totalRecords",[NSNumber numberWithInteger:idx],@"totalInsertedRecords", nil]];
+        }
         
         NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                            
                               rawmaterials.rawmaterialgroupid,@"rawmaterialgroupid",
+                              rawmaterials.abbrname,@"abbrname",
                               rawmaterials.colorid,@"colorid",
                               rawmaterials.name,@"name",
                               rawmaterials.rawmaterialid,@"rawmaterialid",
+
                               nil];
         
         [self insertInto:@"Rawmaterial_Master" ColumnsAndValues:dict];
@@ -433,9 +437,40 @@ static CXSSqliteHelper *sqliteHelper = nil;
 
 
 }
+
+- (void)insertLasts:(NSArray*)lastsArr{
+    
+    
+    __block NSInteger totalRecords = [lastsArr count];
+    
+    [self deleteFromTable:@"DELETE FROM Lasts_Master"];
+    
+    [lastsArr enumerateObjectsUsingBlock:^(Lasts *lasts, NSUInteger idx, BOOL *stop) {
+        
+        if (idx %5 == 0) {
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:PROGRESS_COUNT object:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:totalRecords],@"totalRecords",[NSNumber numberWithInteger:idx],@"totalInsertedRecords", nil]];
+        }
+        
+        NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                              lasts.lastid,@"lastid",
+                              lasts.lastname,@"lastname",
+                              nil];
+        [self insertInto:@"Lasts_Master" ColumnsAndValues:dict];
+        
+    }];
+    
+    
+    
+    
+    
+    
+}
 #pragma mark - Insert Articles
 - (void)insertArticleMasters:(NSArray*)articleArr{
     
+    __block NSInteger totalRecords = [articleArr count];
+
     
     [self deleteFromTable:@"DELETE FROM Article_Rawmaterials"];
     [self deleteFromTable:@"DELETE FROM Article_Master"];
@@ -446,14 +481,21 @@ static CXSSqliteHelper *sqliteHelper = nil;
         
         
         
-        
+        if (idx %5 == 0) {
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:PROGRESS_COUNT object:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:totalRecords],@"totalRecords",[NSNumber numberWithInteger:idx],@"totalInsertedRecords", nil]];
+        }
         NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                              [article.sizeto length] ? article.sizeto : @"",@"sizeto",
-                              [article.articlename length] ? article.articlename : @"" ,@"articlename",
-                              [article.price length] ? article.price : @"0.0",@"price",
-                              article.articleid,@"articleid",
-                              [article.mLC length] ? article.mLC : @"",@"mLC",
-                              [article.sizefrom length] ? article.sizefrom : @"",@"sizefrom",
+                              
+                              [[article soleid] checkEmptyString],@"soleid",
+                              [[article artbuyerid] checkEmptyString],@"artbuyerid",
+                              [[article lastid] checkEmptyString],@"lastid",
+                              [[article articlename] checkEmptyString],@"articlename",
+                              [[article price] checkEmptyString],@"price",
+                              [[article articleid] checkEmptyString],@"articleid",
+                              [[article sizeto] checkEmptyString],@"sizeto",
+                              [[article mLC] checkEmptyString],@"mLC",
+                              [[article sizefrom] checkEmptyString],@"sizefrom",
                               nil];
         
         [self insertInto:@"Article_Master" ColumnsAndValues:dict];
@@ -464,13 +506,14 @@ static CXSSqliteHelper *sqliteHelper = nil;
         [[article rawmaterials] enumerateObjectsUsingBlock:^(ArticlesRawmaterials *articlesRawmaterial, NSUInteger idx, BOOL *stop) {
             
             
-            
-            
             NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                                  article.articleid,@"articleid",
-                                  [articlesRawmaterial.rawmaterialid length] ? articlesRawmaterial.rawmaterialid : @"",@"rawmaterialid",
-                                  [articlesRawmaterial.rawmaterialgroupid length] ? articlesRawmaterial.rawmaterialgroupid : @"",@"rawmaterialgroupid",
-                                  [articlesRawmaterial.leatherpriority length]? articlesRawmaterial.leatherpriority : @"",@"leatherpriority",
+                                  
+                                  [[articlesRawmaterial rawmaterialgroupid] checkEmptyString],@"rawmaterialgroupid",
+                                  [[articlesRawmaterial insraw] checkEmptyString],@"insraw",
+                                  [[articlesRawmaterial insraw] checkEmptyString],@"leatherpriority",
+                                  [[articlesRawmaterial insraw] checkEmptyString],@"colorid",
+                                  [[articlesRawmaterial insraw] checkEmptyString],@"rawmaterialid",
+                                  
                                   nil];
             
             [self insertInto:@"Article_Rawmaterials" ColumnsAndValues:dict];
@@ -508,10 +551,19 @@ static CXSSqliteHelper *sqliteHelper = nil;
     
     
     
+    __block NSInteger totalRecords = [colors count];
+
+    
     [self deleteFromTable:@"DELETE FROM Colors"];
     
     [colors enumerateObjectsUsingBlock:^(Colors *color, NSUInteger idx, BOOL *stop) {
         
+        
+        if (idx %5 == 0) {
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:PROGRESS_COUNT object:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:totalRecords],@"totalRecords",[NSNumber numberWithInteger:idx],@"totalInsertedRecords", nil]];
+        }
+
         NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
                               color.colorid,@"colorid",
                               color.colorname,@"colorname",
@@ -531,21 +583,70 @@ static CXSSqliteHelper *sqliteHelper = nil;
     
     
     
+    __block NSInteger totalRecords = [clients count];
+
     [self deleteFromTable:@"DELETE FROM Client_Master"];
-    
+    [self deleteFromTable:@"DELETE FROM Agents_Master"];
+
     [clients enumerateObjectsUsingBlock:^(Clients *client, NSUInteger idx, BOOL *stop) {
         
+        if (idx %5 == 0) {
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:PROGRESS_COUNT object:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:totalRecords],@"totalRecords",[NSNumber numberWithInteger:idx],@"totalInsertedRecords", nil]];
+        }
+
+        
         NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                              [client.name length] ? client.name : @"",@"name",
-                              [client.address length] ? client.address : @"",@"address",
-                              [client.country length] ? client.country : @"",@"country",
-                              [client.email length] ? client.email : @"",@"email",
-                              client.clientid,@"clientid",
-                              [client.state length] ? client.state : @"",@"state",
-                              [client.contactNumber length] ? client.contactNumber : @"",@"contactNumber",
+                              
+                              [[client name] checkEmptyString],@"name",
+                              [[client clientcode] checkEmptyString],@"clientcode",
+                              [[client address1] checkEmptyString],@"address1",
+                              [[client address2] checkEmptyString],@"address2",
+                              [[client company] checkEmptyString],@"company",
+                              [[client couriernumber] checkEmptyString],@"couriernumber",
+                              [[client couriername] checkEmptyString],@"couriername",
+                              [[client city] checkEmptyString],@"city",
+                              [[client clienttype] checkEmptyString],@"clienttype",
+                              [[client contactperson] checkEmptyString],@"contactperson",
+                              [[client country] checkEmptyString],@"country",
+                              
                               nil];
         
         [self insertInto:@"Client_Master" ColumnsAndValues:dict];
+        
+        
+        
+        
+        [[client agents] enumerateObjectsUsingBlock:^(Agents *agent, NSUInteger idx, BOOL *stop) {
+            
+            
+            
+            
+            NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  
+                                  [[agent agentid] checkEmptyString],@"agentid",
+                                  [[agent address1] checkEmptyString],@"address1",
+                                  [[agent faxno] checkEmptyString],@"faxno",
+                                  [[agent agentcode] checkEmptyString],@"agentcode",
+                                  [[agent address2] checkEmptyString],@"address2",
+                                  [[agent company] checkEmptyString],@"company",
+                                  [[agent mobileno] checkEmptyString],@"mobileno",
+                                  [[agent city] checkEmptyString],@"city",
+                                  [[agent phno] checkEmptyString],@"phno",
+                                  [[agent pin] checkEmptyString],@"pin",
+                                  [[agent contactperson] checkEmptyString],@"contactperson",
+                                  [[agent pin] checkEmptyString],@"country",
+                                  [[agent contactperson] checkEmptyString],@"email",
+                                  
+                                  nil];
+            
+            [self insertInto:@"Agents_Master" ColumnsAndValues:dict];
+
+            
+            
+        }];
+        
+        
         
     }];
     
@@ -560,17 +661,18 @@ static CXSSqliteHelper *sqliteHelper = nil;
 
     [self deleteFromTable:[NSString stringWithFormat:@"DELETE FROM Client_Master WHERE clientid = %@",[client.clientid sqliteString]]];
 
-    NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                          [client.name checkEmptyString],@"name",
-                          [client.address checkEmptyString],@"address",
-                          [client.country checkEmptyString],@"country",
-                          [client.email checkEmptyString],@"email",
-                          [client.clientid checkEmptyString],@"clientid",
-                          [client.state checkEmptyString],@"state",
-                          [client.contactNumber checkEmptyString],@"contactNumber",
-                          nil];
-    
-    [self insertInto:@"Client_Master" ColumnsAndValues:dict];
+    //TODO::
+    //    NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
+//                          [client.name checkEmptyString],@"name",
+//                          [client.address checkEmptyString],@"address",
+//                          [client.country checkEmptyString],@"country",
+//                          [client.email checkEmptyString],@"email",
+//                          [client.clientid checkEmptyString],@"clientid",
+//                          [client.state checkEmptyString],@"state",
+//                          [client.contactNumber checkEmptyString],@"contactNumber",
+//                          nil];
+//    
+//    [self insertInto:@"Client_Master" ColumnsAndValues:dict];
 
 
 }

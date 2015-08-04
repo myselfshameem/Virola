@@ -1,7 +1,7 @@
 //
 //  RawmaterialApiResponse.h
 //
-//  Created by iVend  on 5/24/15
+//  Created by iVend  on 8/3/15
 //  Copyright (c) 2015 __MyCompanyName__. All rights reserved.
 //
 
@@ -13,6 +13,7 @@
 
 @property (nonatomic, strong) NSString *success;
 @property (nonatomic, strong) NSArray *rawmaterials;
+@property (nonatomic, strong) NSArray *lasts;
 @property (nonatomic, strong) NSString *errorcode;
 @property (nonatomic, strong) NSString *message;
 @property (nonatomic, strong) NSString *version;

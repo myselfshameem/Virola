@@ -7,11 +7,33 @@
 //
 
 #import "MainTabbarController.h"
+#import "HomeViewController.h"
 @interface MainTabbarController ()
 
 @end
 
 @implementation MainTabbarController
+- (BOOL)shouldAutorotate{
+    
+    UIViewController *ctrl = [[(UINavigationController*)[self selectedViewController] viewControllers] firstObject];
+    if ([ctrl isKindOfClass:[HomeViewController class]] && !isIPad()) {
+        
+        return NO;
+    }
+    return YES;
+}
+//- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation NS_AVAILABLE_IOS(6_0){
+//    
+//    
+//    return UIInterfaceOrientationPortrait;
+//    
+//}
+//- (NSUInteger)supportedInterfaceOrientations NS_AVAILABLE_IOS(6_0){
+//    
+//    
+//    return UIInterfaceOrientationMaskPortrait;
+//    
+//}
 
 - (void)viewDidLoad {
     [super viewDidLoad];

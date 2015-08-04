@@ -131,9 +131,9 @@
     cell.lbl_Price.text = [NSString stringWithFormat:@"€%@",[article price]];
     
     cell.backgroundColor = [UIColor clearColor];
-    Article_Image *articleImage = article.image;
+    Article_Image *articleImage = [article.images firstObject];
     if (articleImage) {
-        NSString *fileName = [articleImage.url lastPathComponent];
+        NSString *fileName = [articleImage.imagePath lastPathComponent];
         NSString *filePath = [[[AppDataManager sharedAppDatamanager] imageDirPath] stringByAppendingPathComponent:fileName];
         cell.imgV_Logo.image = [UIImage imageWithContentsOfFile:filePath];
  
@@ -152,6 +152,7 @@
     Articles *article = [[self arr_ClientList] objectAtIndex:indexPath.row];
 
     AddToCartViewController *addToCartViewController = [[self storyboard] instantiateViewControllerWithIdentifier:@"AddToCartViewController"];
+    [[AppDataManager sharedAppDatamanager] setTransaction:nil];
     [[AppDataManager sharedAppDatamanager] newTransactionWithArticleId:article.articleid];
     [self.navigationController pushViewController:addToCartViewController animated:YES];
     

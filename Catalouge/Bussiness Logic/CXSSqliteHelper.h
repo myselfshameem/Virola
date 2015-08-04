@@ -41,7 +41,7 @@
 - (void)insertColors:(NSArray*)colors;
 - (void)insertClient_Master:(NSArray*)clients;
 - (void)insertSingleClient:(Clients*)client;
-
+- (void)insertLasts:(NSArray*)lastsArr;
 
 - (NSArray*)getAllArticles;
 - (NSArray*)getAllClients;

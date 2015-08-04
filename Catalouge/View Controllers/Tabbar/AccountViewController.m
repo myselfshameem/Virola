@@ -29,6 +29,8 @@ CustomeAlert *alert;
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -104,6 +106,7 @@ CustomeAlert *alert;
                     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
                     LoginViewController *loginViewController = [storyboard instantiateViewControllerWithIdentifier:(isIPad() ? @"LoginViewController_iPad" : @"LoginViewController")];
                     [[[[UIApplication sharedApplication] delegate] window] setRootViewController:loginViewController];
+                    [NSUserDefaults setIsUserLoggedIn:NO];
 
                 });
                 

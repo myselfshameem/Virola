@@ -82,11 +82,11 @@ CustomeAlert *alert;
 - (void)refreshUI{
 
     [[self txt_Name] setText:[[self client] name]];
-    [[self txt_Email] setText:[[self client] email]];
-    [[self txt_ContactNum] setText:[[self client] contactNumber]];
-    [[self txt_Address] setText:[[self client] address]];
+    //[[self txt_Email] setText:[[self client] email]];
+    //[[self txt_ContactNum] setText:[[self client] contactNumber]];
+    [[self txt_Address] setText:[[self client] address1]];
     [[self txt_Country] setText:[[self client] country]];
-    [[self txt_State] setText:[[self client] state]];
+    //[[self txt_State] setText:[[self client] state]];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -119,11 +119,11 @@ CustomeAlert *alert;
             self.client.name = textField.text;
             break;
         case 2:
-            self.client.email = textField.text;
+            // self.client.email = textField.text;
 
             break;
         case 3:
-            self.client.contactNumber = textField.text;
+            // self.client.contactNumber = textField.text;
 
             break;
         case 5:
@@ -131,7 +131,7 @@ CustomeAlert *alert;
 
             break;
         case 6:
-            self.client.state = textField.text;
+            // self.client.state = textField.text;
             
             break;
 
@@ -163,7 +163,7 @@ CustomeAlert *alert;
 }
 - (void)textViewDidEndEditing:(UITextView *)textView{
 
-    self.client.address = textView.text;
+    self.client.address1 = textView.text;
 
 }
 

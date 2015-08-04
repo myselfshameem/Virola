@@ -9,5 +9,5 @@
 #import <QuickLook/QuickLook.h>
 
 @interface QuickLookViewController : QLPreviewController
-
+@property(nonatomic,strong) NSMutableArray *arrayOfDocuments;
 @end

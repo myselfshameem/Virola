@@ -1,7 +1,7 @@
 //
 //  ArticlesApiResponse.m
 //
-//  Created by iVend  on 5/30/15
+//  Created by iVend  on 8/3/15
 //  Copyright (c) 2015 __MyCompanyName__. All rights reserved.
 //
 
@@ -44,24 +44,24 @@ NSString *const kArticlesApiResponseVersion = @"version";
     // This check serves to make sure that a non-NSDictionary object
     // passed into the model class doesn't break the parsing.
     if(self && [dict isKindOfClass:[NSDictionary class]]) {
-            self.success = [self objectOrNilForKey:kArticlesApiResponseSuccess fromDictionary:dict];
-            self.message = [self objectOrNilForKey:kArticlesApiResponseMessage fromDictionary:dict];
-            self.errorcode = [self objectOrNilForKey:kArticlesApiResponseErrorcode fromDictionary:dict];
-    NSObject *receivedArticles = [dict objectForKey:kArticlesApiResponseArticles];
-    NSMutableArray *parsedArticles = [NSMutableArray array];
-    if ([receivedArticles isKindOfClass:[NSArray class]]) {
-        for (NSDictionary *item in (NSArray *)receivedArticles) {
-            if ([item isKindOfClass:[NSDictionary class]]) {
-                [parsedArticles addObject:[Articles modelObjectWithDictionary:item]];
+        self.success = [self objectOrNilForKey:kArticlesApiResponseSuccess fromDictionary:dict];
+        self.message = [self objectOrNilForKey:kArticlesApiResponseMessage fromDictionary:dict];
+        self.errorcode = [self objectOrNilForKey:kArticlesApiResponseErrorcode fromDictionary:dict];
+        NSObject *receivedArticles = [dict objectForKey:kArticlesApiResponseArticles];
+        NSMutableArray *parsedArticles = [NSMutableArray array];
+        if ([receivedArticles isKindOfClass:[NSArray class]]) {
+            for (NSDictionary *item in (NSArray *)receivedArticles) {
+                if ([item isKindOfClass:[NSDictionary class]]) {
+                    [parsedArticles addObject:[Articles modelObjectWithDictionary:item]];
+                }
             }
-       }
-    } else if ([receivedArticles isKindOfClass:[NSDictionary class]]) {
-       [parsedArticles addObject:[Articles modelObjectWithDictionary:(NSDictionary *)receivedArticles]];
-    }
-
-    self.articles = [NSArray arrayWithArray:parsedArticles];
-            self.version = [self objectOrNilForKey:kArticlesApiResponseVersion fromDictionary:dict];
-
+        } else if ([receivedArticles isKindOfClass:[NSDictionary class]]) {
+            [parsedArticles addObject:[Articles modelObjectWithDictionary:(NSDictionary *)receivedArticles]];
+        }
+        
+        self.articles = [NSArray arrayWithArray:parsedArticles];
+        self.version = [self objectOrNilForKey:kArticlesApiResponseVersion fromDictionary:dict];
+        
     }
     
     return self;
@@ -74,7 +74,7 @@ NSString *const kArticlesApiResponseVersion = @"version";
     [mutableDict setValue:self.success forKey:kArticlesApiResponseSuccess];
     [mutableDict setValue:self.message forKey:kArticlesApiResponseMessage];
     [mutableDict setValue:self.errorcode forKey:kArticlesApiResponseErrorcode];
-NSMutableArray *tempArrayForArticles = [NSMutableArray array];
+    NSMutableArray *tempArrayForArticles = [NSMutableArray array];
     for (NSObject *subArrayObject in self.articles) {
         if([subArrayObject respondsToSelector:@selector(dictionaryRepresentation)]) {
             // This class is a model object
@@ -86,11 +86,11 @@ NSMutableArray *tempArrayForArticles = [NSMutableArray array];
     }
     [mutableDict setValue:[NSArray arrayWithArray:tempArrayForArticles] forKey:@"kArticlesApiResponseArticles"];
     [mutableDict setValue:self.version forKey:kArticlesApiResponseVersion];
-
+    
     return [NSDictionary dictionaryWithDictionary:mutableDict];
 }
 
-- (NSString *)description 
+- (NSString *)description
 {
     return [NSString stringWithFormat:@"%@", [self dictionaryRepresentation]];
 }
@@ -108,7 +108,7 @@ NSMutableArray *tempArrayForArticles = [NSMutableArray array];
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super init];
-
+    
     self.success = [aDecoder decodeObjectForKey:kArticlesApiResponseSuccess];
     self.message = [aDecoder decodeObjectForKey:kArticlesApiResponseMessage];
     self.errorcode = [aDecoder decodeObjectForKey:kArticlesApiResponseErrorcode];
@@ -119,7 +119,7 @@ NSMutableArray *tempArrayForArticles = [NSMutableArray array];
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
-
+    
     [aCoder encodeObject:_success forKey:kArticlesApiResponseSuccess];
     [aCoder encodeObject:_message forKey:kArticlesApiResponseMessage];
     [aCoder encodeObject:_errorcode forKey:kArticlesApiResponseErrorcode];

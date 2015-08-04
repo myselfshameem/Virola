@@ -128,7 +128,7 @@ static AppDataManager *appdataManager;
    
     //Sole
     query = [NSString stringWithFormat:@"SELECT * FROM Article_Rawmaterials WHERE articleid = '%@' AND rawmaterialgroupid = '10'",articleId];
-    NSArray *soleArr = [[CXSSqliteHelper sharedSqliteHelper] runQuery:query asObject:[Rawmaterials class]];
+    NSArray *soleArr = [[CXSSqliteHelper sharedSqliteHelper] runQuery:query asObject:[ArticlesRawmaterials class]];
     [soleArr enumerateObjectsUsingBlock:^(ArticlesRawmaterials *obj, NSUInteger idx, BOOL *stop) {
         
         NSString *query = [NSString stringWithFormat:@"SELECT * FROM Rawmaterial_Master WHERE rawmaterialid = '%@' AND rawmaterialgroupid = '%@'",obj.rawmaterialid,obj.rawmaterialgroupid];
@@ -149,7 +149,7 @@ static AppDataManager *appdataManager;
     
     //Sole Material
     query = [NSString stringWithFormat:@"SELECT * FROM Article_Rawmaterials WHERE articleid = '%@' AND rawmaterialgroupid = '23'",articleId];
-    NSArray *soleMaterialArr = [[CXSSqliteHelper sharedSqliteHelper] runQuery:query asObject:[Rawmaterials class]];
+    NSArray *soleMaterialArr = [[CXSSqliteHelper sharedSqliteHelper] runQuery:query asObject:[ArticlesRawmaterials class]];
     [soleMaterialArr enumerateObjectsUsingBlock:^(ArticlesRawmaterials *obj, NSUInteger idx, BOOL *stop) {
         
         NSString *query = [NSString stringWithFormat:@"SELECT * FROM Rawmaterial_Master WHERE rawmaterialid = '%@' AND rawmaterialgroupid = '%@'",obj.rawmaterialid,obj.rawmaterialgroupid];

@@ -1,3 +1,4 @@
+
 //
 //  AddToCartViewController.m
 //  Catalouge
@@ -13,7 +14,9 @@
 #import <QuickLook/QuickLook.h>
 #import "TrxTransaction.h"
 #import "CartViewController.h"
-
+#import "QuickLookViewController.h"
+#import "SearchViewController.h"
+#import "RawMatarialCell.h"
 #define SOLE_TXT_TAG 2001
 #define SOLE_TXT_COLOR 2002
 #define SOLE_MATERIAL_TXT_COLOR 2003
@@ -57,11 +60,14 @@
 #define ARTILCE_SIZE 10003
 
 
-NSString *kDetailedViewControllerIDCart = @"DetailView";    // view controller storyboard id
-NSString *kCellIDCart = @"cellID";                          // UICollectionViewCell storyboard id
 
-@interface AddToCartViewController ()<UITextFieldDelegate,UIPickerViewDataSource,UIPickerViewDelegate,UITextViewDelegate>
+@interface AddToCartViewController ()<QLPreviewControllerDataSource,QLPreviewControllerDelegate,QLPreviewItem,UITextFieldDelegate,UIPickerViewDataSource,UIPickerViewDelegate,UITextViewDelegate>
 {
+
+    QLPreviewController *previewCtrl;
+    NSInteger selectedIndex;
+    __block NSInteger rowForRawMatarial;
+    __block NSInteger rowForRawMatarial1;
 
 }
 @property(nonatomic,strong) NSMutableArray *arr_Input_List;
@@ -75,8 +81,11 @@ NSString *kCellIDCart = @"cellID";                          // UICollectionViewC
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    rowForRawMatarial = 3;
+    rowForRawMatarial1 = 3;
+
     UINib *cellNib = [UINib nibWithNibName:@"HomeCollectionViewCell" bundle:nil];
-    [self.CollectionView registerNib:cellNib forCellWithReuseIdentifier:kCellIDCart];
+    [self.CollectionView registerNib:cellNib forCellWithReuseIdentifier:kCellID];
     [self.pageCtrl setNumberOfPages:5];
     [self.pageCtrl setCurrentPage:0];
     [self.pageCtrl setCurrentPageIndicatorTintColor:[UIColor blueColor]];
@@ -236,7 +245,6 @@ NSString *kCellIDCart = @"cellID";                          // UICollectionViewC
     
     [self refreshUI];
     
-    
 }
 
 - (void)setFontSize{
@@ -296,11 +304,11 @@ NSString *kCellIDCart = @"cellID";                          // UICollectionViewC
     [[self txt_Lining4] setFont:font];
     [[self txt_Lining5] setFont:font];
     
-    [[self txt_Lining1] setPlaceholder:@"Leather 1"];
-    [[self txt_Lining2] setPlaceholder:@"Leather 2"];
-    [[self txt_Lining3] setPlaceholder:@"Leather 3"];
-    [[self txt_Lining4] setPlaceholder:@"Leather 4"];
-    [[self txt_Lining5] setPlaceholder:@"Leather 5"];
+    [[self txt_Lining1] setPlaceholder:@"Lining 1"];
+    [[self txt_Lining2] setPlaceholder:@"Lining 2"];
+    [[self txt_Lining3] setPlaceholder:@"Lining 3"];
+    [[self txt_Lining4] setPlaceholder:@"Lining 4"];
+    [[self txt_Lining5] setPlaceholder:@"Lining 5"];
 
     
     
@@ -325,6 +333,9 @@ NSString *kCellIDCart = @"cellID";                          // UICollectionViewC
     
     font = [UIFont fontWithName:@"MyriadPro-Regular" size:14];
     [[self txt_Remarks] setFont:font];
+    
+    [[self txt_Remarks] setAutocorrectionType:UITextAutocorrectionTypeNo];
+    [[self txt_Remarks] setInputAccessoryView:self.toolbar];
 
 }
 - (void)refreshUI{
@@ -340,6 +351,21 @@ NSString *kCellIDCart = @"cellID";                          // UICollectionViewC
     [[self txt_Qty] setText:[NSString stringWithFormat:@"%@",[local qty]]];
     [[self txt_Pair] setText:[NSString stringWithFormat:@"%@",[local qty_unit]]];
     [[self txt_Size] setText:[NSString stringWithFormat:@"%@",[local size]]];
+
+    
+    
+    
+    if ([local Sole]) {
+        
+        self.txt_Sole.text = local.Sole.name;
+        self.txt_SoleColor.text = local.Sole.colors.colorname;
+        
+    }
+
+    if ([local SoleMaterial]) {
+        
+        self.txt_SoleMaterial.text = local.SoleMaterial.name;
+    }
 
     
     
@@ -485,7 +511,26 @@ NSString *kCellIDCart = @"cellID";                          // UICollectionViewC
 
     
 }
-
+- (UIToolbar*)toolbar{
+    
+    if (!_toolbar) {
+        
+        _toolbar = [[[NSBundle mainBundle] loadNibNamed:@"ToolbarForKeyBoard" owner:self options:nil] firstObject];
+        UIBarButtonItem *last = [[_toolbar items] lastObject];
+        [last setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont fontWithName:@"MyriadPro-Regular" size:18],NSFontAttributeName, nil] forState:UIControlStateNormal];
+        [last setTarget:self];
+        [last setAction:@selector(DoneInput)];
+    }
+    
+    return _toolbar;
+}
+#pragma mark - Toolbar
+- (void)DoneInput{
+    
+    if ([self txt_Remarks]) {
+        [[self txt_Remarks] resignFirstResponder];
+    }
+}
 - (NSMutableArray*)arr_Input_List{
 
     if (!_arr_Input_List) {
@@ -503,7 +548,7 @@ NSString *kCellIDCart = @"cellID";                          // UICollectionViewC
     [[self relatedProduct] setHidden:YES];
     
     [self refreshArticleList:@""];
-
+    [self refreshUI];
 }
 - (NSMutableArray*)arrArticles{
     return _arrArticles ? _arrArticles : [[NSMutableArray alloc] init];
@@ -532,7 +577,7 @@ NSString *kCellIDCart = @"cellID";                          // UICollectionViewC
 {
     // we're going to use a custom UICollectionViewCell, which will hold an image and its label
     //
-    HomeCollectionViewCell *cell = [cv dequeueReusableCellWithReuseIdentifier:kCellIDCart forIndexPath:indexPath];
+    HomeCollectionViewCell *cell = [cv dequeueReusableCellWithReuseIdentifier:kCellID forIndexPath:indexPath];
     
     if (!cell) {
         
@@ -543,7 +588,7 @@ NSString *kCellIDCart = @"cellID";                          // UICollectionViewC
     [[self pageCtrl] setCurrentPage:indexPath.row];
 
     Article_Image *article = [[self article_Images] objectAtIndex:indexPath.row];
-    NSString *fileName = [article.url lastPathComponent];
+    NSString *fileName = [article.imagePath lastPathComponent];
     NSString *filePath = [[[AppDataManager sharedAppDatamanager] imageDirPath] stringByAppendingPathComponent:fileName];
     cell.imageCell.image = [UIImage imageWithContentsOfFile:filePath];
 
@@ -558,103 +603,198 @@ NSString *kCellIDCart = @"cellID";                          // UICollectionViewC
 }
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     
+    
+    
+    
+    
+    
 }
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
     
     [[self CollectionView] reloadData];
 }
-#pragma mark - Text Field Delegates
-- (void)textFieldDidBeginEditing:(UITextField *)textField{
+- (BOOL)shouldAutorotate{
 
-    
+    return YES;
+}
+- (NSUInteger)supportedInterfaceOrientations{
+
+    if (isIPad()) {
+        
+        return UIInterfaceOrientationMaskAllButUpsideDown;
+    }
+    return UIInterfaceOrientationMaskPortrait ;
+}
+#pragma mark - Text Field Delegates
+
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField{
 
     self.common_TxtField = textField;
-    self.common_TxtField.inputView = self.picker;
-    TrxTransaction *local = [[AppDataManager sharedAppDatamanager] transaction];
+    return YES;
+}
+
+-(IBAction)btn_Pressed:(id)sender{
+
     
+    self.common_TxtField = (UITextField*)[[self view] viewWithTag:[sender tag]];
+    selectedIndex = 0;
+    TrxTransaction *local = [[AppDataManager sharedAppDatamanager] transaction];
+    NSString *title = @"";
     
     NSMutableArray *materialGroup = [[NSMutableArray alloc] init];
-
-    switch ([textField tag]) {
+    
+    switch ([self.common_TxtField tag]) {
             
         case SOLE_TXT_TAG:{
-            
-            materialGroup = [self getSoleWithTextField:textField];
+            title = @"Last/Sole";
+            materialGroup = [self getSoleWithTextField:self.common_TxtField];
         }
             break;
         case SOLE_TXT_COLOR:{
-            
-            materialGroup = [self getSoleColorWithTextField:textField];
+            title = @"Sole Color";
+            materialGroup = [self getSoleColorWithTextField:self.common_TxtField];
         }
             break;
         case SOLE_MATERIAL_TXT_COLOR:{
             
-            materialGroup = [self getSoleMaterialWithTextField:textField];
+            title = @"Sole Material";
+            
+            materialGroup = [self getSoleMaterialWithTextField:self.common_TxtField];
+            
+            if([local SoleMaterial]){
+                
+                NSArray *arr = [materialGroup filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"rawmaterialid = '%@'",[[local SoleMaterial] rawmaterialid]]];
+                
+                if([arr count]){
+                    selectedIndex = [materialGroup indexOfObject:[arr lastObject]];
+                }
+                
+            }
+            
+            
+            
         }
             break;
             
         case LINING1_TXT_TAG:
+            materialGroup = [self getLiningWithTextField:self.common_TxtField];
+            title = @"Lining 1";
+            break;
         case LINING2_TXT_TAG:
+            materialGroup = [self getLiningWithTextField:self.common_TxtField];
+            title = @"Lining 2";
+            
         case LINING3_TXT_TAG:
+            materialGroup = [self getLiningWithTextField:self.common_TxtField];
+            title = @"Lining 3";
+            
         case LINING4_TXT_TAG:
-        case LINING5_TXT_TAG:{
+            materialGroup = [self getLiningWithTextField:self.common_TxtField];
+            title = @"Lining 4";
             
-            materialGroup = [self getLiningWithTextField:textField];
-        }
+        case LINING5_TXT_TAG:
+            materialGroup = [self getLiningWithTextField:self.common_TxtField];
+            title = @"Lining 5";
+            
             break;
-
+            
         case LINING_COLOR1_TXT_TAG:
+            materialGroup = [self getLiningColorWithTextField:self.common_TxtField];
+            title = @"Lining Color 1";
+            break;
         case LINING_COLOR2_TXT_TAG:
+            materialGroup = [self getLiningColorWithTextField:self.common_TxtField];
+            title = @"Lining Color 2";
+            break;
+            
         case LINING_COLOR3_TXT_TAG:
+            materialGroup = [self getLiningColorWithTextField:self.common_TxtField];
+            title = @"Lining Color 3";
+            break;
+            
         case LINING_COLOR4_TXT_TAG:
-        case LINING_COLOR5_TXT_TAG:{
-            
-            materialGroup = [self getLiningColorWithTextField:textField];
-        }
+            materialGroup = [self getLiningColorWithTextField:self.common_TxtField];
+            title = @"Lining Color 4";
             break;
-
+            
+        case LINING_COLOR5_TXT_TAG:
+            materialGroup = [self getLiningColorWithTextField:self.common_TxtField];
+            title = @"Lining Color 5";
+            break;
+            
         case LEATHER1_TXT_TAG:
-        case LEATHER2_TXT_TAG:
-        case LEATHER3_TXT_TAG:
-        case LEATHER4_TXT_TAG:
-        case LEATHER5_TXT_TAG:{
-        
-            materialGroup = [self getLeatherWithTextField:textField];
-        }
+            materialGroup = [self getLeatherWithTextField:self.common_TxtField];
+            title = @"Leather 1";
             break;
-
-        case LEATHER_COLOR1_TXT_TAG:
-        case LEATHER_COLOR2_TXT_TAG:
-        case LEATHER_COLOR3_TXT_TAG:
-        case LEATHER_COLOR4_TXT_TAG:
-        case LEATHER_COLOR5_TXT_TAG:{
+        case LEATHER2_TXT_TAG:
+            materialGroup = [self getLeatherWithTextField:self.common_TxtField];
+            title = @"Leather 2";
+            break;
             
-            materialGroup = [self getLeatherColorWithTextField:textField];
-        }
+        case LEATHER3_TXT_TAG:
+            materialGroup = [self getLeatherWithTextField:self.common_TxtField];
+            title = @"Leather 3";
+            break;
+            
+        case LEATHER4_TXT_TAG:
+            materialGroup = [self getLeatherWithTextField:self.common_TxtField];
+            title = @"Leather 4";
+            break;
+            
+        case LEATHER5_TXT_TAG:
+            materialGroup = [self getLeatherWithTextField:self.common_TxtField];
+            title = @"Leather 5";
+            break;
+            
+        case LEATHER_COLOR1_TXT_TAG:
+            materialGroup = [self getLeatherColorWithTextField:self.common_TxtField];
+            title = @"Leather Color 1";
+            break;
+            
+        case LEATHER_COLOR2_TXT_TAG:
+            materialGroup = [self getLeatherColorWithTextField:self.common_TxtField];
+            title = @"Leather Color 2";
+            break;
+            
+        case LEATHER_COLOR3_TXT_TAG:
+            materialGroup = [self getLeatherColorWithTextField:self.common_TxtField];
+            title = @"Leather Color 3";
+            break;
+            
+        case LEATHER_COLOR4_TXT_TAG:
+            materialGroup = [self getLeatherColorWithTextField:self.common_TxtField];
+            title = @"Leather Color 4";
+            break;
+            
+        case LEATHER_COLOR5_TXT_TAG:
+            materialGroup = [self getLeatherColorWithTextField:self.common_TxtField];
+            title = @"Leather Color 5";
+            break;
+            
             break;
         case ARTILCE_QTY:
         {
-        
+            
             for (int i = 1; i<=100; i++) {
                 
                 Rawmaterials *raw = [[Rawmaterials alloc] init];
                 [raw setName:[NSString stringWithFormat:@"%i",i]];
                 [materialGroup addObject:raw];
-
+                
             }
             
             Rawmaterials *_200 = [[Rawmaterials alloc] init];
             [_200 setName:@"200"];
             [materialGroup addObject:_200];
-
+            
             Rawmaterials *_500 = [[Rawmaterials alloc] init];
             [_500 setName:@"500"];
             [materialGroup addObject:_500];
-
+            
             Rawmaterials *_1000 = [[Rawmaterials alloc] init];
             [_1000 setName:@"1000"];
             [materialGroup addObject:_1000];
-
+            
         }
             break;
         case ARTILCE_QTY_UNIT:
@@ -663,12 +803,12 @@ NSString *kCellIDCart = @"cellID";                          // UICollectionViewC
             Rawmaterials *PAIR = [[Rawmaterials alloc] init];
             [PAIR setName:@"PAIR"];
             [materialGroup addObject:PAIR];
-
+            
             Rawmaterials *ODD = [[Rawmaterials alloc] init];
             [ODD setName:@"ODD"];
             [materialGroup addObject:ODD];
-
-
+            
+            
         }
             break;
         case ARTILCE_SIZE:
@@ -680,10 +820,10 @@ NSString *kCellIDCart = @"cellID";                          // UICollectionViewC
                 [materialGroup addObject:raw];
                 
             }
-
+            
         }
             break;
-
+            
         default:
             break;
     }
@@ -691,10 +831,243 @@ NSString *kCellIDCart = @"cellID";                          // UICollectionViewC
     
     
     
-
+    
     [[self arr_Input_List] count] ?  [[self arr_Input_List] removeAllObjects] : @"NOTHING";
+    
     [[self arr_Input_List] addObjectsFromArray:materialGroup];
-    [[self picker] reloadAllComponents];
+    //    [[self picker] reloadAllComponents];
+    //    if ([[self arr_Input_List] count]>=selectedIndex) {
+    //        [[self picker] selectRow:selectedIndex inComponent:0 animated:NO];
+    //
+    //    }
+    
+    SearchViewController *search = [[self storyboard] instantiateViewControllerWithIdentifier:@"SearchViewController"];
+    search.title = title;
+    search.arr_ClientList = self.arr_Input_List;
+    search.tag = self.common_TxtField.tag;
+    search.common_TxtField = self.common_TxtField;
+    [[self navigationController] pushViewController:search animated:YES];
+
+    
+}
+- (void)textFieldDidBeginEditing:(UITextField *)textField{
+
+    
+
+//    self.common_TxtField = textField;
+////    self.common_TxtField.inputView = self.picker;
+////    self.common_TxtField.inputAccessoryView = self.toolbar;
+//    selectedIndex = 0;
+//    TrxTransaction *local = [[AppDataManager sharedAppDatamanager] transaction];
+//    NSString *title = @"";
+//    
+//    NSMutableArray *materialGroup = [[NSMutableArray alloc] init];
+//
+//    switch ([textField tag]) {
+//            
+//        case SOLE_TXT_TAG:{
+//            title = @"Last/Sole";
+//            materialGroup = [self getSoleWithTextField:textField];
+//        }
+//            break;
+//        case SOLE_TXT_COLOR:{
+//            title = @"Sole Color";
+//            materialGroup = [self getSoleColorWithTextField:textField];
+//        }
+//            break;
+//        case SOLE_MATERIAL_TXT_COLOR:{
+//            
+//            title = @"Sole Material";
+//
+//            materialGroup = [self getSoleMaterialWithTextField:textField];
+//            
+//            if([local SoleMaterial]){
+//                
+//                NSArray *arr = [materialGroup filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"rawmaterialid = '%@'",[[local SoleMaterial] rawmaterialid]]];
+//                
+//                if([arr count]){
+//                    selectedIndex = [materialGroup indexOfObject:[arr lastObject]];
+//                }
+//                
+//            }
+//            
+//            
+//
+//        }
+//            break;
+//            
+//        case LINING1_TXT_TAG:
+//            materialGroup = [self getLiningWithTextField:textField];
+//            title = @"Lining 1";
+//            break;
+//        case LINING2_TXT_TAG:
+//            materialGroup = [self getLiningWithTextField:textField];
+//            title = @"Lining 2";
+//            
+//        case LINING3_TXT_TAG:
+//            materialGroup = [self getLiningWithTextField:textField];
+//            title = @"Lining 3";
+//            
+//        case LINING4_TXT_TAG:
+//            materialGroup = [self getLiningWithTextField:textField];
+//            title = @"Lining 4";
+//            
+//        case LINING5_TXT_TAG:
+//            materialGroup = [self getLiningWithTextField:textField];
+//            title = @"Lining 5";
+//            
+//            break;
+//
+//        case LINING_COLOR1_TXT_TAG:
+//            materialGroup = [self getLiningColorWithTextField:textField];
+//            title = @"Lining Color 1";
+//            break;
+//        case LINING_COLOR2_TXT_TAG:
+//            materialGroup = [self getLiningColorWithTextField:textField];
+//            title = @"Lining Color 2";
+//            break;
+//
+//        case LINING_COLOR3_TXT_TAG:
+//            materialGroup = [self getLiningColorWithTextField:textField];
+//            title = @"Lining Color 3";
+//            break;
+//
+//        case LINING_COLOR4_TXT_TAG:
+//            materialGroup = [self getLiningColorWithTextField:textField];
+//            title = @"Lining Color 4";
+//            break;
+//
+//        case LINING_COLOR5_TXT_TAG:
+//            materialGroup = [self getLiningColorWithTextField:textField];
+//            title = @"Lining Color 5";
+//            break;
+//            
+//        case LEATHER1_TXT_TAG:
+//            materialGroup = [self getLeatherWithTextField:textField];
+//            title = @"Leather 1";
+//            break;
+//        case LEATHER2_TXT_TAG:
+//            materialGroup = [self getLeatherWithTextField:textField];
+//            title = @"Leather 2";
+//            break;
+//
+//        case LEATHER3_TXT_TAG:
+//            materialGroup = [self getLeatherWithTextField:textField];
+//            title = @"Leather 3";
+//            break;
+//
+//        case LEATHER4_TXT_TAG:
+//            materialGroup = [self getLeatherWithTextField:textField];
+//            title = @"Leather 4";
+//            break;
+//
+//        case LEATHER5_TXT_TAG:
+//            materialGroup = [self getLeatherWithTextField:textField];
+//            title = @"Leather 5";
+//            break;
+//
+//        case LEATHER_COLOR1_TXT_TAG:
+//            materialGroup = [self getLeatherColorWithTextField:textField];
+//            title = @"Leather Color 1";
+//            break;
+//
+//        case LEATHER_COLOR2_TXT_TAG:
+//            materialGroup = [self getLeatherColorWithTextField:textField];
+//            title = @"Leather Color 2";
+//            break;
+//
+//        case LEATHER_COLOR3_TXT_TAG:
+//            materialGroup = [self getLeatherColorWithTextField:textField];
+//            title = @"Leather Color 3";
+//            break;
+//
+//        case LEATHER_COLOR4_TXT_TAG:
+//            materialGroup = [self getLeatherColorWithTextField:textField];
+//            title = @"Leather Color 4";
+//            break;
+//
+//        case LEATHER_COLOR5_TXT_TAG:
+//            materialGroup = [self getLeatherColorWithTextField:textField];
+//            title = @"Leather Color 5";
+//            break;
+//
+//            break;
+//        case ARTILCE_QTY:
+//        {
+//        
+//            for (int i = 1; i<=100; i++) {
+//                
+//                Rawmaterials *raw = [[Rawmaterials alloc] init];
+//                [raw setName:[NSString stringWithFormat:@"%i",i]];
+//                [materialGroup addObject:raw];
+//
+//            }
+//            
+//            Rawmaterials *_200 = [[Rawmaterials alloc] init];
+//            [_200 setName:@"200"];
+//            [materialGroup addObject:_200];
+//
+//            Rawmaterials *_500 = [[Rawmaterials alloc] init];
+//            [_500 setName:@"500"];
+//            [materialGroup addObject:_500];
+//
+//            Rawmaterials *_1000 = [[Rawmaterials alloc] init];
+//            [_1000 setName:@"1000"];
+//            [materialGroup addObject:_1000];
+//
+//        }
+//            break;
+//        case ARTILCE_QTY_UNIT:
+//        {
+//            
+//            Rawmaterials *PAIR = [[Rawmaterials alloc] init];
+//            [PAIR setName:@"PAIR"];
+//            [materialGroup addObject:PAIR];
+//
+//            Rawmaterials *ODD = [[Rawmaterials alloc] init];
+//            [ODD setName:@"ODD"];
+//            [materialGroup addObject:ODD];
+//
+//
+//        }
+//            break;
+//        case ARTILCE_SIZE:
+//        {
+//            for (int i = [[[local article] sizefrom] integerValue]; i<=[[[local article] sizeto] integerValue]; i++) {
+//                
+//                Rawmaterials *raw = [[Rawmaterials alloc] init];
+//                [raw setName:[NSString stringWithFormat:@"%i",i]];
+//                [materialGroup addObject:raw];
+//                
+//            }
+//
+//        }
+//            break;
+//
+//        default:
+//            break;
+//    }
+//    
+//    
+//    
+//    
+//
+//    [[self arr_Input_List] count] ?  [[self arr_Input_List] removeAllObjects] : @"NOTHING";
+//    
+//    [[self arr_Input_List] addObjectsFromArray:materialGroup];
+////    [[self picker] reloadAllComponents];
+////    if ([[self arr_Input_List] count]>=selectedIndex) {
+////        [[self picker] selectRow:selectedIndex inComponent:0 animated:NO];
+////        
+////    }
+//    
+//    SearchViewController *search = [[self storyboard] instantiateViewControllerWithIdentifier:@"SearchViewController"];
+//    search.title = title;
+//    search.arr_ClientList = self.arr_Input_List;
+//    search.tag = textField.tag;
+//    search.common_TxtField = self.common_TxtField;
+//    [[self navigationController] pushViewController:search animated:YES];
+    
     
 }
 - (NSMutableArray*)getLeatherWithTextField:(UITextField*)textField{
@@ -725,6 +1098,18 @@ NSString *kCellIDCart = @"cellID";                          // UICollectionViewC
     
     NSString *query = [NSString stringWithFormat:@"SELECT * FROM Rawmaterial_Master WHERE rawmaterialgroupid = '%@' GROUP BY name",[leather rawmaterialgroupid]];
     NSMutableArray *materialGroup = [NSMutableArray arrayWithArray:[[CXSSqliteHelper sharedSqliteHelper] runQuery:query asObject:[Rawmaterials class]]] ;
+
+    if(leather){
+        
+        query = [NSString stringWithFormat:@"name = '%@'",[leather name]];
+        NSArray *arr = [materialGroup filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:query]];
+        
+        if([arr count]){
+            selectedIndex = [materialGroup indexOfObject:[arr lastObject]];
+        }
+        
+    }
+    
 
     return materialGroup;
     
@@ -759,6 +1144,18 @@ NSString *kCellIDCart = @"cellID";                          // UICollectionViewC
     
     NSMutableArray *materialGroup = [NSMutableArray arrayWithArray:[[CXSSqliteHelper sharedSqliteHelper] runQuery:query asObject:[Rawmaterials class]]] ;
     
+    if(leather){
+        
+        query = [NSString stringWithFormat:@"colorid = '%@'",[leather colorid]];
+        NSArray *arr = [materialGroup filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:query]];
+        
+        if([arr count]){
+            selectedIndex = [materialGroup indexOfObject:[arr lastObject]];
+        }
+        
+    }
+
+    
     return materialGroup;
     
 }
@@ -790,6 +1187,21 @@ NSString *kCellIDCart = @"cellID";                          // UICollectionViewC
     
     NSString *query = [NSString stringWithFormat:@"SELECT * FROM Rawmaterial_Master WHERE rawmaterialgroupid = '%@' GROUP BY name",[lining rawmaterialgroupid]];
     NSMutableArray *materialGroup = [NSMutableArray arrayWithArray:[[CXSSqliteHelper sharedSqliteHelper] runQuery:query asObject:[Rawmaterials class]]] ;
+    
+    if(lining){
+        
+        NSString *searchTerm = [lining name];
+        
+        [materialGroup enumerateObjectsUsingBlock:^(Rawmaterials *obj, NSUInteger idx, BOOL *stop) {
+            
+            NSLog(@"rawmaterialid = %@",[obj name]);
+            if ([[obj name] isEqualToString:searchTerm]) {
+                selectedIndex = idx;
+                *stop = YES;
+            }
+        }];
+    }
+
     
     return materialGroup;
     
@@ -824,14 +1236,37 @@ NSString *kCellIDCart = @"cellID";                          // UICollectionViewC
     
     NSMutableArray *materialGroup = [NSMutableArray arrayWithArray:[[CXSSqliteHelper sharedSqliteHelper] runQuery:query asObject:[Rawmaterials class]]] ;
     
+    
+    if(lining){
+        
+        query = [NSString stringWithFormat:@"colorid = '%@'",[lining colorid]];
+        NSArray *arr = [materialGroup filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:query]];
+        
+        if([arr count]){
+            selectedIndex = [materialGroup indexOfObject:[arr lastObject]];
+        }
+        
+    }
+
+    
     return materialGroup;
     
 }
 - (NSMutableArray*)getSoleWithTextField:(UITextField*)textField{
     
+    Rawmaterials *soleColor = [[[AppDataManager sharedAppDatamanager] transaction] Sole];
+
+    
     NSString *query = [NSString stringWithFormat:@"SELECT * FROM Rawmaterial_Master where  rawmaterialgroupid = '10' group by name"];
     NSMutableArray *materialGroup = [NSMutableArray arrayWithArray:[[CXSSqliteHelper sharedSqliteHelper] runQuery:query asObject:[Rawmaterials class]]] ;
     
+    query = [NSString stringWithFormat:@"name = '%@'",[soleColor name]];
+    NSArray *arr = [materialGroup filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:query]];
+    
+    if([arr count]){
+        selectedIndex = [materialGroup indexOfObject:[arr lastObject]];
+    }
+
     return materialGroup;
     
 }
@@ -845,6 +1280,14 @@ NSString *kCellIDCart = @"cellID";                          // UICollectionViewC
         materialGroup = [NSMutableArray arrayWithArray:[[CXSSqliteHelper sharedSqliteHelper] runQuery:query asObject:[Rawmaterials class]]] ;
     }
     
+    
+    NSString *query = [NSString stringWithFormat:@"colorid = '%@'",[soleColor colorid]];
+    NSArray *arr = [materialGroup filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:query]];
+    
+    if([arr count]){
+        selectedIndex = [materialGroup indexOfObject:[arr lastObject]];
+    }
+    
     return materialGroup;
     
 }
@@ -854,6 +1297,15 @@ NSString *kCellIDCart = @"cellID";                          // UICollectionViewC
     
     NSMutableArray *materialGroup = [NSMutableArray arrayWithArray:[[CXSSqliteHelper sharedSqliteHelper] runQuery:query asObject:[Rawmaterials class]]] ;
     
+    Rawmaterials *soleColor = [[[AppDataManager sharedAppDatamanager] transaction] SoleMaterial];
+
+    query = [NSString stringWithFormat:@"name = '%@'",[soleColor name]];
+    NSArray *arr = [materialGroup filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:query]];
+    
+    if([arr count]){
+        selectedIndex = [materialGroup indexOfObject:[arr lastObject]];
+    }
+
     return materialGroup;
     
 }
@@ -865,17 +1317,27 @@ NSString *kCellIDCart = @"cellID";                          // UICollectionViewC
     local.remark = self.txt_Remarks.text;
 }
 
+- (void)textViewDidBeginEditing:(UITextView *)textView{
 
+    textView.inputAccessoryView = self.toolbar;
+    
+}
 
 
 -(IBAction)zoomButtonPressed:(id)sender{
 
-    //QLPreviewController *previewCtrl = [[QLPreviewController alloc] init];
+    QLPreviewController *previewController = [[QLPreviewController alloc] init];
     
+    [self presentViewController:previewController animated:YES completion:^{
+       
+        previewController.dataSource = self;
+        previewController.currentPreviewItemIndex = 1;
+        [previewController reloadData];
+
+    }];
 
     
 }
-
 
 
 #pragma mark - Picker Delegates
@@ -1449,49 +1911,227 @@ NSString *kCellIDCart = @"cellID";                          // UICollectionViewC
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    return [self.arrArticles count];
+    
+    if (tableView == [self tbl_RawMatarial])
+        return 3;
+
+    else if (tableView == [self relatedProduct])
+        return [self.arrArticles count];
+    
+    else if(tableView == _tbl_Leather)
+        return rowForRawMatarial ;
+    
+    else
+        return  rowForRawMatarial1;
+
 }
+
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    RelatedProductTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
-    
-    if (!cell) {
-        cell = [[[NSBundle mainBundle] loadNibNamed:@"RelatedProductTableViewCell" owner:self options:nil] firstObject];
-        
-    }
-    
-    // Configure the cell...
-    Articles *article = [[self arrArticles] objectAtIndex:indexPath.row];
-    cell.lbl_Title.text = [article articlename];
-    cell.lbl_Description.text = [NSString stringWithFormat:@"Article No.: %@",[article articleid]];
-    cell.lbl_Price.text = [NSString stringWithFormat:@"€%@",[article price]];
     
     
-    Article_Image *articleImage = article.image;
-    if (articleImage) {
-        NSString *fileName = [articleImage.url lastPathComponent];
-        NSString *filePath = [[[AppDataManager sharedAppDatamanager] imageDirPath] stringByAppendingPathComponent:fileName];
-        cell.imgV_Logo.image = [UIImage imageWithContentsOfFile:filePath];
-        
-    }
+    
+    
+    
+    if (tableView == [self tbl_RawMatarial])
+        return [self cellForTbl_RawMatarial:tableView cellForRowAtIndexPath:indexPath];
 
     
-    return cell;
+     if(tableView == _relatedProduct){
+        RelatedProductTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
+        
+        if (!cell) {
+            cell = [[[NSBundle mainBundle] loadNibNamed:@"RelatedProductTableViewCell" owner:self options:nil] firstObject];
+            
+        }
+        
+        // Configure the cell...
+        Articles *article = [[self arrArticles] objectAtIndex:indexPath.row];
+        cell.lbl_Title.text = [article articlename];
+        cell.lbl_Description.text = [NSString stringWithFormat:@"Article No.: %@",[article articleid]];
+        cell.lbl_Price.text = [NSString stringWithFormat:@"€%@",[article price]];
+        
+        
+        Article_Image *articleImage = [article.images firstObject];
+        if (articleImage) {
+            NSString *fileName = [articleImage.imagePath lastPathComponent];
+            NSString *filePath = [[[AppDataManager sharedAppDatamanager] imageDirPath] stringByAppendingPathComponent:fileName];
+            cell.imgV_Logo.image = [UIImage imageWithContentsOfFile:filePath];
+            
+        }
+        
+        return cell;
+
+    }else if(tableView == _tbl_Leather){
+    
+        
+        static NSString *FirstCell = @"FirstCell1";
+        static NSString *AddCell = @"AddCell";
+        static NSString *LastCell = @"LastCell";
+        
+        UITableViewCell *cell =[tableView dequeueReusableCellWithIdentifier:FirstCell];
+        if (!cell) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:FirstCell];
+            
+        }
+        cell.textLabel.text = @"Shameem";
+        
+        return cell;
+    
+    }else {
+    
+        static NSString *FirstCell = @"FirstCell11";
+        static NSString *AddCell = @"AddCell";
+        static NSString *LastCell = @"LastCell";
+        
+        UITableViewCell *cell =[tableView dequeueReusableCellWithIdentifier:FirstCell];
+        if (!cell) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:FirstCell];
+            
+        }
+        cell.textLabel.text = @"Shameem";
+        
+        return cell;
+
+    }
+    
+
+    
 }
 
+- (RawMatarialCell*)cellForTbl_RawMatarial:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+
+    
+    
+    static NSString *FirstCell  = @"FirstCell";
+    static NSString *AddCell    = @"AddCell";
+    static NSString *LastCell   = @"LastCell";
+
+    RawMatarialCell *cell = nil;
+    
+    if (indexPath.row == 1) {
+        
+        cell = [tableView dequeueReusableCellWithIdentifier:FirstCell];
+        
+        if (!cell) {
+            cell = [[[NSBundle mainBundle] loadNibNamed:@"RawMatarialCell" owner:self options:nil] firstObject];
+            
+        }
+        cell.indeX = indexPath.row;
+        _tbl_Leather = cell.tbl_AddLeather;
+        _tbl_Lining = cell.tbl_AddLining;
+        
+    }else if(indexPath.row == 0){
+        
+        cell = [tableView dequeueReusableCellWithIdentifier:AddCell];
+        
+        if (!cell) {
+            cell = [[[NSBundle mainBundle] loadNibNamed:@"RawMatarialCell" owner:self options:nil] objectAtIndex:1];
+            
+        }
+        cell.indeX = indexPath.row;
+        
+    }else if (indexPath.row == 2){
+        
+        cell = [tableView dequeueReusableCellWithIdentifier:LastCell];
+        
+        if (!cell) {
+            cell = [[[NSBundle mainBundle] loadNibNamed:@"RawMatarialCell" owner:self options:nil] lastObject];
+            
+        }
+        cell.indeX = indexPath.row;
+        
+        [cell addLeather:^(int rowIndex) {
+            
+            [[self tbl_RawMatarial] beginUpdates];
+            NSIndexPath *path = [NSIndexPath indexPathForRow:rowForRawMatarial inSection:0];
+            [[self tbl_RawMatarial] insertRowsAtIndexPaths:[NSArray arrayWithObject:path] withRowAnimation:UITableViewRowAnimationTop];
+            rowForRawMatarial++;
+            [[self tbl_RawMatarial] endUpdates];
+            
+            [[self tbl_RawMatarial] scrollToRowAtIndexPath:path atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+            
+        }];
+        
+        
+        [cell addLining:^(int rowIndex) {
+            
+            
+        }];
+        
+        
+    }
+    // Configure the cell...
+    //        Articles *article = [[self arrArticles] objectAtIndex:indexPath.row];
+    //        cell.lbl_Title.text = [article articlename];
+    //        cell.lbl_Description.text = [NSString stringWithFormat:@"Article No.: %@",[article articleid]];
+    //        cell.lbl_Price.text = [NSString stringWithFormat:@"€%@",[article price]];
+    //
+    //
+    //        Article_Image *articleImage = article.image;
+    //        if (articleImage) {
+    //            NSString *fileName = [articleImage.url lastPathComponent];
+    //            NSString *filePath = [[[AppDataManager sharedAppDatamanager] imageDirPath] stringByAppendingPathComponent:fileName];
+    //            cell.imgV_Logo.image = [UIImage imageWithContentsOfFile:filePath];
+    //
+    //        }
+    
+    
+    
+    
+    return cell;
+    
+    
+    
+    
+}
+
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if ((tableView == [self tbl_RawMatarial]) && ([indexPath row] == 1)) {
+     
+        return 146*(rowForRawMatarial > rowForRawMatarial1 ? rowForRawMatarial : rowForRawMatarial1);
+    }else if ((tableView == [self tbl_RawMatarial]) && ([indexPath row] == 2)){
+    
+        return 300;
+    }
     
     return 146;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    Articles *article = [[self arrArticles] objectAtIndex:indexPath.row];
-    [[AppDataManager sharedAppDatamanager] newTransactionWithArticleId:article.articleid];
-    [self tapOnRelatedBtn:self.dargButton];
-    [self refreshUI];
+//    Articles *article = [[self arrArticles] objectAtIndex:indexPath.row];
+//    [[AppDataManager sharedAppDatamanager] newTransactionWithArticleId:article.articleid];
+//    [[AppDataManager sharedAppDatamanager] newTransactionWithArticleId:article.articleid];
+//    [self tapOnRelatedBtn:self.dargButton];
+//    [self refreshUI];
     
+    
+//    [tableView beginUpdates];
+//    if (tableView == _tbl_Leather) {
+//        
+////        NSIndexPath *path = [NSIndexPath indexPathForRow:rowForRawMatarial inSection:0];
+////        [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:path] withRowAnimation:UITableViewRowAnimationTop];
+//        rowForRawMatarial++;
+//
+//        
+//    }else if (tableView == _tbl_Lining) {
+//        
+////        NSIndexPath *path = [NSIndexPath indexPathForRow:rowForRawMatarial1 inSection:0];
+////        [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:path] withRowAnimation:UITableViewRowAnimationTop];
+//        rowForRawMatarial1++;
+//
+//        
+//    }
+//    
+////    [tableView endUpdates];
+//    
+//    [[self tbl_RawMatarial] reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+//    [_tbl_Leather reloadData];
+//    [_tbl_Lining reloadData];
 }
 
 
@@ -1502,6 +2142,23 @@ NSString *kCellIDCart = @"cellID";                          // UICollectionViewC
     self.arrArticles = [NSMutableArray arrayWithArray:[[CXSSqliteHelper sharedSqliteHelper] runQuery:sqlQuery asObject:[Articles class]]];
     [[self relatedProduct] reloadData];
     
+}
+
+#pragma mark - Zoom View
+#pragma mark - QLPreviewControllerDataSource Methods
+- (NSInteger)numberOfPreviewItemsInPreviewController:(QLPreviewController *)controller
+{
+    return [self.article_Images count];
+}
+
+
+- (id)previewController:(QLPreviewController *)controller previewItemAtIndex:(NSInteger)index
+{
+    Article_Image *article = [[self article_Images] objectAtIndex:index];
+    NSString *fileName = [article.imagePath lastPathComponent];
+    NSString *filePath = [[[AppDataManager sharedAppDatamanager] imageDirPath] stringByAppendingPathComponent:fileName];
+    NSURL *fileURL = [NSURL fileURLWithPath:filePath isDirectory:NO];
+    return fileURL;
 }
 
 

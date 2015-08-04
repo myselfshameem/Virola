@@ -15,7 +15,7 @@
 @property (strong, nonatomic) IBOutlet UIButton *btn_PlaceOrder;
 @property (strong, nonatomic) IBOutlet UIButton *btn_Refresh;
 @property (strong, nonatomic) IBOutlet __block UITableView *tbl_List_Cart;
-
+@property (strong, nonatomic) IBOutlet UILabel *lbl_UserName;
 
 
 

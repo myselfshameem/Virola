@@ -8,9 +8,8 @@
 
 #import "HomeViewController.h"
 #import "HomeCollectionViewCell.h"
+#import "SyncViewController.h"
 
-NSString *kDetailedViewControllerID = @"DetailView";    // view controller storyboard id
-NSString *kCellID = @"cellID";                          // UICollectionViewCell storyboard id
 
 CustomeAlert *alert;
 @interface HomeViewController ()
@@ -27,7 +26,21 @@ CustomeAlert *alert;
     [self.CollectionView registerNib:cellNib forCellWithReuseIdentifier:kCellID];
     [self setTitle:@"Home"];
     
+
     
+    //
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [btn setFrame:CGRectMake(0, 0, 30, 30)];
+    [btn setImage:[UIImage imageNamed:@"Tabbar_Account_Selected"] forState:UIControlStateNormal];
+    [btn setImage:[UIImage imageNamed:@"Tabbar_Account_Selected"] forState:UIControlStateSelected];
+
+    UIBarButtonItem *bar = [[UIBarButtonItem alloc] initWithCustomView:btn];
+    
+    
+//    [bar setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont fontWithName:@"MyriadPro-Regular" size:16],NSFontAttributeName, [UIColor whiteColor], NSForegroundColorAttributeName, nil] forState:UIControlStateNormal];
+//    [bar setImage:[UIImage imageNamed:@"Tabbar_Account"]];
+    [[self navigationItem] setRightBarButtonItem:bar];
+
     
 }
 
@@ -51,7 +64,7 @@ CustomeAlert *alert;
     
     [[self lbl_NumberOfArticles] setText:[NSString stringWithFormat:@"%lu",(unsigned long)[arrArticles count]]];
     
-    NSArray *arrClients = [[CXSSqliteHelper sharedSqliteHelper] runQuery:@"SELECT name FROM Client_Master" asObject:[Client_Master class]];
+    NSArray *arrClients = [[CXSSqliteHelper sharedSqliteHelper] runQuery:@"SELECT name FROM Client_Master" asObject:[Clients class]];
 
     [[self lbl_NumberOfClients] setText:[NSString stringWithFormat:@"%lu",(unsigned long)[arrClients count]]];
     
@@ -100,7 +113,7 @@ CustomeAlert *alert;
     [[self pageCtrl] setCurrentPage:indexPath.row];
 
     Article_Image *article = [[self arrArticles] objectAtIndex:indexPath.row];
-    NSString *fileName = [article.url lastPathComponent];
+    NSString *fileName = [article.imagePath lastPathComponent];
     NSString *filePath = [[[AppDataManager sharedAppDatamanager] imageDirPath] stringByAppendingPathComponent:fileName];
     cell.imageCell.image = [UIImage imageWithContentsOfFile:filePath];
     
@@ -120,6 +133,22 @@ CustomeAlert *alert;
     
 }
 
+- (BOOL)shouldAutorotate{
+
+    return NO;
+}
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation NS_AVAILABLE_IOS(6_0){
+
+
+    return UIInterfaceOrientationPortrait;
+
+}
+- (NSUInteger)supportedInterfaceOrientations NS_AVAILABLE_IOS(6_0){
+
+    
+    return UIInterfaceOrientationMaskPortrait;
+
+}
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
 
     [[self CollectionView] reloadData];
@@ -129,17 +158,8 @@ CustomeAlert *alert;
 - (IBAction)syncData:(id)sender{
 
     
-    alert = [[CustomeAlert alloc] init];
-    
-    [alert showAlertWithTitle:@"Sync" message:@"Would you like to sync your local database?" cancelButtonTitle:@"Sync" otherButtonTitles:@"Cancel" withButtonHandler:^(NSInteger buttonIndex) {
-    
-        if (buttonIndex == 1 ) {
-            
-            [self startSync];
-            
-        }
-        
-    }];
+    SyncViewController *sync = [[self storyboard] instantiateViewControllerWithIdentifier:@"SyncViewController"];
+    [[self navigationController] pushViewController:sync animated:YES];
     
     
     
@@ -149,259 +169,10 @@ CustomeAlert *alert;
     
 }
 
-- (void)startSync{
-
-    //Save Sync Time
-    [NSUserDefaults setLastSynTime:@""];
-    [self syncRawMaterial];
-}
-
-- (void)syncRawMaterial{
+- (IBAction)newDevelopment:(id)sender{
 
     
-    [self showActivityIndicator:@"Syncing Raw Material..."];
-    [[ApiHandler sharedApiHandler] getRawMaterialApiHandlerWithApiCallBlock:^(id data, NSError *error) {
-        
-        
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            [self hideActivityIndicator];
-        });
-        
-        if (error) {
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                alert = [[CustomeAlert alloc] init];
-                [alert showAlertWithTitle:nil message:@"Error in Syncing." cancelButtonTitle:@"OK" otherButtonTitles:nil withButtonHandler:^(NSInteger buttonIndex) {
-                    
-                }];
-
-            });
-            return ;
-        }else{
-            
-            
-            NSString *successCode = [data objectForKey:@"errorcode"];
-            NSString *message = [data objectForKey:@"message"];
-            if (([successCode isEqualToString:@"200"] || [successCode isEqualToString:@"823"])) {
-                [self syncArticle];
-            }else{
-                
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    alert = [[CustomeAlert alloc] init];
-                    [alert showAlertWithTitle:nil message:message cancelButtonTitle:@"OK" otherButtonTitles:nil withButtonHandler:^(NSInteger buttonIndex) {
-                        
-                    }];
-  
-                });
-                return;
-            }
-            
-        }
-        
-    }];
 
 }
 
-- (void)syncArticle{
-    
-    dispatch_sync(dispatch_get_main_queue(), ^{
-        [self showActivityIndicator:@"Syncing Articles..."];
-    });
-
-    
-    [[ApiHandler sharedApiHandler] getArticlesApiHandlerWithApiCallBlock:^(id data, NSError *error) {
-        
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            [self hideActivityIndicator];
-        });
-
-        
-        if (error) {
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                alert = [[CustomeAlert alloc] init];
-                [alert showAlertWithTitle:nil message:@"Error in Syncing." cancelButtonTitle:@"OK" otherButtonTitles:nil withButtonHandler:^(NSInteger buttonIndex) {
-                    
-                }];
-                
-            });
-            return ;
-        }else{
-            
-            
-            NSString *successCode = [data objectForKey:@"errorcode"];
-            NSString *message = [data objectForKey:@"message"];
-            if (([successCode isEqualToString:@"200"] || [successCode isEqualToString:@"823"])) {
-                [self syncClient];
-            }else{
-                
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    alert = [[CustomeAlert alloc] init];
-                    [alert showAlertWithTitle:nil message:message cancelButtonTitle:@"OK" otherButtonTitles:nil withButtonHandler:^(NSInteger buttonIndex) {
-                        
-                    }];
-                    
-                });
-                return;
-            }
-            
-        }
-
-        
-        
-        
-    }];
-
-}
-
-- (void)syncClient{
-    
-    
-    dispatch_sync(dispatch_get_main_queue(), ^{
-        [self showActivityIndicator:@"Syncing Clients..."];
-    });
-
-    [[ApiHandler sharedApiHandler] getClientsApiHandlerWithApiCallBlock:^(id data, NSError *error) {
-        
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            [self hideActivityIndicator];
-        });
-
-        if (error) {
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                alert = [[CustomeAlert alloc] init];
-                [alert showAlertWithTitle:nil message:@"Error in Syncing." cancelButtonTitle:@"OK" otherButtonTitles:nil withButtonHandler:^(NSInteger buttonIndex) {
-                    
-                }];
-                
-            });
-            return ;
-        }else{
-            
-            
-            NSString *successCode = [data objectForKey:@"errorcode"];
-            NSString *message = [data objectForKey:@"message"];
-            if (([successCode isEqualToString:@"200"] || [successCode isEqualToString:@"823"])) {
-                [self syncColor];
-            }else{
-                
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    alert = [[CustomeAlert alloc] init];
-                    [alert showAlertWithTitle:nil message:message cancelButtonTitle:@"OK" otherButtonTitles:nil withButtonHandler:^(NSInteger buttonIndex) {
-                        
-                    }];
-                    
-                });
-                return;
-            }
-            
-        }
-
-    }];
-    
-}
-- (void)syncColor{
- 
-    
-    dispatch_sync(dispatch_get_main_queue(), ^{
-        [self showActivityIndicator:@"Syncing Colors..."];
-    });
-
-    [[ApiHandler sharedApiHandler] getColorApiHandlerWithApiCallBlock:^(id data, NSError *error) {
-        
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            [self hideActivityIndicator];
-        });
-
-        if (error) {
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                alert = [[CustomeAlert alloc] init];
-                [alert showAlertWithTitle:nil message:@"Error in Syncing." cancelButtonTitle:@"OK" otherButtonTitles:nil withButtonHandler:^(NSInteger buttonIndex) {
-                    
-                }];
-                
-            });
-            return ;
-        }else{
-            
-            
-            NSString *successCode = [data objectForKey:@"errorcode"];
-            NSString *message = [data objectForKey:@"message"];
-            if (([successCode isEqualToString:@"200"] || [successCode isEqualToString:@"823"])) {
-                [self downloadImages];
-            }else{
-                
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    alert = [[CustomeAlert alloc] init];
-                    [alert showAlertWithTitle:nil message:message cancelButtonTitle:@"OK" otherButtonTitles:nil withButtonHandler:^(NSInteger buttonIndex) {
-                        
-                    }];
-                    
-                });
-                return;
-            }
-            
-        }
-        
-    }];
-
-}
-
-- (void)downloadImages{
-
-    
-    
-    NSString *imagePath = [[AppDataManager sharedAppDatamanager] imageDirPath];
-    [[NSFileManager defaultManager] removeItemAtPath:imagePath error:nil];
-    dispatch_sync(dispatch_get_main_queue(), ^{
-        [self showActivityIndicator:@"Syncing article images..."];
-    });
-    
-
-    
-    NSArray *imageArr = [[CXSSqliteHelper sharedSqliteHelper] runQuery:@"Select * From Article_Images" asObject:[Article_Image class]];
-    
-    
-    [imageArr enumerateObjectsUsingBlock:^(Article_Image *obj, NSUInteger idx, BOOL *stop) {
-        
-        NSString *fileName = [[obj url] lastPathComponent];
-//        NSURL *url1 = [NSURL URLWithString:@"http://img6a.flixcart.com/image/shoe/q/f/h/black-lc9230n-lee-cooper-43-400x400-imaefcspgxfhdnry.jpeg"];
-        NSURL *url1 = [NSURL URLWithString:[obj url]];
-        NSURLRequest *req = [NSURLRequest requestWithURL:url1];
-        NSURLResponse *response = nil;
-        NSError *error  = nil;
-        NSData *data = [NSURLConnection sendSynchronousRequest:req returningResponse:&response error:&error];
-        
-        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
-        NSInteger statusCode = [httpResponse statusCode];
-        if (statusCode == 200 && [data length]) {
-            [[AppDataManager sharedAppDatamanager]writeDataToImageFileName:fileName withData:data];
-        }
-    }];
-    
-    dispatch_sync(dispatch_get_main_queue(), ^{
-       
-        [self hideActivityIndicator];
-
-        alert = [[CustomeAlert alloc] init];
-        [alert showAlertWithTitle:nil message:@"Syncing completed" cancelButtonTitle:@"OK" otherButtonTitles:nil withButtonHandler:^(NSInteger buttonIndex) {
-            
-        }];
-        
-        [self configureUI];
-
-    });
-
-
-}
-- (void)showActivityIndicator:(NSString*)msg{
-
-    [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    [hud setLabelText:msg];
-
-
-}
-
-- (void)hideActivityIndicator{
-    [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
-}
 @end

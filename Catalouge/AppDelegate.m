@@ -21,7 +21,7 @@
     NSLog(@"HomeDirectory : %@",[NSHomeDirectory() stringByAppendingPathComponent:@"Documents/"]);
 
     BOOL isUserLogedIn = [NSUserDefaults isUserLoggedIn];
-    if (!isUserLogedIn) {
+    if (isUserLogedIn) {
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         LoginViewController *loginViewController = [storyboard instantiateViewControllerWithIdentifier:(isIPad() ? @"LoginViewController_iPad" : @"LoginViewController")];
         [self.window setRootViewController:loginViewController];

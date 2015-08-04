@@ -1,28 +1,28 @@
 //
-//  Client_Master.m
+//  ClientsApiResponse.m
 //
-//  Created by iVend  on 6/5/15
+//  Created by iVend  on 8/3/15
 //  Copyright (c) 2015 __MyCompanyName__. All rights reserved.
 //
 
-#import "Client_Master.h"
+#import "ClientsApiResponse.h"
 #import "Clients.h"
 
 
-NSString *const kClient_MasterSuccess = @"success";
-NSString *const kClient_MasterMessage = @"message";
-NSString *const kClient_MasterErrorcode = @"errorcode";
-NSString *const kClient_MasterClients = @"clients";
-NSString *const kClient_MasterVersion = @"version";
+NSString *const kClientsApiResponseSuccess = @"success";
+NSString *const kClientsApiResponseMessage = @"message";
+NSString *const kClientsApiResponseErrorcode = @"errorcode";
+NSString *const kClientsApiResponseClients = @"clients";
+NSString *const kClientsApiResponseVersion = @"version";
 
 
-@interface Client_Master ()
+@interface ClientsApiResponse ()
 
 - (id)objectOrNilForKey:(id)aKey fromDictionary:(NSDictionary *)dict;
 
 @end
 
-@implementation Client_Master
+@implementation ClientsApiResponse
 
 @synthesize success = _success;
 @synthesize message = _message;
@@ -31,9 +31,9 @@ NSString *const kClient_MasterVersion = @"version";
 @synthesize version = _version;
 
 
-+ (Client_Master *)modelObjectWithDictionary:(NSDictionary *)dict
++ (ClientsApiResponse *)modelObjectWithDictionary:(NSDictionary *)dict
 {
-    Client_Master *instance = [[Client_Master alloc] initWithDictionary:dict];
+    ClientsApiResponse *instance = [[ClientsApiResponse alloc] initWithDictionary:dict];
     return instance;
 }
 
@@ -44,10 +44,10 @@ NSString *const kClient_MasterVersion = @"version";
     // This check serves to make sure that a non-NSDictionary object
     // passed into the model class doesn't break the parsing.
     if(self && [dict isKindOfClass:[NSDictionary class]]) {
-            self.success = [self objectOrNilForKey:kClient_MasterSuccess fromDictionary:dict];
-            self.message = [self objectOrNilForKey:kClient_MasterMessage fromDictionary:dict];
-            self.errorcode = [self objectOrNilForKey:kClient_MasterErrorcode fromDictionary:dict];
-    NSObject *receivedClients = [dict objectForKey:kClient_MasterClients];
+            self.success = [self objectOrNilForKey:kClientsApiResponseSuccess fromDictionary:dict];
+            self.message = [self objectOrNilForKey:kClientsApiResponseMessage fromDictionary:dict];
+            self.errorcode = [self objectOrNilForKey:kClientsApiResponseErrorcode fromDictionary:dict];
+    NSObject *receivedClients = [dict objectForKey:kClientsApiResponseClients];
     NSMutableArray *parsedClients = [NSMutableArray array];
     if ([receivedClients isKindOfClass:[NSArray class]]) {
         for (NSDictionary *item in (NSArray *)receivedClients) {
@@ -60,7 +60,7 @@ NSString *const kClient_MasterVersion = @"version";
     }
 
     self.clients = [NSArray arrayWithArray:parsedClients];
-            self.version = [self objectOrNilForKey:kClient_MasterVersion fromDictionary:dict];
+            self.version = [self objectOrNilForKey:kClientsApiResponseVersion fromDictionary:dict];
 
     }
     
@@ -71,9 +71,9 @@ NSString *const kClient_MasterVersion = @"version";
 - (NSDictionary *)dictionaryRepresentation
 {
     NSMutableDictionary *mutableDict = [NSMutableDictionary dictionary];
-    [mutableDict setValue:self.success forKey:kClient_MasterSuccess];
-    [mutableDict setValue:self.message forKey:kClient_MasterMessage];
-    [mutableDict setValue:self.errorcode forKey:kClient_MasterErrorcode];
+    [mutableDict setValue:self.success forKey:kClientsApiResponseSuccess];
+    [mutableDict setValue:self.message forKey:kClientsApiResponseMessage];
+    [mutableDict setValue:self.errorcode forKey:kClientsApiResponseErrorcode];
 NSMutableArray *tempArrayForClients = [NSMutableArray array];
     for (NSObject *subArrayObject in self.clients) {
         if([subArrayObject respondsToSelector:@selector(dictionaryRepresentation)]) {
@@ -84,8 +84,8 @@ NSMutableArray *tempArrayForClients = [NSMutableArray array];
             [tempArrayForClients addObject:subArrayObject];
         }
     }
-    [mutableDict setValue:[NSArray arrayWithArray:tempArrayForClients] forKey:@"kClient_MasterClients"];
-    [mutableDict setValue:self.version forKey:kClient_MasterVersion];
+    [mutableDict setValue:[NSArray arrayWithArray:tempArrayForClients] forKey:@"kClientsApiResponseClients"];
+    [mutableDict setValue:self.version forKey:kClientsApiResponseVersion];
 
     return [NSDictionary dictionaryWithDictionary:mutableDict];
 }
@@ -109,22 +109,22 @@ NSMutableArray *tempArrayForClients = [NSMutableArray array];
 {
     self = [super init];
 
-    self.success = [aDecoder decodeObjectForKey:kClient_MasterSuccess];
-    self.message = [aDecoder decodeObjectForKey:kClient_MasterMessage];
-    self.errorcode = [aDecoder decodeObjectForKey:kClient_MasterErrorcode];
-    self.clients = [aDecoder decodeObjectForKey:kClient_MasterClients];
-    self.version = [aDecoder decodeObjectForKey:kClient_MasterVersion];
+    self.success = [aDecoder decodeObjectForKey:kClientsApiResponseSuccess];
+    self.message = [aDecoder decodeObjectForKey:kClientsApiResponseMessage];
+    self.errorcode = [aDecoder decodeObjectForKey:kClientsApiResponseErrorcode];
+    self.clients = [aDecoder decodeObjectForKey:kClientsApiResponseClients];
+    self.version = [aDecoder decodeObjectForKey:kClientsApiResponseVersion];
     return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
 
-    [aCoder encodeObject:_success forKey:kClient_MasterSuccess];
-    [aCoder encodeObject:_message forKey:kClient_MasterMessage];
-    [aCoder encodeObject:_errorcode forKey:kClient_MasterErrorcode];
-    [aCoder encodeObject:_clients forKey:kClient_MasterClients];
-    [aCoder encodeObject:_version forKey:kClient_MasterVersion];
+    [aCoder encodeObject:_success forKey:kClientsApiResponseSuccess];
+    [aCoder encodeObject:_message forKey:kClientsApiResponseMessage];
+    [aCoder encodeObject:_errorcode forKey:kClientsApiResponseErrorcode];
+    [aCoder encodeObject:_clients forKey:kClientsApiResponseClients];
+    [aCoder encodeObject:_version forKey:kClientsApiResponseVersion];
 }
 
 

@@ -1,19 +1,21 @@
 //
-//  Rawmaterials2.m
+//  RawmaterialApiResponse.m
 //
-//  Created by iVend  on 5/24/15
+//  Created by iVend  on 8/3/15
 //  Copyright (c) 2015 __MyCompanyName__. All rights reserved.
 //
 
 #import "RawmaterialApiResponse.h"
 #import "Rawmaterials.h"
+#import "Lasts.h"
 
 
-NSString *const kRawmaterials2Success = @"success";
-NSString *const kRawmaterials2Rawmaterials = @"rawmaterials";
-NSString *const kRawmaterials2Errorcode = @"errorcode";
-NSString *const kRawmaterials2Message = @"message";
-NSString *const kRawmaterials2Version = @"version";
+NSString *const kRawmaterialApiResponseSuccess = @"success";
+NSString *const kRawmaterialApiResponseRawmaterials = @"rawmaterials";
+NSString *const kRawmaterialApiResponseLasts = @"lasts";
+NSString *const kRawmaterialApiResponseErrorcode = @"errorcode";
+NSString *const kRawmaterialApiResponseMessage = @"message";
+NSString *const kRawmaterialApiResponseVersion = @"version";
 
 
 @interface RawmaterialApiResponse ()
@@ -26,6 +28,7 @@ NSString *const kRawmaterials2Version = @"version";
 
 @synthesize success = _success;
 @synthesize rawmaterials = _rawmaterials;
+@synthesize lasts = _lasts;
 @synthesize errorcode = _errorcode;
 @synthesize message = _message;
 @synthesize version = _version;
@@ -44,8 +47,8 @@ NSString *const kRawmaterials2Version = @"version";
     // This check serves to make sure that a non-NSDictionary object
     // passed into the model class doesn't break the parsing.
     if(self && [dict isKindOfClass:[NSDictionary class]]) {
-            self.success = [self objectOrNilForKey:kRawmaterials2Success fromDictionary:dict];
-    NSObject *receivedRawmaterials = [dict objectForKey:kRawmaterials2Rawmaterials];
+            self.success = [self objectOrNilForKey:kRawmaterialApiResponseSuccess fromDictionary:dict];
+    NSObject *receivedRawmaterials = [dict objectForKey:kRawmaterialApiResponseRawmaterials];
     NSMutableArray *parsedRawmaterials = [NSMutableArray array];
     if ([receivedRawmaterials isKindOfClass:[NSArray class]]) {
         for (NSDictionary *item in (NSArray *)receivedRawmaterials) {
@@ -58,9 +61,22 @@ NSString *const kRawmaterials2Version = @"version";
     }
 
     self.rawmaterials = [NSArray arrayWithArray:parsedRawmaterials];
-            self.errorcode = [self objectOrNilForKey:kRawmaterials2Errorcode fromDictionary:dict];
-            self.message = [self objectOrNilForKey:kRawmaterials2Message fromDictionary:dict];
-            self.version = [self objectOrNilForKey:kRawmaterials2Version fromDictionary:dict];
+    NSObject *receivedLasts = [dict objectForKey:kRawmaterialApiResponseLasts];
+    NSMutableArray *parsedLasts = [NSMutableArray array];
+    if ([receivedLasts isKindOfClass:[NSArray class]]) {
+        for (NSDictionary *item in (NSArray *)receivedLasts) {
+            if ([item isKindOfClass:[NSDictionary class]]) {
+                [parsedLasts addObject:[Lasts modelObjectWithDictionary:item]];
+            }
+       }
+    } else if ([receivedLasts isKindOfClass:[NSDictionary class]]) {
+       [parsedLasts addObject:[Lasts modelObjectWithDictionary:(NSDictionary *)receivedLasts]];
+    }
+
+    self.lasts = [NSArray arrayWithArray:parsedLasts];
+            self.errorcode = [self objectOrNilForKey:kRawmaterialApiResponseErrorcode fromDictionary:dict];
+            self.message = [self objectOrNilForKey:kRawmaterialApiResponseMessage fromDictionary:dict];
+            self.version = [self objectOrNilForKey:kRawmaterialApiResponseVersion fromDictionary:dict];
 
     }
     
@@ -71,7 +87,7 @@ NSString *const kRawmaterials2Version = @"version";
 - (NSDictionary *)dictionaryRepresentation
 {
     NSMutableDictionary *mutableDict = [NSMutableDictionary dictionary];
-    [mutableDict setValue:self.success forKey:kRawmaterials2Success];
+    [mutableDict setValue:self.success forKey:kRawmaterialApiResponseSuccess];
 NSMutableArray *tempArrayForRawmaterials = [NSMutableArray array];
     for (NSObject *subArrayObject in self.rawmaterials) {
         if([subArrayObject respondsToSelector:@selector(dictionaryRepresentation)]) {
@@ -82,10 +98,21 @@ NSMutableArray *tempArrayForRawmaterials = [NSMutableArray array];
             [tempArrayForRawmaterials addObject:subArrayObject];
         }
     }
-    [mutableDict setValue:[NSArray arrayWithArray:tempArrayForRawmaterials] forKey:@"kRawmaterials2Rawmaterials"];
-    [mutableDict setValue:self.errorcode forKey:kRawmaterials2Errorcode];
-    [mutableDict setValue:self.message forKey:kRawmaterials2Message];
-    [mutableDict setValue:self.version forKey:kRawmaterials2Version];
+    [mutableDict setValue:[NSArray arrayWithArray:tempArrayForRawmaterials] forKey:@"kRawmaterialApiResponseRawmaterials"];
+NSMutableArray *tempArrayForLasts = [NSMutableArray array];
+    for (NSObject *subArrayObject in self.lasts) {
+        if([subArrayObject respondsToSelector:@selector(dictionaryRepresentation)]) {
+            // This class is a model object
+            [tempArrayForLasts addObject:[subArrayObject performSelector:@selector(dictionaryRepresentation)]];
+        } else {
+            // Generic object
+            [tempArrayForLasts addObject:subArrayObject];
+        }
+    }
+    [mutableDict setValue:[NSArray arrayWithArray:tempArrayForLasts] forKey:@"kRawmaterialApiResponseLasts"];
+    [mutableDict setValue:self.errorcode forKey:kRawmaterialApiResponseErrorcode];
+    [mutableDict setValue:self.message forKey:kRawmaterialApiResponseMessage];
+    [mutableDict setValue:self.version forKey:kRawmaterialApiResponseVersion];
 
     return [NSDictionary dictionaryWithDictionary:mutableDict];
 }
@@ -109,22 +136,24 @@ NSMutableArray *tempArrayForRawmaterials = [NSMutableArray array];
 {
     self = [super init];
 
-    self.success = [aDecoder decodeObjectForKey:kRawmaterials2Success];
-    self.rawmaterials = [aDecoder decodeObjectForKey:kRawmaterials2Rawmaterials];
-    self.errorcode = [aDecoder decodeObjectForKey:kRawmaterials2Errorcode];
-    self.message = [aDecoder decodeObjectForKey:kRawmaterials2Message];
-    self.version = [aDecoder decodeObjectForKey:kRawmaterials2Version];
+    self.success = [aDecoder decodeObjectForKey:kRawmaterialApiResponseSuccess];
+    self.rawmaterials = [aDecoder decodeObjectForKey:kRawmaterialApiResponseRawmaterials];
+    self.lasts = [aDecoder decodeObjectForKey:kRawmaterialApiResponseLasts];
+    self.errorcode = [aDecoder decodeObjectForKey:kRawmaterialApiResponseErrorcode];
+    self.message = [aDecoder decodeObjectForKey:kRawmaterialApiResponseMessage];
+    self.version = [aDecoder decodeObjectForKey:kRawmaterialApiResponseVersion];
     return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
 
-    [aCoder encodeObject:_success forKey:kRawmaterials2Success];
-    [aCoder encodeObject:_rawmaterials forKey:kRawmaterials2Rawmaterials];
-    [aCoder encodeObject:_errorcode forKey:kRawmaterials2Errorcode];
-    [aCoder encodeObject:_message forKey:kRawmaterials2Message];
-    [aCoder encodeObject:_version forKey:kRawmaterials2Version];
+    [aCoder encodeObject:_success forKey:kRawmaterialApiResponseSuccess];
+    [aCoder encodeObject:_rawmaterials forKey:kRawmaterialApiResponseRawmaterials];
+    [aCoder encodeObject:_lasts forKey:kRawmaterialApiResponseLasts];
+    [aCoder encodeObject:_errorcode forKey:kRawmaterialApiResponseErrorcode];
+    [aCoder encodeObject:_message forKey:kRawmaterialApiResponseMessage];
+    [aCoder encodeObject:_version forKey:kRawmaterialApiResponseVersion];
 }
 
 

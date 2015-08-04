@@ -1,7 +1,7 @@
 //
-//  Client_Master.h
+//  ClientsApiResponse.h
 //
-//  Created by iVend  on 6/5/15
+//  Created by iVend  on 8/3/15
 //  Copyright (c) 2015 __MyCompanyName__. All rights reserved.
 //
 
@@ -9,7 +9,7 @@
 
 
 
-@interface Client_Master : NSObject <NSCoding>
+@interface ClientsApiResponse : NSObject <NSCoding>
 
 @property (nonatomic, strong) NSString *success;
 @property (nonatomic, strong) NSString *message;
@@ -17,7 +17,7 @@
 @property (nonatomic, strong) NSArray *clients;
 @property (nonatomic, strong) NSString *version;
 
-+ (Client_Master *)modelObjectWithDictionary:(NSDictionary *)dict;
++ (ClientsApiResponse *)modelObjectWithDictionary:(NSDictionary *)dict;
 - (instancetype)initWithDictionary:(NSDictionary *)dict;
 - (NSDictionary *)dictionaryRepresentation;
 

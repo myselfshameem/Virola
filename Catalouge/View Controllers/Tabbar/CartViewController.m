@@ -51,6 +51,9 @@ CustomeAlert *alert;
     
     [[self lbl_Client_Name] setText:[NSString stringWithFormat:@"Client - %@",[cleintName length] ? cleintName : @""]];
 
+    [[self lbl_UserName] setText:[NSString stringWithFormat:@"Agent - %@",[[[[AppDataManager sharedAppDatamanager] account] user] username] ? [[[[AppDataManager sharedAppDatamanager] account] user] username] : @""]];
+
+    
     NSInteger order = [[self cartArr] count];
     
     if (order !=0) {
@@ -110,9 +113,9 @@ CustomeAlert *alert;
     cell.lbl_Quantity.text = [trx qty];
 
     
-    Article_Image *articleImage = article.image;
+    Article_Image *articleImage = [article.images firstObject];
     if (articleImage) {
-        NSString *fileName = [articleImage.url lastPathComponent];
+        NSString *fileName = [articleImage.imagePath lastPathComponent];
         NSString *filePath = [[[AppDataManager sharedAppDatamanager] imageDirPath] stringByAppendingPathComponent:fileName];
         cell.imgVw_Logo.image = [UIImage imageWithContentsOfFile:filePath];
         
@@ -287,6 +290,8 @@ CustomeAlert *alert;
                             alert = [[CustomeAlert alloc] init];
                             [alert showAlertWithTitle:nil message:[responsedData objectForKey:@"message"] cancelButtonTitle:@"OK" otherButtonTitles:nil withButtonHandler:^(NSInteger buttonIndex) {
                                 
+                                [[self tabBarController] setSelectedIndex:0];
+                                
                             }];
                         [self refreshUI];
                     });
@@ -295,6 +300,8 @@ CustomeAlert *alert;
                     dispatch_sync(dispatch_get_main_queue(), ^{
                         alert = [[CustomeAlert alloc] init];
                         [alert showAlertWithTitle:nil message:[responsedData objectForKey:@"message"] cancelButtonTitle:@"OK" otherButtonTitles:nil withButtonHandler:^(NSInteger buttonIndex) {
+                            
+                            
                             
                         }];
                     });

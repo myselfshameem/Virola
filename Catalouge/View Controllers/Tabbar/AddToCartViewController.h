@@ -13,12 +13,16 @@
 @property (strong, nonatomic) IBOutlet UIPageControl *pageCtrl;
 @property (strong, nonatomic) NSMutableArray *arrArticles;
 @property (strong, nonatomic) NSMutableArray *article_Images;
-
+@property (strong, nonatomic) UIToolbar *toolbar;
 @property (strong, nonatomic) IBOutlet UITextField *txtField_Input;
 @property (strong, nonatomic) IBOutlet UIPickerView *picker;
 @property (strong, nonatomic) IBOutlet UIView *dargView;
 @property (strong, nonatomic) IBOutlet UIButton *dargButton;
 @property (strong, nonatomic) IBOutlet UITableView *relatedProduct;
+@property (strong, nonatomic) __block  IBOutlet UITableView *tbl_RawMatarial;
+@property (strong, nonatomic) __block  UITableView *tbl_Leather;
+@property (strong, nonatomic) __block  UITableView *tbl_Lining;
+
 @property (assign, nonatomic) UITextField *common_TxtField;
 
 @property (assign, nonatomic) IBOutlet UILabel *lbl_Title;
@@ -120,4 +124,5 @@
 
 -(IBAction)zoomButtonPressed:(id)sender;
 -(IBAction)addToCart:(id)sender;
+-(IBAction)btn_Pressed:(id)sender;
 @end

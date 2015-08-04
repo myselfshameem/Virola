@@ -17,4 +17,5 @@
 @property (strong, nonatomic) IBOutlet UILabel *lbl_SyncDate;
 @property (strong, nonatomic) NSMutableArray *arrArticles;
 - (IBAction)syncData:(id)sender;
+- (IBAction)newDevelopment:(id)sender;
 @end
