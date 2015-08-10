@@ -6,7 +6,7 @@
 //
 
 #import "Articles.h"
-#import "Rawmaterials.h"
+#import "ArticlesRawmaterials.h"
 
 
 NSString *const kArticlesSoleid = @"soleid";
@@ -37,7 +37,7 @@ NSString *const kArticlesSizefrom = @"sizefrom";
 @synthesize price = _price;
 @synthesize articleid = _articleid;
 @synthesize sizeto = _sizeto;
-@synthesize rawmaterials = _rawmaterials;
+@synthesize articlesRawmaterials = _articlesRawmaterials;
 @synthesize mLC = _mLC;
 @synthesize images = _images;
 @synthesize sizefrom = _sizefrom;
@@ -68,14 +68,14 @@ NSString *const kArticlesSizefrom = @"sizefrom";
         if ([receivedRawmaterials isKindOfClass:[NSArray class]]) {
             for (NSDictionary *item in (NSArray *)receivedRawmaterials) {
                 if ([item isKindOfClass:[NSDictionary class]]) {
-                    [parsedRawmaterials addObject:[Rawmaterials modelObjectWithDictionary:item]];
+                    [parsedRawmaterials addObject:[ArticlesRawmaterials modelObjectWithDictionary:item]];
                 }
             }
         } else if ([receivedRawmaterials isKindOfClass:[NSDictionary class]]) {
-            [parsedRawmaterials addObject:[Rawmaterials modelObjectWithDictionary:(NSDictionary *)receivedRawmaterials]];
+            [parsedRawmaterials addObject:[ArticlesRawmaterials modelObjectWithDictionary:(NSDictionary *)receivedRawmaterials]];
         }
         
-        self.rawmaterials = [NSArray arrayWithArray:parsedRawmaterials];
+        self.articlesRawmaterials = [NSArray arrayWithArray:parsedRawmaterials];
         self.mLC = [self objectOrNilForKey:kArticlesMLC fromDictionary:dict];
         self.images = [self objectOrNilForKey:kArticlesImages fromDictionary:dict];
         self.sizefrom = [self objectOrNilForKey:kArticlesSizefrom fromDictionary:dict];
@@ -97,7 +97,7 @@ NSString *const kArticlesSizefrom = @"sizefrom";
     [mutableDict setValue:self.articleid forKey:kArticlesArticleid];
     [mutableDict setValue:self.sizeto forKey:kArticlesSizeto];
     NSMutableArray *tempArrayForRawmaterials = [NSMutableArray array];
-    for (NSObject *subArrayObject in self.rawmaterials) {
+    for (NSObject *subArrayObject in self.articlesRawmaterials) {
         if([subArrayObject respondsToSelector:@selector(dictionaryRepresentation)]) {
             // This class is a model object
             [tempArrayForRawmaterials addObject:[subArrayObject performSelector:@selector(dictionaryRepresentation)]];
@@ -150,7 +150,7 @@ NSString *const kArticlesSizefrom = @"sizefrom";
     self.price = [aDecoder decodeObjectForKey:kArticlesPrice];
     self.articleid = [aDecoder decodeObjectForKey:kArticlesArticleid];
     self.sizeto = [aDecoder decodeObjectForKey:kArticlesSizeto];
-    self.rawmaterials = [aDecoder decodeObjectForKey:kArticlesRawmaterials];
+    self.articlesRawmaterials = [aDecoder decodeObjectForKey:kArticlesRawmaterials];
     self.mLC = [aDecoder decodeObjectForKey:kArticlesMLC];
     self.images = [aDecoder decodeObjectForKey:kArticlesImages];
     self.sizefrom = [aDecoder decodeObjectForKey:kArticlesSizefrom];
@@ -167,7 +167,7 @@ NSString *const kArticlesSizefrom = @"sizefrom";
     [aCoder encodeObject:_price forKey:kArticlesPrice];
     [aCoder encodeObject:_articleid forKey:kArticlesArticleid];
     [aCoder encodeObject:_sizeto forKey:kArticlesSizeto];
-    [aCoder encodeObject:_rawmaterials forKey:kArticlesRawmaterials];
+    [aCoder encodeObject:_articlesRawmaterials forKey:kArticlesRawmaterials];
     [aCoder encodeObject:_mLC forKey:kArticlesMLC];
     [aCoder encodeObject:_images forKey:kArticlesImages];
     [aCoder encodeObject:_sizefrom forKey:kArticlesSizefrom];
@@ -176,7 +176,7 @@ NSString *const kArticlesSizefrom = @"sizefrom";
 - (NSArray*)images{
 
     if (!_images)
-        _images = [[CXSSqliteHelper sharedSqliteHelper] runQuery:@"SELECT * FROM Article_Image WHERE %@" asObject:[Article_Image class]];
+        _images = [[CXSSqliteHelper sharedSqliteHelper] runQuery:[NSString stringWithFormat:@"SELECT * FROM Article_Images WHERE '%@'",_articleid] asObject:[Article_Image class]];
 
     return _images;
 }

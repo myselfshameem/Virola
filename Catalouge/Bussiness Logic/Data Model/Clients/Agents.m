@@ -21,7 +21,7 @@ NSString *const kAgentsPin = @"pin";
 NSString *const kAgentsContactperson = @"contactperson";
 NSString *const kAgentsCountry = @"country";
 NSString *const kAgentsEmail = @"email";
-
+NSString *const kClientid = @"clientid";
 
 @interface Agents ()
 

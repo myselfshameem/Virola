@@ -20,8 +20,9 @@
     // Override point for customization after application launch.
     NSLog(@"HomeDirectory : %@",[NSHomeDirectory() stringByAppendingPathComponent:@"Documents/"]);
 
-    BOOL isUserLogedIn = [NSUserDefaults isUserLoggedIn];
-    if (isUserLogedIn) {
+    Account *account = [[AppDataManager sharedAppDatamanager] lastLoggedInUser];
+    [[AppDataManager sharedAppDatamanager] setAccount:account];
+    if (!account) {
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         LoginViewController *loginViewController = [storyboard instantiateViewControllerWithIdentifier:(isIPad() ? @"LoginViewController_iPad" : @"LoginViewController")];
         [self.window setRootViewController:loginViewController];
@@ -70,4 +71,5 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
+ 
 @end

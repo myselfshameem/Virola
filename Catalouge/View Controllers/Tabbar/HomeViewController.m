@@ -9,7 +9,7 @@
 #import "HomeViewController.h"
 #import "HomeCollectionViewCell.h"
 #import "SyncViewController.h"
-
+#import "NewDevelopmentCtrl.h"
 
 CustomeAlert *alert;
 @interface HomeViewController ()
@@ -29,17 +29,17 @@ CustomeAlert *alert;
 
     
     //
-    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btn setFrame:CGRectMake(0, 0, 30, 30)];
-    [btn setImage:[UIImage imageNamed:@"Tabbar_Account_Selected"] forState:UIControlStateNormal];
-    [btn setImage:[UIImage imageNamed:@"Tabbar_Account_Selected"] forState:UIControlStateSelected];
-
-    UIBarButtonItem *bar = [[UIBarButtonItem alloc] initWithCustomView:btn];
-    
-    
-//    [bar setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont fontWithName:@"MyriadPro-Regular" size:16],NSFontAttributeName, [UIColor whiteColor], NSForegroundColorAttributeName, nil] forState:UIControlStateNormal];
-//    [bar setImage:[UIImage imageNamed:@"Tabbar_Account"]];
-    [[self navigationItem] setRightBarButtonItem:bar];
+//    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    [btn setFrame:CGRectMake(0, 0, 30, 30)];
+//    [btn setImage:[UIImage imageNamed:@"Tabbar_Account_Selected"] forState:UIControlStateNormal];
+//    [btn setImage:[UIImage imageNamed:@"Tabbar_Account_Selected"] forState:UIControlStateSelected];
+//
+//    UIBarButtonItem *bar = [[UIBarButtonItem alloc] initWithCustomView:btn];
+//    
+//    
+////    [bar setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont fontWithName:@"MyriadPro-Regular" size:16],NSFontAttributeName, [UIColor whiteColor], NSForegroundColorAttributeName, nil] forState:UIControlStateNormal];
+////    [bar setImage:[UIImage imageNamed:@"Tabbar_Account"]];
+//    [[self navigationItem] setRightBarButtonItem:bar];
 
     
 }
@@ -58,9 +58,9 @@ CustomeAlert *alert;
     NSArray *arrArticles = [[CXSSqliteHelper sharedSqliteHelper] runQuery:@"SELECT articleid FROM Article_Master" asObject:[Articles class]];
     
     
-    NSArray *arrArticlesImaegs = [[CXSSqliteHelper sharedSqliteHelper] runQuery:@"SELECT * FROM Article_Images LIMIT 5" asObject:[Article_Image class]];
+//    NSArray *arrArticlesImaegs = [[CXSSqliteHelper sharedSqliteHelper] runQuery:@"SELECT * FROM Article_Images LIMIT 5" asObject:[Article_Image class]];
 
-    self.arrArticles = [NSMutableArray arrayWithArray:arrArticlesImaegs];
+//    self.arrArticles = [NSMutableArray arrayWithArray:arrArticlesImaegs];
     
     [[self lbl_NumberOfArticles] setText:[NSString stringWithFormat:@"%lu",(unsigned long)[arrArticles count]]];
     
@@ -70,10 +70,15 @@ CustomeAlert *alert;
     
     [[self lbl_SyncDate] setText:[NSUserDefaults lastSynTime]];
 
-    [self.pageCtrl setNumberOfPages:[self.arrArticles count]];
+//    [self.pageCtrl setNumberOfPages:[self.arrArticles count]];
+//
+//    [[self CollectionView] reloadData];
 
-    [[self CollectionView] reloadData];
+    NSArray *arrMyOrder = [[CXSSqliteHelper sharedSqliteHelper] runQuery:@"SELECT * FROM MyOrder" asObject:[Articles class]];
 
+    [[self lbl_NumberOfReports] setText:[NSString stringWithFormat:@"%lu",(unsigned long)[arrMyOrder count]]];
+
+    
 
 }
 - (NSMutableArray*)arrArticles{
@@ -172,7 +177,10 @@ CustomeAlert *alert;
 - (IBAction)newDevelopment:(id)sender{
 
     
-
+    NewDevelopmentCtrl *newDev = [[self storyboard] instantiateViewControllerWithIdentifier:@"NewDevelopmentCtrl"];
+    [[self navigationController] pushViewController:newDev animated:YES];
+    [[AppDataManager sharedAppDatamanager] newTransactionWithArticleId:@"" withNewDevelopment:YES];
+    newDev = nil;
 }
 
 @end

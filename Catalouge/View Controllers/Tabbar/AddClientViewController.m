@@ -14,6 +14,7 @@ CustomeAlert *alert;
 @property (weak, nonatomic) IBOutlet UIView *view_EmailAddress;
 @property (weak, nonatomic) IBOutlet UIView *view_ContactNumber;
 @property (weak, nonatomic) IBOutlet UIView *view_Address;
+@property (weak, nonatomic) IBOutlet UIView *view_Address1;
 @property (weak, nonatomic) IBOutlet UIView *view_State;
 @property (weak, nonatomic) IBOutlet UIView *view_Country;
 @end
@@ -29,6 +30,8 @@ CustomeAlert *alert;
     self.view_EmailAddress.layer.cornerRadius = 20;
     self.view_ContactNumber.layer.cornerRadius = 20;
     self.view_Address.layer.cornerRadius = 20;
+    self.view_Address1.layer.cornerRadius = 20;
+
     self.view_State.layer.cornerRadius = 20;
     self.view_Country.layer.cornerRadius = 20;
     self.btn_AddClient.layer.cornerRadius = 18;
@@ -38,6 +41,8 @@ CustomeAlert *alert;
     self.view_EmailAddress.layer.borderColor = borderColor;
     self.view_ContactNumber.layer.borderColor = borderColor;
     self.view_Address.layer.borderColor = borderColor;
+    self.view_Address1.layer.borderColor = borderColor;
+
     self.view_State.layer.borderColor = borderColor;
     self.view_Country.layer.borderColor = borderColor;
     //self.btn_AddClient.layer.borderColor = borderColor;
@@ -46,6 +51,8 @@ CustomeAlert *alert;
     self.view_EmailAddress.layer.borderWidth = 1;
     self.view_ContactNumber.layer.borderWidth = 1;
     self.view_Address.layer.borderWidth = 1;
+    self.view_Address1.layer.borderWidth = 1;
+
     self.view_State.layer.borderWidth = 1;
     self.view_Country.layer.borderWidth = 1;
     //self.btn_AddClient.layer.borderWidth = 1;
@@ -81,12 +88,13 @@ CustomeAlert *alert;
 
 - (void)refreshUI{
 
-    [[self txt_Name] setText:[[self client] name]];
-    //[[self txt_Email] setText:[[self client] email]];
-    //[[self txt_ContactNum] setText:[[self client] contactNumber]];
-    [[self txt_Address] setText:[[self client] address1]];
-    [[self txt_Country] setText:[[self client] country]];
-    //[[self txt_State] setText:[[self client] state]];
+    [[self txt_Company] setText:[[self client] company]];
+    [[self txt_Email] setText:[[self client] email]];
+    [[self txt_ContactPerson] setText:[[self client] contactperson]];
+    [[self txt_Address1] setText:[[self client] address1]];
+    [[self txt_Address2] setText:[[self client] address2]];
+    [[self txt_City] setText:[[self client] country]];
+    [[self txt_Country] setText:[[self client] city]];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -116,22 +124,22 @@ CustomeAlert *alert;
 
     switch ([textField tag]) {
         case 1:
-            self.client.name = textField.text;
+            self.client.company = textField.text;
             break;
         case 2:
-            // self.client.email = textField.text;
+             self.client.email = textField.text;
 
             break;
         case 3:
-            // self.client.contactNumber = textField.text;
-
-            break;
-        case 5:
-            self.client.country = textField.text;
+             self.client.contactperson = textField.text;
 
             break;
         case 6:
-            // self.client.state = textField.text;
+            self.client.city = textField.text;
+
+            break;
+        case 7:
+             self.client.country = textField.text;
             
             break;
 
@@ -163,7 +171,13 @@ CustomeAlert *alert;
 }
 - (void)textViewDidEndEditing:(UITextView *)textView{
 
-    self.client.address1 = textView.text;
+    if ([textView tag] == 4) {
+        self.client.address1 = textView.text;
+
+    }else{
+        self.client.address2 = textView.text;
+
+    }
 
 }
 
@@ -181,10 +195,10 @@ CustomeAlert *alert;
 #pragma mark - AddClient 
 - (IBAction)addClient:(id)sender{
 
-    [[self txt_State] resignFirstResponder];
+    [[self txt_Email] resignFirstResponder];
     
     //Save into DB
-    if ([[[self client] name] length]) {
+    if ([[[self client] company] length]) {
         
         
 
@@ -229,7 +243,7 @@ CustomeAlert *alert;
         //Error
         
         alert = [[CustomeAlert alloc] init];
-        [alert showAlertWithTitle:nil message:@"Name can not be left blank." cancelButtonTitle:@"OK" otherButtonTitles:nil withButtonHandler:^(NSInteger buttonIndex) {
+        [alert showAlertWithTitle:nil message:@"Company can not be left blank." cancelButtonTitle:@"OK" otherButtonTitles:nil withButtonHandler:^(NSInteger buttonIndex) {
            
             
         }];
@@ -245,7 +259,8 @@ CustomeAlert *alert;
 #pragma mark - Toolbar
 - (void)DoneInput{
     
-    [[self txt_Address] resignFirstResponder];
+    [[self txt_Address2] resignFirstResponder];
+    [[self txt_Address1] resignFirstResponder];
 }
 
 - (void)showActivityIndicator:(NSString*)msg{

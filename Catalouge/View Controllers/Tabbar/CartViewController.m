@@ -9,9 +9,10 @@
 #import "CartViewController.h"
 #import "CartTableViewCell.h"
 #import "ClientViewController.h"
+#import "SearchViewController.h"
 CustomeAlert *alert;
 
-@interface CartViewController ()
+@interface CartViewController ()<UITextViewDelegate>
 @property(nonatomic,strong) __block NSArray *cartArr;
 @end
 
@@ -23,7 +24,12 @@ CustomeAlert *alert;
     self.btn_PlaceOrder.layer.cornerRadius = 12;
     [self setTitle:@"Cart"];
     
-
+    UIView *vw = [[[NSBundle mainBundle] loadNibNamed:@"CartListFooter" owner:self options:nil] lastObject];
+    [[self tbl_List_Cart] setTableFooterView:vw];
+    [self initilizeFooterPayment];
+    self.txt_ShippingTermsRemarks.delegate = self;
+    self.lbl_Client_Name.adjustsFontSizeToFitWidth = YES;
+    self.lbl_UserName.adjustsFontSizeToFitWidth = YES;
     
 }
 - (void)viewWillAppear:(BOOL)animated{
@@ -47,7 +53,7 @@ CustomeAlert *alert;
     [[self lbl_Price] setText:[NSString stringWithFormat:@"€ %0.2f",total]];
     [[self lbl_Total_Item] setText:[NSString stringWithFormat:@"Total\n%i Items",totalQty]];
     
-    NSString *cleintName = [[[AppDataManager sharedAppDatamanager] selectedClient] name];
+    NSString *cleintName = [[[AppDataManager sharedAppDatamanager] selectedClient] company];
     
     [[self lbl_Client_Name] setText:[NSString stringWithFormat:@"Client - %@",[cleintName length] ? cleintName : @""]];
 
@@ -95,7 +101,7 @@ CustomeAlert *alert;
     
     if (!cell) {
         cell = [[[NSBundle mainBundle] loadNibNamed:@"CartTableViewCell" owner:self options:nil] firstObject];
-
+        [cell initilizeCell];
     }
     
     cell.vw_qty.layer.cornerRadius = 5;
@@ -107,18 +113,32 @@ CustomeAlert *alert;
     TrxTransaction *trx = [self.cartArr objectAtIndex:indexPath.row];
     Articles *article = [trx article];
 
-    cell.lbl_Title.text = [article articlename];
-    cell.lbl_Description.text = [NSString stringWithFormat:@"Article No:. %@",[trx articleid]];
-    cell.lbl_Price.text = [NSString stringWithFormat:@"€ %@",[article price]];
+    if ([[trx isnew] isEqualToString:@"1"]) {
+        
+        cell.lbl_Title.text = @"";
+        cell.lbl_Description.text = @"";
+        cell.lbl_Price.text = @"";
+
+    }else{
+        cell.lbl_Title.text = [article articlename];
+        cell.lbl_Description.text = [NSString stringWithFormat:@"Article No:. %@",[trx articleid]];
+        cell.lbl_Price.text = [NSString stringWithFormat:@"€ %@",[article price]];
+    }
     cell.lbl_Quantity.text = [trx qty];
 
     
-    Article_Image *articleImage = [article.images firstObject];
-    if (articleImage) {
-        NSString *fileName = [articleImage.imagePath lastPathComponent];
-        NSString *filePath = [[[AppDataManager sharedAppDatamanager] imageDirPath] stringByAppendingPathComponent:fileName];
+    if ([[trx isnew] isEqualToString:@"1"]) {
+        NSString *filePath = [[[AppDataManager sharedAppDatamanager] fetchNewDevelopmentImageDir] stringByAppendingFormat:@"/%@.png",[trx TransactionId]];
         cell.imgVw_Logo.image = [UIImage imageWithContentsOfFile:filePath];
-        
+    }else{
+        Article_Image *articleImage = [article.images firstObject];
+        if (articleImage) {
+            NSString *fileName = [articleImage.imagePath lastPathComponent];
+            NSString *filePath = [[[AppDataManager sharedAppDatamanager] imageDirPath] stringByAppendingPathComponent:fileName];
+            cell.imgVw_Logo.image = [UIImage imageWithContentsOfFile:filePath];
+            
+        }
+
     }
 
     
@@ -147,7 +167,12 @@ CustomeAlert *alert;
     return 101;
 }
 
-
+//- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+//
+//
+//    return 400;
+//
+//}
 
 
 #pragma mark - Actions
@@ -201,13 +226,18 @@ CustomeAlert *alert;
             
             NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
             [dict setObject:trx.articleid forKey:@"articleid"];
+            [dict setObject:trx.articlename forKey:@"articlename"];
+            [dict setObject:trx.ischange forKey:@"ischange"];
+            [dict setObject:trx.isnew forKey:@"isnew"];
+            [dict setObject:trx.lastid forKey:@"lastid"];
             [dict setObject:trx.qty forKey:@"qty"];
             [dict setObject:trx.qty_unit forKey:@"qty_unit"];
-            [dict setObject:trx.size forKey:@"size"];
             [dict setObject:([trx.remark length] ? trx.remark : @"") forKey:@"remark"];
-            
+            [dict setObject:trx.size forKey:@"size"];
+            [dict setObject:trx.soleid forKey:@"soleid"];
+
             NSMutableArray *arrRawMaetrial = [[NSMutableArray alloc] init];
-            [[trx rawmaterials] enumerateObjectsUsingBlock:^(Trx_Rawmaterials *rawmaterials, NSUInteger idx, BOOL *stop) {
+            [[trx trx_Rawmaterials] enumerateObjectsUsingBlock:^(Trx_Rawmaterials *rawmaterials, NSUInteger idx, BOOL *stop) {
                 
                 NSMutableDictionary *dictRaw = [[NSMutableDictionary alloc] init];
                 [dictRaw setObject:rawmaterials.rawmaterialid forKey:@"rawmaterialid"];
@@ -224,9 +254,39 @@ CustomeAlert *alert;
             
         }];
         
+        
+//        deshippingterms
+//        "sadfasdf"
+//        modeshippingtermsremarks
+//        "sadfasdf"
+//        paymentterms
+//        "sadfasdf"
+//        paymenttermsremarks
+//        "sadfasdf"
+//        remark
+//        "sadfasdf"
+//        shippingterms
+//        "sadfasdf"
+//        shippingtermsremarks
+//        "sadfasdf"
+        
+        AppDataManager *dataManager = [AppDataManager sharedAppDatamanager];
+        
         NSDictionary *mainDict1 = [NSDictionary dictionaryWithObjectsAndKeys:
                                   cleintName,@"clientid",
+                                
+                                   [dataManager validateString:[[dataManager paymentTerms] paymentTerm]],@"paymentterms",
+                                   
+                                   [dataManager validateString:[[dataManager paymentTermRemakrs] paymentTermRemark]],@"paymenttermsremarks",
+                                   
+                                   [dataManager validateString:[[dataManager shippingTerms] shippingTerm]],@"shippingterms",
+                                   
+                                   [dataManager validateString:[dataManager shippingTermsRemarks]],@"shippingtermsremarks",
+                                   
+                                   [dataManager validateString:[[dataManager modeofshipping] shippingMode]],@"modeshippingterms",
+
                                   arr,@"articles",
+                                   
                                   nil];
         
         NSDictionary *mainDict = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -286,6 +346,11 @@ CustomeAlert *alert;
                     [[CXSSqliteHelper sharedSqliteHelper] runQuery:@"DELETE FROM TrxTransaction" asObject:[TrxTransaction class]];
                     [[CXSSqliteHelper sharedSqliteHelper] runQuery:@"DELETE FROM Trx_Rawmaterials" asObject:[Trx_Rawmaterials class]];
 
+                    NSString *insertOrderQuery = [NSString stringWithFormat:@"Insert Into MyOrder (order_number,orderid) Values ('%@','%@')",[[AppDataManager sharedAppDatamanager] validateString:[responsedData objectForKey:@"order_number"]],[[AppDataManager sharedAppDatamanager] validateString:[responsedData objectForKey:@"orderid"]]];
+                    
+                    [[CXSSqliteHelper sharedSqliteHelper] runQuery:insertOrderQuery asObject:[MyOrder class]];
+
+                    
                     dispatch_sync(dispatch_get_main_queue(), ^{
                             alert = [[CustomeAlert alloc] init];
                             [alert showAlertWithTitle:nil message:[responsedData objectForKey:@"message"] cancelButtonTitle:@"OK" otherButtonTitles:nil withButtonHandler:^(NSInteger buttonIndex) {
@@ -342,4 +407,168 @@ CustomeAlert *alert;
 }
 
 
+
+
+#pragma mark - Payment Terms
+- (void)initilizeFooterPayment{
+
+    CGColorRef fuck = [UIColor blackColor].CGColor;
+    self.vw_PaymentTerms.layer.cornerRadius = 1;
+    self.vw_PaymentTerms.layer.borderWidth = 1;
+    self.vw_PaymentTerms.layer.borderColor = fuck;
+    
+    
+    self.vw_PaymentTermsRemarks.layer.cornerRadius = 1;
+    self.vw_PaymentTermsRemarks.layer.borderWidth = 1;
+    self.vw_PaymentTermsRemarks.layer.borderColor = fuck;
+
+    
+    self.vw_ShippingTerms.layer.cornerRadius = 1;
+    self.vw_ShippingTerms.layer.borderWidth = 1;
+    self.vw_ShippingTerms.layer.borderColor = fuck;
+
+
+    self.vw_ShippingTermsRemarks.layer.cornerRadius = 1;
+    self.vw_ShippingTermsRemarks.layer.borderWidth = 1;
+    self.vw_ShippingTermsRemarks.layer.borderColor = fuck;
+
+    
+    
+    self.vw_ModeOfShipping.layer.cornerRadius = 1;
+    self.vw_ModeOfShipping.layer.borderWidth = 1;
+    self.vw_ModeOfShipping.layer.borderColor = fuck;
+    
+    
+    
+
+}
+- (IBAction)fotterBtnPressed:(id)sender{
+
+    
+    NSInteger tag = [sender tag];
+    
+    switch (tag) {
+        case PAYMENT_TERMS_SELECTION:{
+        
+            
+            SearchViewController *search = [[self storyboard] instantiateViewControllerWithIdentifier:@"SearchViewController"];
+            search.tag = PAYMENT_TERMS_SELECTION;
+            search.arr_Common_List = [[[CXSSqliteHelper sharedSqliteHelper] runQuery:@"SELECT * FROM PaymentTerms" asObject:[PaymentTerms class]] mutableCopy];
+            [search registerOptionSelectionCallback:^(id selectedData) {
+                
+                [[AppDataManager sharedAppDatamanager] setPaymentTerms:selectedData];
+                [[self txt_PaymentTerms] setText:[selectedData paymentTerm]];
+                
+            }];
+            
+            [[self navigationController] pushViewController:search animated:YES];
+
+            
+            
+        }
+            break;
+            
+        case PAYMENT_TERMS_REMARKS_SELECTION:{
+            
+            SearchViewController *search = [[self storyboard] instantiateViewControllerWithIdentifier:@"SearchViewController"];
+            search.tag = PAYMENT_TERMS_REMARKS_SELECTION;
+            search.arr_Common_List = [[[CXSSqliteHelper sharedSqliteHelper] runQuery:[NSString stringWithFormat:@"SELECT * FROM PaymentTermRemarks WHERE '%@'",[[[AppDataManager sharedAppDatamanager] paymentTerms] paymentTermId]] asObject:[PaymentTermRemarks class]] mutableCopy];
+            [search registerOptionSelectionCallback:^(id selectedData) {
+                
+                [[AppDataManager sharedAppDatamanager] setPaymentTermRemakrs:selectedData];
+                [[self txt_PaymentTermsRemarks] setText:[selectedData paymentTermRemark]];
+
+                
+            }];
+            
+            [[self navigationController] pushViewController:search animated:YES];
+
+            
+        }
+            break;
+
+        case SHIPPING_TERMS_SELECTION:{
+            
+            
+            SearchViewController *search = [[self storyboard] instantiateViewControllerWithIdentifier:@"SearchViewController"];
+            search.tag = SHIPPING_TERMS_SELECTION;
+            search.arr_Common_List = [[[CXSSqliteHelper sharedSqliteHelper] runQuery:@"SELECT * FROM ShippingTerms" asObject:[ShippingTerms class]] mutableCopy];
+            [search registerOptionSelectionCallback:^(id selectedData) {
+                
+                [[AppDataManager sharedAppDatamanager] setShippingTerms:selectedData];
+                [[self txt_ShippingTerms] setText:[selectedData shippingTerm]];
+                
+                
+            }];
+            
+            [[self navigationController] pushViewController:search animated:YES];
+
+        }
+            break;
+
+        case MODE_OF_SHIPPING_SELECTION:{
+            
+            
+            SearchViewController *search = [[self storyboard] instantiateViewControllerWithIdentifier:@"SearchViewController"];
+            search.tag = MODE_OF_SHIPPING_SELECTION;
+            search.arr_Common_List = [[[CXSSqliteHelper sharedSqliteHelper] runQuery:@"SELECT * FROM Modeofshipping" asObject:[Modeofshipping class]] mutableCopy];
+            [search registerOptionSelectionCallback:^(id selectedData) {
+                
+                [[AppDataManager sharedAppDatamanager] setModeofshipping:selectedData];
+                [[self txt_ModeOfShipping] setText:[selectedData shippingMode]];
+                
+                
+            }];
+            
+            [[self navigationController] pushViewController:search animated:YES];
+
+        }
+            break;
+
+        default:
+            break;
+    }
+    
+    
+    
+}
+
+
+
+#pragma mark - UITextView delegates
+
+- (UIToolbar*)toolbar{
+    
+    if (!_toolbar) {
+        
+        _toolbar = [[[NSBundle mainBundle] loadNibNamed:@"ToolbarForKeyBoard" owner:self options:nil] firstObject];
+        UIBarButtonItem *last = [[_toolbar items] lastObject];
+        [last setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont fontWithName:@"MyriadPro-Regular" size:18],NSFontAttributeName, nil] forState:UIControlStateNormal];
+        [last setTarget:self];
+        [last setAction:@selector(DoneInput)];
+    }
+    
+    return _toolbar;
+}
+- (BOOL)textViewShouldBeginEditing:(UITextView *)textView{
+    
+    textView.inputAccessoryView = self.toolbar;
+    return YES;
+}
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
+    
+    return YES;
+    
+}
+- (void)textViewDidEndEditing:(UITextView *)textView{
+    
+    [[AppDataManager sharedAppDatamanager] setShippingTermsRemarks:textView.text];
+    
+}
+
+#pragma mark - Toolbar
+- (void)DoneInput{
+    
+    [[self txt_ShippingTermsRemarks] resignFirstResponder];
+}
 @end

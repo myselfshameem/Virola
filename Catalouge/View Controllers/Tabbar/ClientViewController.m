@@ -40,7 +40,7 @@
     NSString *sqlQuery =@"SELECT * FROM Client_Master";
 
     if ([searchString length]) {
-        sqlQuery = [NSString stringWithFormat:@"SELECT * FROM Client_Master WHERE (name like '%%%@%%') OR (clientid like '%%%@%%')",searchString,searchString];
+        sqlQuery = [NSString stringWithFormat:@"SELECT * FROM Client_Master WHERE (company like '%%%@%%') OR (clientid like '%%%@%%')",searchString,searchString];
     }
     self.arr_Clients = [[CXSSqliteHelper sharedSqliteHelper] runQuery:sqlQuery asObject:[Clients class]];
     [[self tbl_Clients] reloadData];
@@ -105,14 +105,16 @@
     if (!cell) {
         
         cell = [[[NSBundle mainBundle] loadNibNamed:@"ClientTableViewCell" owner:self options:nil] firstObject];
+        cell.backgroundColor = [UIColor clearColor];
+
     }
     Clients *client = [[self arr_Clients] objectAtIndex:indexPath.row];
-    cell.lblClient_Name.text = client.name;
+    cell.lblClient_Name.text = client.company;
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 49.0f;
+    return 54.0f;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     

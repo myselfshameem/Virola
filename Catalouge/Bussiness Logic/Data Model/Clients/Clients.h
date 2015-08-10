@@ -24,6 +24,7 @@
 @property (nonatomic, strong) NSString *clienttype;
 @property (nonatomic, strong) NSString *contactperson;
 @property (nonatomic, strong) NSString *country;
+@property (nonatomic, strong) NSString *email;
 
 + (Clients *)modelObjectWithDictionary:(NSDictionary *)dict;
 - (instancetype)initWithDictionary:(NSDictionary *)dict;

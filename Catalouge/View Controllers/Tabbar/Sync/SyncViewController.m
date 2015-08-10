@@ -31,7 +31,11 @@ CustomeAlert *alert;
     // Do any additional setup after loading the view.
 
     self.btn_Sync.layer.cornerRadius = 18;
-
+    self.progressView.trackTintColor = [UIColor whiteColor];
+    self.progressView.alpha = 0;
+    CGRect rect = [self progressView].frame;
+    rect.size.height = 20;
+    [self progressView].frame = rect;
     
     NSAttributedString *string = [[NSAttributedString alloc] initWithString:@"Sync" attributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont fontWithName:@"MyriadPro-Regular" size:18],NSFontAttributeName, [UIColor whiteColor], NSForegroundColorAttributeName, nil]];
     [[self btn_Sync] setAttributedTitle:string forState:UIControlStateNormal];
@@ -80,7 +84,7 @@ CustomeAlert *alert;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return 5;
+    return 6;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -109,6 +113,10 @@ CustomeAlert *alert;
             cell.lblClient_Name.text = @"Sync Article Images";
             break;
 
+        case 5:
+            cell.lblClient_Name.text = @"Sync Payment & Shipping Terms";
+            break;
+
         default:
             break;
     }
@@ -128,12 +136,11 @@ CustomeAlert *alert;
     
 }
 
+
+
+#pragma mark - Sync
 - (IBAction)startSync:(id)sender{
 
-
-    
-    
-    
     alert = [[CustomeAlert alloc] init];
     
     [alert showAlertWithTitle:@"Sync" message:@"Would you like to sync your local database?" cancelButtonTitle:@"Sync" otherButtonTitles:@"Cancel" withButtonHandler:^(NSInteger buttonIndex) {
@@ -145,8 +152,6 @@ CustomeAlert *alert;
         }
         
     }];
-
-
 }
 
 - (void)startSync{
@@ -154,6 +159,8 @@ CustomeAlert *alert;
     [[self synQueue] cancelAllOperations];
     //Save Sync Time
     [NSUserDefaults setLastSynTime:@""];
+    self.progressView.alpha = 1.0;
+    [self enableView:NO];
     [[self synQueue] addOperationWithBlock:^{
         [self syncRawMaterial];
     }];
@@ -167,17 +174,17 @@ CustomeAlert *alert;
     
     if ([[cell checkBox] isSelected]) {
         
-        
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            [[self lbl_ProgressHeader ] setText:@"Syncing Raw Material..."];
-        });
-        
+
         [[ApiHandler sharedApiHandler] getRawMaterialApiHandlerWithApiCallBlock:^(id data, NSError *error) {
             
             if (error) {
+               
+                [self errorWhileSynching];
+
                 dispatch_sync(dispatch_get_main_queue(), ^{
                     alert = [[CustomeAlert alloc] init];
                     [alert showAlertWithTitle:nil message:@"Error in Syncing Raw Material." cancelButtonTitle:@"OK" otherButtonTitles:nil withButtonHandler:^(NSInteger buttonIndex) {
+                        
                         
                     }];
                     
@@ -192,6 +199,8 @@ CustomeAlert *alert;
                     [self syncArticle];
                 }else{
                     
+                    [self errorWhileSynching];
+
                     dispatch_sync(dispatch_get_main_queue(), ^{
                         alert = [[CustomeAlert alloc] init];
                         [alert showAlertWithTitle:nil message:message cancelButtonTitle:@"OK" otherButtonTitles:nil withButtonHandler:^(NSInteger buttonIndex) {
@@ -221,14 +230,14 @@ CustomeAlert *alert;
     
     if ([[cell checkBox] isSelected]) {
         
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            [[self lbl_ProgressHeader ] setText:@"Syncing Articles..."];
-        });
+
 
         [[ApiHandler sharedApiHandler] getArticlesApiHandlerWithApiCallBlock:^(id data, NSError *error) {
             
             
             if (error) {
+                [self errorWhileSynching];
+
                 dispatch_sync(dispatch_get_main_queue(), ^{
                     alert = [[CustomeAlert alloc] init];
                     [alert showAlertWithTitle:nil message:@"Error in Syncing." cancelButtonTitle:@"OK" otherButtonTitles:nil withButtonHandler:^(NSInteger buttonIndex) {
@@ -245,7 +254,7 @@ CustomeAlert *alert;
                 if (([successCode isEqualToString:@"200"] || [successCode isEqualToString:@"823"])) {
                     [self syncClient];
                 }else{
-                    
+
                     dispatch_sync(dispatch_get_main_queue(), ^{
                         alert = [[CustomeAlert alloc] init];
                         [alert showAlertWithTitle:nil message:message cancelButtonTitle:@"OK" otherButtonTitles:nil withButtonHandler:^(NSInteger buttonIndex) {
@@ -281,14 +290,14 @@ CustomeAlert *alert;
     
     if ([[cell checkBox] isSelected]) {
       
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            [[self lbl_ProgressHeader ] setText:@"Syncing Clients..."];
-        });
-        
+
         [[ApiHandler sharedApiHandler] getClientsApiHandlerWithApiCallBlock:^(id data, NSError *error) {
             
             
             if (error) {
+               
+                [self errorWhileSynching];
+
                 dispatch_sync(dispatch_get_main_queue(), ^{
                     alert = [[CustomeAlert alloc] init];
                     [alert showAlertWithTitle:nil message:@"Error in Syncing." cancelButtonTitle:@"OK" otherButtonTitles:nil withButtonHandler:^(NSInteger buttonIndex) {
@@ -306,6 +315,9 @@ CustomeAlert *alert;
                     [self syncColor];
                 }else{
                     
+                   
+                    [self errorWhileSynching];
+
                     dispatch_sync(dispatch_get_main_queue(), ^{
                         alert = [[CustomeAlert alloc] init];
                         [alert showAlertWithTitle:nil message:message cancelButtonTitle:@"OK" otherButtonTitles:nil withButtonHandler:^(NSInteger buttonIndex) {
@@ -338,14 +350,12 @@ CustomeAlert *alert;
     if ([[cell checkBox] isSelected]) {
         
         
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            [[self lbl_ProgressHeader ] setText:@"Syncing Colors..."];
-        });
 
         [[ApiHandler sharedApiHandler] getColorApiHandlerWithApiCallBlock:^(id data, NSError *error) {
             
-            
+
             if (error) {
+                [self errorWhileSynching];
                 dispatch_sync(dispatch_get_main_queue(), ^{
                     alert = [[CustomeAlert alloc] init];
                     [alert showAlertWithTitle:nil message:@"Error in Syncing." cancelButtonTitle:@"OK" otherButtonTitles:nil withButtonHandler:^(NSInteger buttonIndex) {
@@ -363,6 +373,8 @@ CustomeAlert *alert;
                     [self downloadImages];
                 }else{
                     
+                    [self errorWhileSynching];
+
                     dispatch_sync(dispatch_get_main_queue(), ^{
                         alert = [[CustomeAlert alloc] init];
                         [alert showAlertWithTitle:nil message:message cancelButtonTitle:@"OK" otherButtonTitles:nil withButtonHandler:^(NSInteger buttonIndex) {
@@ -390,12 +402,11 @@ CustomeAlert *alert;
     
     if ([[cell checkBox] isSelected]){
     
+
+        [[NSNotificationCenter defaultCenter] postNotificationName:PROGRESS_COUNT object:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:0],@"totalRecords",[NSNumber numberWithInteger:0],@"totalInsertedRecords",@"Fetching Article Images...",@"Title", nil]];
+
         NSString *imagePath = [[AppDataManager sharedAppDatamanager] imageDirPath];
         [[NSFileManager defaultManager] removeItemAtPath:imagePath error:nil];
-        
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            [[self lbl_ProgressHeader ] setText:@"Syncing article images..."];
-        });
         
         NSArray *imageArr = [[CXSSqliteHelper sharedSqliteHelper] runQuery:@"Select * From Article_Images" asObject:[Article_Image class]];
         
@@ -416,36 +427,97 @@ CustomeAlert *alert;
                 [[AppDataManager sharedAppDatamanager]writeDataToImageFileName:fileName withData:data];
             }
             
-            
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                float filledValue = idx/[imageArr count];
-                [[self progressView] setProgress:filledValue animated:YES];
-            });
-
+            [[NSNotificationCenter defaultCenter] postNotificationName:PROGRESS_COUNT object:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:[imageArr count]],@"totalRecords",[NSNumber numberWithInteger:idx],@"totalInsertedRecords",@"Fetching Colors...",@"Title", nil]];
             
         }];
-
         
+        [self synPayment_Shipping_Terms];
     }else{
     
         
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            [self hideActivityIndicator];
-            
-            alert = [[CustomeAlert alloc] init];
-            [alert showAlertWithTitle:nil message:@"Syncing completed" cancelButtonTitle:@"OK" otherButtonTitles:nil withButtonHandler:^(NSInteger buttonIndex) {
-                
-            }];
-        });
-        [[self lbl_ProgressHeader] setText:@""];
-        
+        [self synPayment_Shipping_Terms];
     }
     
     
     
 }
 
+- (void)synPayment_Shipping_Terms{
+    
+    
+    SyncTableViewCell *cell = (SyncTableViewCell*)[[self tbl_Clients] cellForRowAtIndexPath:[NSIndexPath indexPathForItem:5 inSection:0]];
+    
+    if ([[cell checkBox] isSelected]) {
+        
 
+        [[ApiHandler sharedApiHandler] getPaymentShippingTermsApiHandlerWithApiCallBlock:^(id data, NSError *error) {
+            
+
+            if (error) {
+                
+                [self errorWhileSynching];
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    alert = [[CustomeAlert alloc] init];
+                    [alert showAlertWithTitle:nil message:@"Error in Syncing." cancelButtonTitle:@"OK" otherButtonTitles:nil withButtonHandler:^(NSInteger buttonIndex) {
+                        
+                    }];
+                    
+                });
+                return ;
+            }else{
+                
+                
+                NSString *successCode = [data objectForKey:@"errorcode"];
+                NSString *message = [data objectForKey:@"message"];
+                if (([successCode isEqualToString:@"200"] || [successCode isEqualToString:@"823"])) {
+
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        alert = [[CustomeAlert alloc] init];
+                        [alert showAlertWithTitle:nil message:@"Syncing completed" cancelButtonTitle:@"OK" otherButtonTitles:nil withButtonHandler:^(NSInteger buttonIndex) {
+                            
+                        }];
+                        [[self lbl_ProgressHeader] setText:@""];
+                        [[self progressView] setProgress:0 animated:NO];
+                    });
+
+                    
+                }else{
+                    
+                    [self errorWhileSynching];
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        alert = [[CustomeAlert alloc] init];
+                        [alert showAlertWithTitle:nil message:message cancelButtonTitle:@"OK" otherButtonTitles:nil withButtonHandler:^(NSInteger buttonIndex) {
+                            
+                        }];
+                        
+                    });
+                    return;
+                }
+                
+            }
+            
+            
+            
+            
+        }];
+    }else{
+        
+        [self errorWhileSynching];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            alert = [[CustomeAlert alloc] init];
+            [alert showAlertWithTitle:nil message:@"Syncing completed" cancelButtonTitle:@"OK" otherButtonTitles:nil withButtonHandler:^(NSInteger buttonIndex) {
+                
+            }];
+        });
+
+    }
+    
+    
+    
+    
+    
+    
+}
 
 - (void)selectAllSyn{
 
@@ -476,6 +548,7 @@ CustomeAlert *alert;
 }
 
 
+#pragma mark - Activity Indicator
 - (void)updateProgress:(NSNotification*)notif{
 
     NSDictionary *dict = [notif object];
@@ -483,10 +556,16 @@ CustomeAlert *alert;
     
     float totalRecords = [[dict objectForKey:@"totalRecords"] floatValue];
     float totalInsertedRecords = [[dict objectForKey:@"totalInsertedRecords"] floatValue];
-    
-    float filledValue = totalInsertedRecords/totalRecords;
-    
-    [[self progressView] setProgress:filledValue animated:YES];
+    NSString *title = [dict objectForKey:@"Title"];
+
+    float filledValue = 0.0f;
+    if (totalRecords != 0) {
+        filledValue = totalInsertedRecords/totalRecords;
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[self progressView] setProgress:filledValue animated:NO];
+        [[self lbl_ProgressHeader] setText:title];
+    });
     
 }
 - (void)showActivityIndicator:(NSString*)msg{
@@ -497,9 +576,38 @@ CustomeAlert *alert;
     
     
 }
-
 - (void)hideActivityIndicator{
     [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
+}
+- (void)enableView:(BOOL)flag{
+
+//    [[[self navigationItem] backBarButtonItem] setEnabled:flag];
+//    [[[self navigationItem] rightBarButtonItem] setEnabled:flag];
+//    [[self tbl_Clients] setUserInteractionEnabled:flag];
+//    [[self btn_Sync] setEnabled:flag];
+//    [[self tabBarItem] setEnabled:flag];
+
+}
+
+- (void)errorWhileSynching{
+
+
+    if ([NSOperationQueue currentQueue] == [NSOperationQueue mainQueue]) {
+        
+        [[self progressView] setProgress:0 animated:NO];
+        [[self progressView] setAlpha:0];
+        [[self lbl_ProgressHeader] setText:@""];
+
+    }else{
+    
+    
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[self progressView] setProgress:0 animated:NO];
+            [[self progressView] setAlpha:0];
+            [[self lbl_ProgressHeader] setText:@""];
+        });
+
+    }
 }
 
 

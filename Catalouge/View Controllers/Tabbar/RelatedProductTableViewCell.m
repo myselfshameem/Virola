@@ -20,4 +20,10 @@
     // Configure the view for the selected state
 }
 
+- (void)initilizeCell{
+
+    self.imgV_Logo_Holder.layer.cornerRadius = 2.0f;
+    self.imgV_Logo_Holder.layer.borderWidth = 1.0f;
+    self.imgV_Logo_Holder.layer.borderColor = [UIColor blackColor].CGColor;
+}
 @end

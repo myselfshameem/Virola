@@ -13,12 +13,13 @@
 @property (strong, nonatomic) Clients *client;
 @property (assign, nonatomic) BOOL isNewClient;
 
-@property (strong, nonatomic) IBOutlet UITextField *txt_Name;
+@property (strong, nonatomic) IBOutlet UITextField *txt_Company;
 @property (strong, nonatomic) IBOutlet UITextField *txt_Email;
-@property (strong, nonatomic) IBOutlet UITextField *txt_ContactNum;
-@property (strong, nonatomic) IBOutlet UITextView *txt_Address;
+@property (strong, nonatomic) IBOutlet UITextField *txt_ContactPerson;
+@property (strong, nonatomic) IBOutlet UITextView  *txt_Address1;
+@property (strong, nonatomic) IBOutlet UITextView  *txt_Address2;
+@property (strong, nonatomic) IBOutlet UITextField *txt_City;
 @property (strong, nonatomic) IBOutlet UITextField *txt_Country;
-@property (strong, nonatomic) IBOutlet UITextField *txt_State;
 
 
 @property (strong, nonatomic) UIToolbar *toolbar;

@@ -17,6 +17,27 @@
 @property (strong, nonatomic) IBOutlet __block UITableView *tbl_List_Cart;
 @property (strong, nonatomic) IBOutlet UILabel *lbl_UserName;
 
+//Header
+@property (strong, nonatomic) IBOutlet UIView *vw_PaymentTerms;
+@property (strong, nonatomic) IBOutlet UITextField *txt_PaymentTerms;
+@property (strong, nonatomic) IBOutlet UIButton *btn_PaymentTerms;
+
+@property (strong, nonatomic) IBOutlet UIView *vw_PaymentTermsRemarks;
+@property (strong, nonatomic) IBOutlet UITextField *txt_PaymentTermsRemarks;
+@property (strong, nonatomic) IBOutlet UIButton *btn_PaymentTermsRemarks;
+
+@property (strong, nonatomic) IBOutlet UIView *vw_ShippingTerms;
+@property (strong, nonatomic) IBOutlet UITextField *txt_ShippingTerms;
+@property (strong, nonatomic) IBOutlet UIButton *btn_ShippingTerms;
+
+@property (strong, nonatomic) IBOutlet UIView *vw_ShippingTermsRemarks;
+@property (strong, nonatomic) IBOutlet UITextView *txt_ShippingTermsRemarks;
+
+@property (strong, nonatomic) IBOutlet UIView *vw_ModeOfShipping;
+@property (strong, nonatomic) IBOutlet UITextField *txt_ModeOfShipping;
+@property (strong, nonatomic) IBOutlet UIButton *btn_ModeOfShipping;
+
+@property (strong, nonatomic) UIToolbar *toolbar;
 
 
 - (IBAction)chnageClient:(id)sender;

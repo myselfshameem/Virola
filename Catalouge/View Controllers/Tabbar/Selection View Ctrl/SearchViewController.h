@@ -18,4 +18,10 @@
 @property (strong, nonatomic) NSString *strSearchString;
 @property (assign, nonatomic) NSInteger tag;
 @property (assign, nonatomic) UITextField *common_TxtField;
+typedef void(^OptionSelectedCallBack)(id selectedData);
+@property (strong, nonatomic) OptionSelectedCallBack optionSelectedCallBack;
+- (void)registerOptionSelectionCallback:(OptionSelectedCallBack)optionSelectedCallBack;
+
+
+
 @end

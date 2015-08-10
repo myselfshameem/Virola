@@ -18,7 +18,7 @@
 @property (nonatomic, strong) NSString *price;
 @property (nonatomic, strong) NSString *articleid;
 @property (nonatomic, strong) NSString *sizeto;
-@property (nonatomic, strong) NSArray *rawmaterials;
+@property (nonatomic, strong) NSArray *articlesRawmaterials;
 @property (nonatomic, strong) NSString *mLC;
 @property (nonatomic, strong) NSArray *images;
 @property (nonatomic, strong) NSString *sizefrom;

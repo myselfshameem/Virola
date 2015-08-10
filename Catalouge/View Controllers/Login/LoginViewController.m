@@ -84,7 +84,7 @@ CustomeAlert *alert;
                 
                 Account *account = [[Account alloc] initWithDictionary:data];
                 [[AppDataManager sharedAppDatamanager] setAccount:account];
-
+                [[AppDataManager sharedAppDatamanager] saveLoggedInUserDetails:account];
                 dispatch_sync(dispatch_get_main_queue(), ^{
 
                     

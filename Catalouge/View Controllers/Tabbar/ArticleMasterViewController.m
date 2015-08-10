@@ -112,8 +112,7 @@ CustomeAlert *alert;
             Articles *article = [arr firstObject];
             
             AddToCartViewController *addToCartViewController = [[self storyboard] instantiateViewControllerWithIdentifier:@"AddToCartViewController"];
-            [[AppDataManager sharedAppDatamanager] newTransactionWithArticleId:article.articleid];
-            [[AppDataManager sharedAppDatamanager] newTransactionWithArticleId:article.articleid];
+            [[AppDataManager sharedAppDatamanager] newTransactionWithArticleId:article.articleid withNewDevelopment:NO];
             [self.navigationController pushViewController:addToCartViewController animated:YES];
 
             

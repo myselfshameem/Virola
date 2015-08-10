@@ -107,8 +107,10 @@ NSString *const kRawmaterialsRawmaterialid = @"rawmaterialid";
 - (Colors*)colors{
 
     if (!_colors) {
-        NSArray *arr = [[CXSSqliteHelper sharedSqliteHelper] runQuery:[NSString stringWithFormat:@"SELECT * FROM Colors WHERE %@",[[self colorid] sqliteString]] asObject:[Colors class]];
-        [arr count] ? _colors = [arr firstObject] : nil;
+        if ([[self colorid] length]) {
+            NSArray *arr = [[CXSSqliteHelper sharedSqliteHelper] runQuery:[NSString stringWithFormat:@"SELECT * FROM Colors WHERE colorid = '%@'",[self colorid]] asObject:[Colors class]];
+            [arr count] ? _colors = [arr firstObject] : nil;
+        }
     }
     return _colors;
 }

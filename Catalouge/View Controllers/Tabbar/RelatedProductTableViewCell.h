@@ -10,7 +10,9 @@
 
 @interface RelatedProductTableViewCell : UITableViewCell
 @property (strong, nonatomic) IBOutlet UIImageView *imgV_Logo;
+@property (strong, nonatomic) IBOutlet UIView *imgV_Logo_Holder;
 @property (strong, nonatomic) IBOutlet UILabel *lbl_Title;
 @property (strong, nonatomic) IBOutlet UILabel *lbl_Description;
 @property (strong, nonatomic) IBOutlet UILabel *lbl_Price;
+- (void)initilizeCell;
 @end

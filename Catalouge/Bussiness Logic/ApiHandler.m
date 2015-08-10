@@ -91,6 +91,8 @@ static ApiHandler *apiHandler;
 - (void)getArticlesApiHandlerWithApiCallBlock:(LoginApiCallBlock)logoutApiCallBlock{
     
     
+    [[NSNotificationCenter defaultCenter] postNotificationName:PROGRESS_COUNT object:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:0],@"totalRecords",[NSNumber numberWithInteger:0],@"totalInsertedRecords",@"Fetching Articles...",@"Title", nil]];
+
     [NSURLConnection sendAsynchronousRequest:[self getURLRequestForGetarticles] queue:[self apiHandlerQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
         
         if (connectionError) {
@@ -114,6 +116,9 @@ static ApiHandler *apiHandler;
 
 - (void)getRawMaterialApiHandlerWithApiCallBlock:(LoginApiCallBlock)logoutApiCallBlock{
 
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:PROGRESS_COUNT object:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:0],@"totalRecords",[NSNumber numberWithInteger:0],@"totalInsertedRecords",@"Fetching Rawmaterials...",@"Title", nil]];
+
     [NSURLConnection sendAsynchronousRequest:[self getURLRequestForRawmaterials] queue:[self apiHandlerQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
         
         if (connectionError) {
@@ -122,7 +127,7 @@ static ApiHandler *apiHandler;
         }else{
             
             NSError *jsonError = nil;
-            id responsedData = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&jsonError];
+            id responsedData = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonError];
             RawmaterialApiResponse *response = [[RawmaterialApiResponse alloc] initWithDictionary:responsedData];
             
             //Update to DB
@@ -145,6 +150,8 @@ static ApiHandler *apiHandler;
 
 - (void)getColorApiHandlerWithApiCallBlock:(LoginApiCallBlock)logoutApiCallBlock{
     
+    [[NSNotificationCenter defaultCenter] postNotificationName:PROGRESS_COUNT object:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:0],@"totalRecords",[NSNumber numberWithInteger:0],@"totalInsertedRecords",@"Fetching Colors...",@"Title", nil]];
+
     [NSURLConnection sendAsynchronousRequest:[self getURLRequestForGetcolors] queue:[self apiHandlerQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
         
         if (connectionError) {
@@ -172,6 +179,9 @@ static ApiHandler *apiHandler;
 
 - (void)getClientsApiHandlerWithApiCallBlock:(LoginApiCallBlock)logoutApiCallBlock{
     
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:PROGRESS_COUNT object:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:0],@"totalRecords",[NSNumber numberWithInteger:0],@"totalInsertedRecords",@"Fetching Clients...",@"Title", nil]];
+
     [NSURLConnection sendAsynchronousRequest:[self getURLRequestForGetclients] queue:[self apiHandlerQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
         
         if (connectionError) {
@@ -214,18 +224,19 @@ static ApiHandler *apiHandler;
             if ([[responsedData objectForKey:@"errorcode"] isEqualToString:@"200"]) {
 
                 //TODO::
-//                NSString *clientId = [responsedData objectForKey:@"clientid"];
-//                NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
-//                                      [clientId length]? clientId : @"",@"clientid",
-//                                      [weakClient.name length]? weakClient.name : @"",@"name",
-//                                      [weakClient.address length]? weakClient.address : @"",@"address",
-//                                      [weakClient.country length]? weakClient.country : @"",@"country",
-//                                      [weakClient.email length]? weakClient.email : @"",@"email",
-//                                      [weakClient.state length]? weakClient.state : @"",@"state",
-//                                      [weakClient.contactNumber length]? weakClient.contactNumber : @"",@"contactNumber",
-//                                      nil];
-//
-//                [[CXSSqliteHelper sharedSqliteHelper] insertInto:@"Client_Master" ColumnsAndValues:dict];
+                NSString *clientId = [responsedData objectForKey:@"clientid"];
+                NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                                      [[AppDataManager sharedAppDatamanager] validateString:clientId],@"clientid",
+                                      [[AppDataManager sharedAppDatamanager] validateString:[client company]],@"company",
+                                      [[AppDataManager sharedAppDatamanager] validateString:[client contactperson]],@"contactperson",
+                                      [[AppDataManager sharedAppDatamanager] validateString:[client email]],@"email",
+                                      [[AppDataManager sharedAppDatamanager] validateString:[client address1]],@"address1",
+                                      [[AppDataManager sharedAppDatamanager] validateString:[client address2]],@"address2",
+                                      [[AppDataManager sharedAppDatamanager] validateString:[client city]],@"city",
+                                      [[AppDataManager sharedAppDatamanager] validateString:[client country]],@"country",
+                                      nil];
+
+                [[CXSSqliteHelper sharedSqliteHelper] insertInto:@"Client_Master" ColumnsAndValues:dict];
 
             }
 
@@ -269,6 +280,41 @@ static ApiHandler *apiHandler;
 }
 
 
+- (void)getPaymentShippingTermsApiHandlerWithApiCallBlock:(LoginApiCallBlock)logoutApiCallBlock{
+    
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:PROGRESS_COUNT object:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:0],@"totalRecords",[NSNumber numberWithInteger:0],@"totalInsertedRecords",@"Fetching Payment Term...",@"Title", nil]];
+
+    [NSURLConnection sendAsynchronousRequest:[self getURLRequestForGetPaymentShippingTerms] queue:[self apiHandlerQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+        
+        if (connectionError) {
+            
+            logoutApiCallBlock(nil,connectionError);
+        }else{
+            
+            NSError *jsonError = nil;
+            id responsedData = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&jsonError];
+            GetOtherDetailsApiResponse *response = [[GetOtherDetailsApiResponse alloc] initWithDictionary:responsedData];
+            //Update to DB
+            if ([[response paymentTerms] isKindOfClass:[NSArray class]])
+                [[CXSSqliteHelper sharedSqliteHelper] insertPaymentTerms:[response paymentTerms]];
+
+            if ([[response paymentTerms] isKindOfClass:[NSArray class]])
+                [[CXSSqliteHelper sharedSqliteHelper] insertShippingTerms:[response shippingTerms]];
+
+            if ([[response paymentTerms] isKindOfClass:[NSArray class]])
+                [[CXSSqliteHelper sharedSqliteHelper] insertModeofshipping:[response modeofshipping]];
+
+            logoutApiCallBlock(responsedData,connectionError);
+        }
+        
+        
+    }];
+    
+    
+    
+}
+
 #pragma mark - NSURLRequest
 
 - (NSURLRequest*)getURLRequestForLoginAPIWith:(NSString*)username andPassword:(NSString*)pwd{
@@ -278,8 +324,8 @@ static ApiHandler *apiHandler;
     NSMutableURLRequest  *request = [NSMutableURLRequest requestWithURL:url];
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-//    NSString *postString = [NSString stringWithFormat:@"username=%@&password=%@&device_id=%@",username,pwd,[[UIDevice currentDevice]uniqueDeviceIdentifierWithOutEncription]];
-    NSString *postString = [NSString stringWithFormat:@"username=%@&password=%@",@"test",@"test"];
+    NSString *postString = [NSString stringWithFormat:@"username=%@&password=%@&device_id=%@",username,pwd,[[UIDevice currentDevice]uniqueDeviceIdentifierWithOutEncription]];
+//    NSString *postString = [NSString stringWithFormat:@"username=%@&password=%@",@"test",@"test"];
     NSData *postData = [postString dataUsingEncoding:NSUTF8StringEncoding];
     [request setHTTPBody:postData];
     return request;
@@ -398,42 +444,58 @@ static ApiHandler *apiHandler;
 
 - (NSURLRequest*)getURLRequestForAddClients:(Clients*)client{
     
-//    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",ROOT_API_PATH ,ADD_CLIENTS_API]];
-//    NSMutableURLRequest  *request = [NSMutableURLRequest requestWithURL:url];
-//    [request setHTTPMethod:@"POST"];
-//    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-//    AppDataManager *sharedAppDatamanager = [AppDataManager sharedAppDatamanager];
-//    
-//    
-//    NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
-//                          [client.name length]? client.name : @"",@"name",
-//                          [client.address length]? client.address : @"",@"address",
-//                          [client.country length]? client.country : @"",@"country",
-//                          [client.email length]? client.email : @"",@"email",
-//                          [client.state length]? client.state : @"",@"state",
-//                          [client.contactNumber length]? client.contactNumber : @"",@"contactNumber",
-//                          nil];
-//    
-//    
-//    NSDictionary *mainDict = [NSDictionary dictionaryWithObjectsAndKeys:dict,@"client" ,nil];
-//
-//    NSError *error;
-//    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:mainDict
-//                                                       options:NSJSONWritingPrettyPrinted
-//                                                         error:&error];
-//    
-//    
-//    NSString*aStr;
-//    aStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-//    //
-//    
-//    
-//    
-//    
-//    NSString *postString = [NSString stringWithFormat:@"userid=%@&sessionid=%@&payload=%@",[[[sharedAppDatamanager account] user] userId],[[sharedAppDatamanager account] sessionId],aStr];
-//    NSData *postData = [postString dataUsingEncoding:NSUTF8StringEncoding];
-//    [request setHTTPBody:postData];
-    return nil;
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",ROOT_API_PATH ,ADD_CLIENTS_API]];
+    NSMutableURLRequest  *request = [NSMutableURLRequest requestWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    AppDataManager *sharedAppDatamanager = [AppDataManager sharedAppDatamanager];
+    
+    
+    NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                          
+                          [[AppDataManager sharedAppDatamanager] validateString:[client company]],@"company",
+                          [[AppDataManager sharedAppDatamanager] validateString:[client contactperson]],@"contactperson",
+                          [[AppDataManager sharedAppDatamanager] validateString:[client email]],@"email",
+                          [[AppDataManager sharedAppDatamanager] validateString:[client address1]],@"address1",
+                          [[AppDataManager sharedAppDatamanager] validateString:[client address2]],@"address2",
+                          [[AppDataManager sharedAppDatamanager] validateString:[client city]],@"city",
+                          [[AppDataManager sharedAppDatamanager] validateString:[client country]],@"country",
+                          nil];
+    
+    
+    NSDictionary *mainDict = [NSDictionary dictionaryWithObjectsAndKeys:dict,@"client" ,nil];
+
+    NSError *error;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:mainDict
+                                                       options:NSJSONWritingPrettyPrinted
+                                                         error:&error];
+    
+    
+    NSString*aStr;
+    aStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    //
+    
+    
+    
+    
+    NSString *postString = [NSString stringWithFormat:@"userid=%@&sessionid=%@&payload=%@",[[[sharedAppDatamanager account] user] userId],[[sharedAppDatamanager account] sessionId],aStr];
+    NSData *postData = [postString dataUsingEncoding:NSUTF8StringEncoding];
+    [request setHTTPBody:postData];
+    return request;
+    
+}
+
+- (NSURLRequest*)getURLRequestForGetPaymentShippingTerms{
+    
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",ROOT_API_PATH ,GET_PAYMENT_SHIPPING_TERMS]];
+    NSMutableURLRequest  *request = [NSMutableURLRequest requestWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    AppDataManager *sharedAppDatamanager = [AppDataManager sharedAppDatamanager];
+    NSString *postString = [NSString stringWithFormat:@"userid=%@&sessionid=%@",[[[sharedAppDatamanager account] user] userId],[[sharedAppDatamanager account] sessionId]];
+    NSData *postData = [postString dataUsingEncoding:NSUTF8StringEncoding];
+    [request setHTTPBody:postData];
+    return request;
     
 }
 

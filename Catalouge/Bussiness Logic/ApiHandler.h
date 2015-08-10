@@ -23,7 +23,7 @@
 
 +(ApiHandler*)sharedApiHandler;
 typedef void(^LoginApiCallBlock)(id data,NSError *error);
-
+- (NSURLRequest*)getURLRequestForRawmaterials;
 
 - (void)loginApiHandlerWithUserName:(NSString*)userName password:(NSString*)pdw LoginApiCallBlock:(LoginApiCallBlock)loginApiCallBlock;
 - (void)logoutApiHandlerWithLogoutApiCallBlock:(LoginApiCallBlock)logoutApiCallBlock;
@@ -33,4 +33,5 @@ typedef void(^LoginApiCallBlock)(id data,NSError *error);
 - (void)getClientsApiHandlerWithApiCallBlock:(LoginApiCallBlock)logoutApiCallBlock;
 - (void)updateClientsApiHandlerWithApiCallBlock:(LoginApiCallBlock)logoutApiCallBlock withClient:(id)client;
 - (void)addClientsApiHandlerWithApiCallBlock:(LoginApiCallBlock)logoutApiCallBlock withClient:(id)client;
+- (void)getPaymentShippingTermsApiHandlerWithApiCallBlock:(LoginApiCallBlock)logoutApiCallBlock;
 @end

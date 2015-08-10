@@ -367,14 +367,8 @@ static CXSSqliteHelper *sqliteHelper = nil;
 }
 - (BOOL)insertIntoTable:(NSString*)sql{
     
-#if SQLITER ==1
-    if ([sql rangeOfString:@"PaymentTypeAttribute"].location == NSNotFound) {
-        NSLog(@"\n<Query>: <%@>\n\n",sql);
-    } else {
-        NSLog(@"❤❤❤❤❤❤\n\n<Query>: <%@>\n\n❤❤❤❤❤❤",sql);
-    }
+    NSLog(@"INSERT QUERY = %@",sql);
     
-#endif
     [self open];
     
     BOOL isSuccess = NO;
@@ -386,9 +380,7 @@ static CXSSqliteHelper *sqliteHelper = nil;
             [NSException exceptionWithName: @"DBException" reason: [NSString stringWithFormat: @"Failed to perform query with SQL statement. '%p'", sqlite3_errmsg16(_database)] userInfo: nil];
         }
         @catch (NSException *exception) {
-#if SQLITER ==1
-            NSLog(@"Sqlite Error : %@",exception);
-#endif
+        NSLog(@"Sqlite Error : %@",exception);
         }
         
     }
@@ -412,9 +404,9 @@ static CXSSqliteHelper *sqliteHelper = nil;
         
 
 
-        if (idx %5 == 0) {
+        if (idx % 500 == 0) {
             
-            [[NSNotificationCenter defaultCenter] postNotificationName:PROGRESS_COUNT object:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:totalRecords],@"totalRecords",[NSNumber numberWithInteger:idx],@"totalInsertedRecords", nil]];
+            [[NSNotificationCenter defaultCenter] postNotificationName:PROGRESS_COUNT object:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:totalRecords],@"totalRecords",[NSNumber numberWithInteger:idx],@"totalInsertedRecords",@"Syncing Rawmaterials...",@"Title", nil]];
         }
         
         NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -449,7 +441,7 @@ static CXSSqliteHelper *sqliteHelper = nil;
         
         if (idx %5 == 0) {
             
-            [[NSNotificationCenter defaultCenter] postNotificationName:PROGRESS_COUNT object:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:totalRecords],@"totalRecords",[NSNumber numberWithInteger:idx],@"totalInsertedRecords", nil]];
+            [[NSNotificationCenter defaultCenter] postNotificationName:PROGRESS_COUNT object:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:totalRecords],@"totalRecords",[NSNumber numberWithInteger:idx],@"totalInsertedRecords",@"Syncing Lasts...",@"Title", nil]];
         }
         
         NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -481,9 +473,9 @@ static CXSSqliteHelper *sqliteHelper = nil;
         
         
         
-        if (idx %5 == 0) {
+        if (idx %2 == 0) {
             
-            [[NSNotificationCenter defaultCenter] postNotificationName:PROGRESS_COUNT object:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:totalRecords],@"totalRecords",[NSNumber numberWithInteger:idx],@"totalInsertedRecords", nil]];
+            [[NSNotificationCenter defaultCenter] postNotificationName:PROGRESS_COUNT object:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:totalRecords],@"totalRecords",[NSNumber numberWithInteger:idx],@"totalInsertedRecords",@"Syncing Articles...",@"Title", nil]];
         }
         NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
                               
@@ -503,16 +495,18 @@ static CXSSqliteHelper *sqliteHelper = nil;
         
         
         
-        [[article rawmaterials] enumerateObjectsUsingBlock:^(ArticlesRawmaterials *articlesRawmaterial, NSUInteger idx, BOOL *stop) {
+        [[article articlesRawmaterials] enumerateObjectsUsingBlock:^(ArticlesRawmaterials *articlesRawmaterial, NSUInteger idx, BOOL *stop) {
             
             
             NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
                                   
+                                  [article articleid],@"articleid",
+
                                   [[articlesRawmaterial rawmaterialgroupid] checkEmptyString],@"rawmaterialgroupid",
                                   [[articlesRawmaterial insraw] checkEmptyString],@"insraw",
-                                  [[articlesRawmaterial insraw] checkEmptyString],@"leatherpriority",
-                                  [[articlesRawmaterial insraw] checkEmptyString],@"colorid",
-                                  [[articlesRawmaterial insraw] checkEmptyString],@"rawmaterialid",
+                                  [[articlesRawmaterial leatherpriority] checkEmptyString],@"leatherpriority",
+                                  [[articlesRawmaterial colorid] checkEmptyString],@"colorid",
+                                  [[articlesRawmaterial rawmaterialid] checkEmptyString],@"rawmaterialid",
                                   
                                   nil];
             
@@ -530,7 +524,7 @@ static CXSSqliteHelper *sqliteHelper = nil;
             
             NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
                                   article.articleid,@"articleid",
-                                  [obj objectForKey:@"image_path"],@"url",
+                                  [obj objectForKey:@"image_path"],@"imagepath",
                                   nil];
             
             [self insertInto:@"Article_Images" ColumnsAndValues:dict];
@@ -561,7 +555,7 @@ static CXSSqliteHelper *sqliteHelper = nil;
         
         if (idx %5 == 0) {
             
-            [[NSNotificationCenter defaultCenter] postNotificationName:PROGRESS_COUNT object:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:totalRecords],@"totalRecords",[NSNumber numberWithInteger:idx],@"totalInsertedRecords", nil]];
+            [[NSNotificationCenter defaultCenter] postNotificationName:PROGRESS_COUNT object:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:totalRecords],@"totalRecords",[NSNumber numberWithInteger:idx],@"totalInsertedRecords",@"Syncing Colors...",@"Title", nil]];
         }
 
         NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -590,15 +584,17 @@ static CXSSqliteHelper *sqliteHelper = nil;
 
     [clients enumerateObjectsUsingBlock:^(Clients *client, NSUInteger idx, BOOL *stop) {
         
-        if (idx %5 == 0) {
+        if (idx %2 == 0) {
             
-            [[NSNotificationCenter defaultCenter] postNotificationName:PROGRESS_COUNT object:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:totalRecords],@"totalRecords",[NSNumber numberWithInteger:idx],@"totalInsertedRecords", nil]];
+            [[NSNotificationCenter defaultCenter] postNotificationName:PROGRESS_COUNT object:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:totalRecords],@"totalRecords",[NSNumber numberWithInteger:idx],@"totalInsertedRecords",@"Syncing Clients...",@"Title", nil]];
         }
 
-        
+        client.name = @"No Name";
         NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
                               
                               [[client name] checkEmptyString],@"name",
+                              [[client clientid] checkEmptyString],@"clientid",
+
                               [[client clientcode] checkEmptyString],@"clientcode",
                               [[client address1] checkEmptyString],@"address1",
                               [[client address2] checkEmptyString],@"address2",
@@ -623,7 +619,7 @@ static CXSSqliteHelper *sqliteHelper = nil;
             
             
             NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                                  
+                                  [client clientid],@"clientid",
                                   [[agent agentid] checkEmptyString],@"agentid",
                                   [[agent address1] checkEmptyString],@"address1",
                                   [[agent faxno] checkEmptyString],@"faxno",
@@ -684,5 +680,121 @@ static CXSSqliteHelper *sqliteHelper = nil;
 - (NSArray*)getAllClients{
     return [self runQuery:@"SELECT * FROM Client_Master" asObject:[Clients class]];
 }
+
+#pragma mark - Payment Terms
+- (void)insertPaymentTerms:(NSArray*)paymentTermArr{
+
+
+    __block NSInteger totalRecords = [paymentTermArr count];
+    
+    [self deleteFromTable:@"DELETE FROM PaymentTerms"];
+    
+    [paymentTermArr enumerateObjectsUsingBlock:^(PaymentTerms *paymentTerm, NSUInteger idx, BOOL *stop) {
+        
+        if (idx %2 == 0) {
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:PROGRESS_COUNT object:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:totalRecords],@"totalRecords",[NSNumber numberWithInteger:idx],@"totalInsertedRecords",@"Syncing Payment Term...",@"Title", nil]];
+        }
+//        *paymentTermId;
+//        paymentTermRemarks;
+//        *paymentTerm;
+        
+        NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                              
+                              [[paymentTerm paymentTermId] checkEmptyString],@"paymentTermId",
+                              [[paymentTerm paymentTerm] checkEmptyString],@"paymentTerm",
+                              nil];
+        
+        [self insertInto:@"PaymentTerms" ColumnsAndValues:dict];
+        
+        [self insertPaymentTermRemarks:[paymentTerm paymentTermRemarks] paymentTermId:[paymentTerm paymentTermId]];
+        
+        }];
+        
+    
+}
+- (void)insertPaymentTermRemarks:(NSArray*)paymentTermArr paymentTermId:(NSString*)paymentTermId{
+    
+    
+    __block NSInteger totalRecords = [paymentTermArr count];
+    
+    [self deleteFromTable:@"DELETE FROM PaymentTermRemarks"];
+    
+    [paymentTermArr enumerateObjectsUsingBlock:^(PaymentTermRemarks *paymentTermRemarks, NSUInteger idx, BOOL *stop) {
+        
+        if (idx %2 == 0) {
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:PROGRESS_COUNT object:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:totalRecords],@"totalRecords",[NSNumber numberWithInteger:idx],@"totalInsertedRecords",@"Syncing Payment Term Remarks...",@"Title", nil]];
+        }
+        NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                              
+                              paymentTermId,@"paymentTermId",
+                              
+                              [[paymentTermRemarks paymentTermRemarkId] checkEmptyString],@"paymentTermRemarkId",
+                              [[paymentTermRemarks paymentTermRemark] checkEmptyString],@"paymentTermRemark",
+                              nil];
+        
+        [self insertInto:@"PaymentTermRemarks" ColumnsAndValues:dict];
+        
+    }];
+    
+    
+}
+
+
+
+- (void)insertShippingTerms:(NSArray*)paymentTermArr{
+    
+    
+    __block NSInteger totalRecords = [paymentTermArr count];
+    
+    [self deleteFromTable:@"DELETE FROM ShippingTerms"];
+    
+    [paymentTermArr enumerateObjectsUsingBlock:^(ShippingTerms *shippingTerms, NSUInteger idx, BOOL *stop) {
+        
+        if (idx %2 == 0) {
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:PROGRESS_COUNT object:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:totalRecords],@"totalRecords",[NSNumber numberWithInteger:idx],@"totalInsertedRecords",@"Syncing Shipping Terms...",@"Title", nil]];
+        }
+        NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                              
+                              [[shippingTerms shippingTerm] checkEmptyString],@"shippingTerm",
+                              [[shippingTerms shippingTermId] checkEmptyString],@"shippingTermId",
+                              nil];
+        
+        [self insertInto:@"ShippingTerms" ColumnsAndValues:dict];
+        
+    }];
+    
+    
+}
+
+
+- (void)insertModeofshipping:(NSArray*)paymentTermArr{
+    
+    
+    __block NSInteger totalRecords = [paymentTermArr count];
+    
+    [self deleteFromTable:@"DELETE FROM Modeofshipping"];
+    
+    [paymentTermArr enumerateObjectsUsingBlock:^(Modeofshipping *modeofshipping, NSUInteger idx, BOOL *stop) {
+        
+        if (idx %2 == 0) {
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:PROGRESS_COUNT object:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:totalRecords],@"totalRecords",[NSNumber numberWithInteger:idx],@"totalInsertedRecords",@"Syncing Mode of shipping...",@"Title", nil]];
+        }
+        NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                              
+                              [[modeofshipping shippingModeId] checkEmptyString],@"shippingModeId",
+                              [[modeofshipping shippingMode] checkEmptyString],@"shippingMode",
+                              nil];
+        
+        [self insertInto:@"Modeofshipping" ColumnsAndValues:dict];
+        
+    }];
+    
+    
+}
+
 
 @end

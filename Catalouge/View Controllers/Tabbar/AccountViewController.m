@@ -107,6 +107,7 @@ CustomeAlert *alert;
                     LoginViewController *loginViewController = [storyboard instantiateViewControllerWithIdentifier:(isIPad() ? @"LoginViewController_iPad" : @"LoginViewController")];
                     [[[[UIApplication sharedApplication] delegate] window] setRootViewController:loginViewController];
                     [NSUserDefaults setIsUserLoggedIn:NO];
+                    [[AppDataManager sharedAppDatamanager] deleteLoggedInUserDetails];
 
                 });
                 

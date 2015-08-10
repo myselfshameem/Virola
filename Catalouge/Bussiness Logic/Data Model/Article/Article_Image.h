@@ -12,6 +12,7 @@
 @interface Article_Image : NSObject <NSCoding>
 
 @property (nonatomic, strong) NSString *imagePath;
+@property (nonatomic, strong) NSString *articleid;
 
 + (Article_Image *)modelObjectWithDictionary:(NSDictionary *)dict;
 - (instancetype)initWithDictionary:(NSDictionary *)dict;

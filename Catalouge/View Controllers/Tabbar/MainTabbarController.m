@@ -73,6 +73,8 @@
             item.image = [[UIImage imageNamed:@"Tabbar_Clients"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
         }
         
+        
+        
         else if(i==3){
             
             item.title= @"Cart";
@@ -89,6 +91,14 @@
             item.image = [[UIImage imageNamed:@"Tabbar_Account"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
         }
 
+        else if(i==5){
+            
+            item.title= @"Sync";
+            item.selectedImage = [[UIImage imageNamed:@"Tabbar_Sync_Selected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+            item.image = [[UIImage imageNamed:@"Tabbar_Sync"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+            
+            
+        }
 
     }
     

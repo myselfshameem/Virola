@@ -5,47 +5,8 @@
 //  Created by Shameem Ahamad on 6/14/15.
 //  Copyright (c) 2015 Shameem Ahamad. All rights reserved.
 //
-#define SOLE_TXT_TAG 2001
-#define SOLE_TXT_COLOR 2002
-#define SOLE_MATERIAL_TXT_COLOR 2003
 
 
-#define LEATHER1_TXT_TAG 101
-#define LEATHER_COLOR1_TXT_TAG 102
-#define LINING1_TXT_TAG 103
-#define LINING_COLOR1_TXT_TAG 104
-
-
-#define LEATHER2_TXT_TAG 105
-#define LEATHER_COLOR2_TXT_TAG 106
-#define LINING2_TXT_TAG 107
-#define LINING_COLOR2_TXT_TAG 108
-
-
-
-#define LEATHER3_TXT_TAG 109
-#define LEATHER_COLOR3_TXT_TAG 110
-#define LINING3_TXT_TAG 111
-#define LINING_COLOR3_TXT_TAG 112
-
-
-#define LEATHER4_TXT_TAG 113
-#define LEATHER_COLOR4_TXT_TAG 114
-#define LINING4_TXT_TAG 115
-#define LINING_COLOR4_TXT_TAG 116
-
-
-#define LEATHER5_TXT_TAG 117
-#define LEATHER_COLOR5_TXT_TAG 118
-#define LINING5_TXT_TAG 119
-#define LINING_COLOR5_TXT_TAG 120
-
-
-
-
-#define ARTILCE_QTY 10001
-#define ARTILCE_QTY_UNIT 10002
-#define ARTILCE_SIZE 10003
 
 #import "SearchViewController.h"
 #import "ClientTableViewCell.h"
@@ -65,7 +26,7 @@
     
     
     self.txtField_Search_Clients.text = self.strSearchString;
-    self.arr_Common_List = self.arr_ClientList;
+    self.arr_ClientList = self.arr_Common_List;
 
     // Do any additional setup after loading the view.
 }
@@ -73,75 +34,89 @@
 - (void)refreshArticleList:(NSString*)searchString{
     
     
+    
+    
+//#define INVALID_USER 801
+//#define  1999
+//#define  1998
+//#define  1997
+//#define  1996
+//#define  1995
+//#define  1994
+//#define  1993
+//#define  1992
+//#define QTY_SELECTION 1991
+//#define PAIR_SELECTION 1990
+//#define SIZE_SELECTION 1989
+//#define  1988
+//#define  1987
+//#define  1986
+//#define MODE_OF_SHIPPING_SELECTION 1985
+    
     NSString *strPredicate = nil;
     NSPredicate *predicate = nil;
 
     
-    
     if ([searchString length]) {
         switch ([self tag]) {
-            
-        case SOLE_TXT_TAG:{
-            strPredicate = [NSString stringWithFormat:@"name contains[c]'%@'",searchString];
+                
+                
+            case PAYMENT_TERMS_SELECTION:{
+                strPredicate = [NSString stringWithFormat:@"paymentTerm contains[c]'%@'",searchString];
+                predicate = [NSPredicate predicateWithFormat:strPredicate];
+            }
+                break;
+
+                
+            case PAYMENT_TERMS_REMARKS_SELECTION:{
+                strPredicate = [NSString stringWithFormat:@"paymentTermRemark contains[c]'%@'",searchString];
+                predicate = [NSPredicate predicateWithFormat:strPredicate];
+            }
+                break;
+
+            case SHIPPING_TERMS_SELECTION:{
+                strPredicate = [NSString stringWithFormat:@"shippingTerm contains[c]'%@'",searchString];
+                predicate = [NSPredicate predicateWithFormat:strPredicate];
+            }
+                break;
+
+            case MODE_OF_SHIPPING_SELECTION:{
+                strPredicate = [NSString stringWithFormat:@"shippingMode contains[c]'%@'",searchString];
+                predicate = [NSPredicate predicateWithFormat:strPredicate];
+            }
+                break;
+
+        case LAST_SELECTION:{
+            strPredicate = [NSString stringWithFormat:@"lastname contains[c]'%@'",searchString];
             predicate = [NSPredicate predicateWithFormat:strPredicate];
         }
             break;
-        case SOLE_TXT_COLOR:{
-            strPredicate = [NSString stringWithFormat:@"self.colors.colorname contains[c]'%@'",searchString];
-            predicate = [NSPredicate predicateWithFormat:strPredicate];
-        }
-            break;
-            
-            
-        case LEATHER1_TXT_TAG:
-        case LEATHER2_TXT_TAG:
-        case LEATHER3_TXT_TAG:
-        case LEATHER4_TXT_TAG:
-        case LEATHER5_TXT_TAG:{
-            
-            strPredicate = [NSString stringWithFormat:@"name contains[c]'%@'",searchString];
-            predicate = [NSPredicate predicateWithFormat:strPredicate];
-        }
-            break;
-            
-        case LEATHER_COLOR1_TXT_TAG:
-        case LEATHER_COLOR2_TXT_TAG:
-        case LEATHER_COLOR3_TXT_TAG:
-        case LEATHER_COLOR4_TXT_TAG:
-        case LEATHER_COLOR5_TXT_TAG:{
-            strPredicate = [NSString stringWithFormat:@"self.colors.colorname contains[c]'%@'",searchString];
-            predicate = [NSPredicate predicateWithFormat:strPredicate];
-        }
-            break;
-            
-            
-            
-        case LINING1_TXT_TAG:
-        case LINING2_TXT_TAG:
-        case LINING3_TXT_TAG:
-        case LINING4_TXT_TAG:
-        case LINING5_TXT_TAG:{
-            
+                
+        case LINING_SELECTION:
+        case LEATHER_SELECTION:
+        case SOLE_SELECTION:
+        case SOLE_MATERIAL_SELECTION:{
             strPredicate = [NSString stringWithFormat:@"name contains[c]'%@'",searchString];
             predicate = [NSPredicate predicateWithFormat:strPredicate];
         }
             break;
             
-        case LINING_COLOR1_TXT_TAG:
-        case LINING_COLOR2_TXT_TAG:
-        case LINING_COLOR3_TXT_TAG:
-        case LINING_COLOR4_TXT_TAG:
-        case LINING_COLOR5_TXT_TAG:{
             
-            strPredicate = [NSString stringWithFormat:@"self.colors.colorname contains[c]'%@'",searchString];
-            predicate = [NSPredicate predicateWithFormat:strPredicate];
-        }
-            break;
             
+            case SOLE_COLOR_SELECTION:
+            case LEATHER_COLOR_SELECTION:
+            case LINING_COLOR_SELECTION:{
+                
+                strPredicate = [NSString stringWithFormat:@"self.colors.colorname contains[c]'%@'",searchString];
+                predicate = [NSPredicate predicateWithFormat:strPredicate];
+                
+            }
+                break;
+         
             
         default:{
             
-            strPredicate = [NSString stringWithFormat:@"name contains[c]'%@'",searchString];
+            strPredicate = [NSString stringWithFormat:@"self contains[c]'%@'",searchString];
             predicate = [NSPredicate predicateWithFormat:strPredicate];
             
         }
@@ -220,451 +195,176 @@
     if (!cell) {
         
         cell = [[[NSBundle mainBundle] loadNibNamed:@"ClientTableViewCell" owner:self options:nil] firstObject];
+        cell.backgroundColor = [UIColor clearColor];
     }
 
     
-    cell.lblClient_Name.text = [self getCellTitleWithIndexpath:indexPath];
+    if ([self tag] == LAST_SELECTION) {
+        Lasts *lasts = [self.arr_Common_List objectAtIndex:indexPath.row];
+        cell.lblClient_Name.text = [lasts lastname];
+    }else if ([self tag] == SOLE_SELECTION){
+    
+    
+        Rawmaterials *lasts = [self.arr_Common_List objectAtIndex:indexPath.row];
+        cell.lblClient_Name.text = [lasts name];
+
+    }else if ([self tag] == SOLE_COLOR_SELECTION){
+    
+        Rawmaterials *lasts = [self.arr_Common_List objectAtIndex:indexPath.row];
+        cell.lblClient_Name.text = [[lasts colors] colorname];
+
+    }else if ([self tag] == SOLE_MATERIAL_SELECTION){
+        
+        Rawmaterials *lasts = [self.arr_Common_List objectAtIndex:indexPath.row];
+        cell.lblClient_Name.text = [[lasts colors] colorname];
+        
+    }else if ([self tag] == LEATHER_SELECTION){
+        
+        Rawmaterials *lasts = [self.arr_Common_List objectAtIndex:indexPath.row];
+        cell.lblClient_Name.text = [lasts name];
+        
+    }else if ([self tag] == LEATHER_COLOR_SELECTION){
+        
+        Rawmaterials *lasts = [self.arr_Common_List objectAtIndex:indexPath.row];
+        cell.lblClient_Name.text = [[lasts colors] colorname];
+        
+    }else if ([self tag] == QTY_SELECTION){
+    
+        NSString *lasts = [self.arr_Common_List objectAtIndex:indexPath.row];
+        cell.lblClient_Name.text = lasts;
+
+    }
+    
+    else if ([self tag] == PAIR_SELECTION){
+    
+        NSString *lasts = [self.arr_Common_List objectAtIndex:indexPath.row];
+        cell.lblClient_Name.text = lasts;
+
+    }else if ([self tag] == SIZE_SELECTION){
+    
+        NSString *lasts = [self.arr_Common_List objectAtIndex:indexPath.row];
+        cell.lblClient_Name.text = lasts;
+
+    }else if ([self tag] == PAYMENT_TERMS_SELECTION){
+        
+        PaymentTerms *lasts = [self.arr_Common_List objectAtIndex:indexPath.row];
+        cell.lblClient_Name.text = [lasts paymentTerm];
+
+    }else if ([self tag] == PAYMENT_TERMS_REMARKS_SELECTION){
+        
+        PaymentTermRemarks *lasts = [self.arr_Common_List objectAtIndex:indexPath.row];
+        cell.lblClient_Name.text = [lasts paymentTermRemark];
+        
+    }else if ([self tag] == SHIPPING_TERMS_SELECTION){
+        
+        ShippingTerms *lasts = [self.arr_Common_List objectAtIndex:indexPath.row];
+        cell.lblClient_Name.text = [lasts shippingTerm];
+        
+    }else if ([self tag] == MODE_OF_SHIPPING_SELECTION){
+        
+        Modeofshipping *lasts = [self.arr_Common_List objectAtIndex:indexPath.row];
+        cell.lblClient_Name.text = [lasts shippingMode];
+        
+    }
+    
     
     
     
     return cell;
 }
-- (NSString *)getCellTitleWithIndexpath:(NSIndexPath*)indexPath{
 
-    NSString *text = @"";
-    Rawmaterials *raw = [self.arr_Common_List objectAtIndex:indexPath.row];
-    
-    switch ([self tag]) {
-            
-        case SOLE_TXT_TAG:{
-            text = [raw name];
-        }
-            break;
-        case SOLE_TXT_COLOR:{
-            text = [[raw colors] colorname];
-        }
-            break;
-            
-            
-        case LEATHER1_TXT_TAG:
-        case LEATHER2_TXT_TAG:
-        case LEATHER3_TXT_TAG:
-        case LEATHER4_TXT_TAG:
-        case LEATHER5_TXT_TAG:{
-            
-            text = [raw name];
-        }
-            break;
-            
-        case LEATHER_COLOR1_TXT_TAG:
-        case LEATHER_COLOR2_TXT_TAG:
-        case LEATHER_COLOR3_TXT_TAG:
-        case LEATHER_COLOR4_TXT_TAG:
-        case LEATHER_COLOR5_TXT_TAG:{
-            
-            text = [[raw colors] colorname];
-        }
-            break;
-            
-            
-            
-        case LINING1_TXT_TAG:
-        case LINING2_TXT_TAG:
-        case LINING3_TXT_TAG:
-        case LINING4_TXT_TAG:
-        case LINING5_TXT_TAG:{
-            
-            text = [raw name];
-        }
-            break;
-            
-        case LINING_COLOR1_TXT_TAG:
-        case LINING_COLOR2_TXT_TAG:
-        case LINING_COLOR3_TXT_TAG:
-        case LINING_COLOR4_TXT_TAG:
-        case LINING_COLOR5_TXT_TAG:{
-            
-            text = [[raw colors] colorname];
-        }
-            break;
-            
-            
-        default:{
-            
-            text = [raw name];
-            
-        }
-            break;
-    }
-    
-    return text;
-}
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return 45;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     
-    Rawmaterials *rawmaterial = [[self arr_Common_List] objectAtIndex:indexPath.row];
     
-    switch ([self tag]) {
-            
-            
-        case SOLE_TXT_TAG:{
-            [self setSelectedSole:self.common_TxtField withRawmaterial:rawmaterial];
-        }
-            break;
-        case SOLE_TXT_COLOR:{
-            [self setSelectedSoleColor:self.common_TxtField withRawmaterial:rawmaterial];
-        }
-            break;
-        case SOLE_MATERIAL_TXT_COLOR:{
-            
-            [self setSelectedSoleMaterial:self.common_TxtField withRawmaterial:rawmaterial];
-        }
-            break;
-            
-        case LEATHER1_TXT_TAG:
-        case LEATHER2_TXT_TAG:
-        case LEATHER3_TXT_TAG:
-        case LEATHER4_TXT_TAG:
-        case LEATHER5_TXT_TAG:{
-            
-            [self setSelectedLeather:self.common_TxtField withRawmaterial:rawmaterial];
-        }
-            break;
-            
-            
-        case LINING1_TXT_TAG:
-        case LINING2_TXT_TAG:
-        case LINING3_TXT_TAG:
-        case LINING4_TXT_TAG:
-        case LINING5_TXT_TAG:{
-            
-            [self setSelectedLeatherLining:self.common_TxtField withRawmaterial:rawmaterial];
-        }
-            break;
-            
-            
-            
-        case LINING_COLOR1_TXT_TAG:
-        case LINING_COLOR2_TXT_TAG:
-        case LINING_COLOR3_TXT_TAG:
-        case LINING_COLOR4_TXT_TAG:
-        case LINING_COLOR5_TXT_TAG:{
-            
-            [self setSelectedLeatherLiningColor:self.common_TxtField withRawmaterial:rawmaterial];
-        }
-            break;
-            
-            
-            
-        case LEATHER_COLOR1_TXT_TAG:
-        case LEATHER_COLOR2_TXT_TAG:
-        case LEATHER_COLOR3_TXT_TAG:
-        case LEATHER_COLOR4_TXT_TAG:
-        case LEATHER_COLOR5_TXT_TAG:{
-            
-            [self setSelectedLeatherColor:self.common_TxtField withRawmaterial:rawmaterial];
-        }
-            break;
-            
-        case ARTILCE_QTY:{
-            
-            TrxTransaction *local = [[AppDataManager sharedAppDatamanager] transaction];
-            self.common_TxtField.text = [rawmaterial name];
-            [local setQty:[rawmaterial name]];
-        }
-            
-            break;
-        case ARTILCE_QTY_UNIT:{
-            
-            TrxTransaction *local = [[AppDataManager sharedAppDatamanager] transaction];
-            self.common_TxtField.text = [rawmaterial name];
-            [local setQty_unit:[rawmaterial name]];
-        }
-            
-            break;
-            
-        case ARTILCE_SIZE:{
-            
-            TrxTransaction *local = [[AppDataManager sharedAppDatamanager] transaction];
-            self.common_TxtField.text = [rawmaterial name];
-            [local setSize:[rawmaterial name]];
-        }
-            
-            break;
-            
+    
+    
+    if ([self tag] == LAST_SELECTION) {
+        Lasts *lasts = [self.arr_Common_List objectAtIndex:indexPath.row];
+        _optionSelectedCallBack ? _optionSelectedCallBack(lasts) : nil;
+    }else if ([self tag] == SOLE_SELECTION){
+    
+        Rawmaterials *lasts = [self.arr_Common_List objectAtIndex:indexPath.row];
+        _optionSelectedCallBack ? _optionSelectedCallBack(lasts) : nil;
+
+    }else if ([self tag] == SOLE_COLOR_SELECTION){
+        
+        Rawmaterials *lasts = [self.arr_Common_List objectAtIndex:indexPath.row];
+        _optionSelectedCallBack ? _optionSelectedCallBack(lasts) : nil;
+        
+    }else if ([self tag] == SOLE_MATERIAL_SELECTION){
+        
+        Rawmaterials *lasts = [self.arr_Common_List objectAtIndex:indexPath.row];
+        _optionSelectedCallBack ? _optionSelectedCallBack(lasts) : nil;
+        
+    }else if ([self tag] == LEATHER_SELECTION){
+        
+        Rawmaterials *lasts = [self.arr_Common_List objectAtIndex:indexPath.row];
+        _optionSelectedCallBack ? _optionSelectedCallBack(lasts) : nil;
+        
+    }else if ([self tag] == LEATHER_COLOR_SELECTION){
+        
+        Rawmaterials *lasts = [self.arr_Common_List objectAtIndex:indexPath.row];
+        _optionSelectedCallBack ? _optionSelectedCallBack(lasts) : nil;
+        
+    }else if ([self tag] == QTY_SELECTION){
+        
+        NSString *lasts = [self.arr_Common_List objectAtIndex:indexPath.row];
+        _optionSelectedCallBack ? _optionSelectedCallBack(lasts) : nil;
+        
     }
     
+    else if ([self tag] == PAIR_SELECTION){
+        
+        NSString *lasts = [self.arr_Common_List objectAtIndex:indexPath.row];
+        _optionSelectedCallBack ? _optionSelectedCallBack(lasts) : nil;
+        
+    }else if ([self tag] == SIZE_SELECTION){
+        
+        NSString *lasts = [self.arr_Common_List objectAtIndex:indexPath.row];
+        _optionSelectedCallBack ? _optionSelectedCallBack(lasts) : nil;
+        
+    }else if ([self tag] == PAYMENT_TERMS_SELECTION){
+        
+        PaymentTerms *lasts = [self.arr_Common_List objectAtIndex:indexPath.row];
+        _optionSelectedCallBack ? _optionSelectedCallBack(lasts) : nil;
+        
+    }else if ([self tag] == PAYMENT_TERMS_REMARKS_SELECTION){
+        
+        PaymentTermRemarks *lasts = [self.arr_Common_List objectAtIndex:indexPath.row];
+        _optionSelectedCallBack ? _optionSelectedCallBack(lasts) : nil;
+        
+    }else if ([self tag] == SHIPPING_TERMS_SELECTION){
+        
+        ShippingTerms *lasts = [self.arr_Common_List objectAtIndex:indexPath.row];
+        _optionSelectedCallBack ? _optionSelectedCallBack(lasts) : nil;
+        
+    }else if ([self tag] == MODE_OF_SHIPPING_SELECTION){
+        
+        Modeofshipping *lasts = [self.arr_Common_List objectAtIndex:indexPath.row];
+        _optionSelectedCallBack ? _optionSelectedCallBack(lasts) : nil;
+        
+    }
     
-    [[self common_TxtField] resignFirstResponder];
+
+    
     
     [[self navigationController] popViewControllerAnimated:YES];
+
+    return;
+    
+    
+    
 }
 
-- (void)setSelectedLeather:(UITextField*)textField withRawmaterial:(Rawmaterials*)leather{
-    
-    TrxTransaction *local = [[AppDataManager sharedAppDatamanager] transaction];
-    
-    self.common_TxtField.text = [leather name];
-    
-    
-    NSString *query = [NSString stringWithFormat:@"SELECT * FROM Rawmaterial_Master WHERE rawmaterialgroupid = '%@' and name = '%@' limit 1",[leather rawmaterialgroupid],[leather name]];
-    
-    NSArray *colorsArray = [[CXSSqliteHelper sharedSqliteHelper] runQuery:query asObject:[Rawmaterials class]] ;
-    
-    
-    switch ([textField tag]) {
-            
-        case LEATHER1_TXT_TAG:
-            
-            if ([colorsArray count])
-                [local setLeather1:[colorsArray firstObject]];
-            
-            self.common_TxtField.text = local.Leather1.colors.colorname;
-            
-            break;
-            
-        case LEATHER2_TXT_TAG:
-            
-            if ([colorsArray count])
-                [local setLeather2:[colorsArray firstObject]];
-            
-            self.common_TxtField.text = local.Leather2.colors.colorname;
-            break;
-        case LEATHER3_TXT_TAG:
-            
-            if ([colorsArray count])
-                [local setLeather3:[colorsArray firstObject]];
-            
-            self.common_TxtField.text = local.Leather3.colors.colorname;
-            
-            break;
-        case LEATHER4_TXT_TAG:
-            if ([colorsArray count])
-                [local setLeather4:[colorsArray firstObject]];
-            
-            self.common_TxtField.text = local.Leather4.colors.colorname;
-            break;
-        case LEATHER5_TXT_TAG:
-            if ([colorsArray count])
-                [local setLeather5:[colorsArray firstObject]];
-            
-            self.common_TxtField.text = local.Leather5.colors.colorname;
-            break;
-            
-        default:
-            break;
-    }
-    
-    
+
+- (void)registerOptionSelectionCallback:(OptionSelectedCallBack)optionSelectedCallBack{
+
+    _optionSelectedCallBack = optionSelectedCallBack;
 }
-- (void)setSelectedLeatherColor:(UITextField*)textField withRawmaterial:(Rawmaterials*)leather{
-    
-    TrxTransaction *local = [[AppDataManager sharedAppDatamanager] transaction];
-    
-    self.common_TxtField.text = [[leather colors] colorname];
-    
-    
-    NSString *query = [NSString stringWithFormat:@"SELECT * FROM Rawmaterial_Master WHERE rawmaterialgroupid = '%@' and name = '%@' and colorid = '%@'",[leather rawmaterialgroupid],[leather name],[leather colorid]];
-    
-    NSArray *colorsArray = [[CXSSqliteHelper sharedSqliteHelper] runQuery:query asObject:[Rawmaterials class]] ;
-    
-    
-    switch ([textField tag]) {
-            
-        case LEATHER_COLOR1_TXT_TAG:
-            
-            if ([colorsArray count])
-                [local setLeather1:[colorsArray firstObject]];
-            
-            
-            break;
-            
-        case LEATHER2_TXT_TAG:
-            
-            if ([colorsArray count])
-                [local setLeather2:[colorsArray firstObject]];
-            
-            break;
-        case LEATHER3_TXT_TAG:
-            
-            if ([colorsArray count])
-                [local setLeather3:[colorsArray firstObject]];
-            
-            
-            break;
-        case LEATHER4_TXT_TAG:
-            if ([colorsArray count])
-                [local setLeather4:[colorsArray firstObject]];
-            
-            break;
-        case LEATHER5_TXT_TAG:
-            if ([colorsArray count])
-                [local setLeather5:[colorsArray firstObject]];
-            
-            break;
-            
-        default:
-            break;
-    }
-    
-    //    NSString *query = [NSString stringWithFormat:@"SELECT * FROM Rawmaterial_Master WHERE rawmaterialgroupid = '%@' GROUP BY name",[leather rawmaterialgroupid]];
-    //    NSMutableArray *materialGroup = [NSMutableArray arrayWithArray:[[CXSSqliteHelper sharedSqliteHelper] runQuery:query asObject:[Rawmaterials class]]] ;
-    
-}
-- (void)setSelectedLeatherLining:(UITextField*)textField withRawmaterial:(Rawmaterials*)lining{
-    
-    TrxTransaction *local = [[AppDataManager sharedAppDatamanager] transaction];
-    
-    self.common_TxtField.text = [lining name];
-    
-    
-    NSString *query = [NSString stringWithFormat:@"SELECT * FROM Rawmaterial_Master WHERE rawmaterialgroupid = '%@' and name = '%@' limit 1",[lining rawmaterialgroupid],[lining name]];
-    
-    NSArray *colorsArray = [[CXSSqliteHelper sharedSqliteHelper] runQuery:query asObject:[Rawmaterials class]] ;
-    
-    
-    switch ([textField tag]) {
-            
-        case LINING1_TXT_TAG:
-            
-            if ([colorsArray count])
-                [local setLining1:[colorsArray firstObject]];
-            
-            self.common_TxtField.text = local.Lining1.colors.colorname;
-            
-            break;
-            
-        case LINING2_TXT_TAG:
-            
-            if ([colorsArray count])
-                [local setLining2:[colorsArray firstObject]];
-            
-            self.common_TxtField.text = local.Lining2.colors.colorname;
-            break;
-        case LINING3_TXT_TAG:
-            
-            if ([colorsArray count])
-                [local setLining3:[colorsArray firstObject]];
-            
-            self.common_TxtField.text = local.Lining3.colors.colorname;
-            
-            break;
-        case LINING4_TXT_TAG:
-            if ([colorsArray count])
-                [local setLining4:[colorsArray firstObject]];
-            
-            self.common_TxtField.text = local.Lining4.colors.colorname;
-            break;
-        case LINING5_TXT_TAG:
-            if ([colorsArray count])
-                [local setLining5:[colorsArray firstObject]];
-            
-            self.common_TxtField.text = local.Lining5.colors.colorname;
-            break;
-            
-        default:
-            break;
-    }
-    
-    
-}
-- (void)setSelectedLeatherLiningColor:(UITextField*)textField withRawmaterial:(Rawmaterials*)lining{
-    
-    TrxTransaction *local = [[AppDataManager sharedAppDatamanager] transaction];
-    
-    self.common_TxtField.text = [[lining colors] colorname];
-    
-    
-    NSString *query = [NSString stringWithFormat:@"SELECT * FROM Rawmaterial_Master WHERE rawmaterialgroupid = '%@' and name = '%@' and colorid = '%@'",[lining rawmaterialgroupid],[lining name],[lining colorid]];
-    
-    NSArray *colorsArray = [[CXSSqliteHelper sharedSqliteHelper] runQuery:query asObject:[Rawmaterials class]] ;
-    
-    
-    switch ([textField tag]) {
-            
-        case LINING_COLOR1_TXT_TAG:
-            
-            if ([colorsArray count])
-                [local setLining1:[colorsArray firstObject]];
-            
-            
-            break;
-            
-        case LINING_COLOR2_TXT_TAG:
-            
-            if ([colorsArray count])
-                [local setLining2:[colorsArray firstObject]];
-            
-            break;
-        case LINING_COLOR3_TXT_TAG:
-            
-            if ([colorsArray count])
-                [local setLining3:[colorsArray firstObject]];
-            
-            
-            break;
-        case LINING_COLOR4_TXT_TAG:
-            if ([colorsArray count])
-                [local setLining4:[colorsArray firstObject]];
-            
-            break;
-        case LINING_COLOR5_TXT_TAG:
-            if ([colorsArray count])
-                [local setLining5:[colorsArray firstObject]];
-            
-            break;
-            
-        default:
-            break;
-    }
-    
-    //    NSString *query = [NSString stringWithFormat:@"SELECT * FROM Rawmaterial_Master WHERE rawmaterialgroupid = '%@' GROUP BY name",[leather rawmaterialgroupid]];
-    //    NSMutableArray *materialGroup = [NSMutableArray arrayWithArray:[[CXSSqliteHelper sharedSqliteHelper] runQuery:query asObject:[Rawmaterials class]]] ;
-    
-}
-- (void)setSelectedSole:(UITextField*)textField withRawmaterial:(Rawmaterials*)leather{
-    
-    TrxTransaction *local = [[AppDataManager sharedAppDatamanager] transaction];
-    
-    self.common_TxtField.text = [leather name];
-    
-    
-    NSString *query = [NSString stringWithFormat:@"SELECT * FROM Rawmaterial_Master WHERE rawmaterialgroupid = '%@' and name = '%@' limit 1",[leather rawmaterialgroupid],[leather name]];
-    
-    NSArray *colorsArray = [[CXSSqliteHelper sharedSqliteHelper] runQuery:query asObject:[Rawmaterials class]] ;
-    
-    if ([colorsArray count]){
-        
-        [local setSole:[colorsArray firstObject]];
-        self.common_TxtField.text = local.Sole.colors.colorname;
-    }
-    
-    
-    
-}
-- (void)setSelectedSoleColor:(UITextField*)textField withRawmaterial:(Rawmaterials*)leather{
-    
-    TrxTransaction *local = [[AppDataManager sharedAppDatamanager] transaction];
-    
-    self.common_TxtField.text = [[leather colors] colorname];
-    
-    
-    NSString *query = [NSString stringWithFormat:@"SELECT * FROM Rawmaterial_Master WHERE rawmaterialgroupid = '%@' and name = '%@' and colorid = '%@'",[leather rawmaterialgroupid],[leather name],[leather colorid]];
-    
-    NSArray *colorsArray = [[CXSSqliteHelper sharedSqliteHelper] runQuery:query asObject:[Rawmaterials class]] ;
-    
-    if ([colorsArray count])
-        [local setSole:[colorsArray firstObject]];
-    
-}
-- (void)setSelectedSoleMaterial:(UITextField*)textField withRawmaterial:(Rawmaterials*)leather{
-    
-    TrxTransaction *local = [[AppDataManager sharedAppDatamanager] transaction];
-    self.common_TxtField.text = [leather name];
-    [local setSoleMaterial:leather];
-    
-}
+
+
 @end

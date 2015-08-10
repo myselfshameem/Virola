@@ -45,4 +45,9 @@
 
 - (NSArray*)getAllArticles;
 - (NSArray*)getAllClients;
+
+- (void)insertPaymentTerms:(NSArray*)paymentTermArr;
+- (void)insertPaymentTermRemarks:(NSArray*)paymentTermArr;
+- (void)insertShippingTerms:(NSArray*)paymentTermArr;
+- (void)insertModeofshipping:(NSArray*)paymentTermArr;
 @end

@@ -31,8 +31,16 @@
                         <color key="textColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="plY-9Z-pvU">
+                        <rect key="frame" x="5" y="8" width="64" height="64"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="64" id="Pgp-mg-xxq"/>
+                            <constraint firstAttribute="width" constant="64" id="eex-GU-qsN"/>
+                        </constraints>
+                    </view>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="6kX-Dx-a1x">
-                        <rect key="frame" x="6" y="7" width="64" height="64"/>
+                        <rect key="frame" x="6" y="9" width="64" height="64"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="64" id="KeJ-gQ-hYp"/>
                             <constraint firstAttribute="height" constant="64" id="W5W-ab-HNp"/>
@@ -69,13 +77,15 @@
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 <constraints>
                     <constraint firstItem="lfd-xe-GZE" firstAttribute="leading" secondItem="6kX-Dx-a1x" secondAttribute="trailing" constant="5" id="6HR-57-Zgy"/>
-                    <constraint firstItem="6kX-Dx-a1x" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="7" id="A1Y-9f-y8a"/>
+                    <constraint firstItem="6kX-Dx-a1x" firstAttribute="centerX" secondItem="plY-9Z-pvU" secondAttribute="centerX" constant="1" id="DOa-l9-ZBd"/>
                     <constraint firstAttribute="trailing" secondItem="9Oa-GQ-QSD" secondAttribute="trailing" constant="7" id="HJo-28-uMu"/>
                     <constraint firstItem="6kX-Dx-a1x" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="6" id="IDk-TU-nGt"/>
                     <constraint firstAttribute="trailing" secondItem="lfd-xe-GZE" secondAttribute="trailing" constant="7" id="LO6-Tw-SC8"/>
                     <constraint firstAttribute="bottom" secondItem="DFi-CH-qcW" secondAttribute="bottom" constant="9" id="MJE-mX-PgH"/>
                     <constraint firstAttribute="trailing" secondItem="nPF-ra-tPz" secondAttribute="trailing" constant="7" id="TXa-fX-4cA"/>
                     <constraint firstItem="9Oa-GQ-QSD" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="7" id="V2z-GE-oDY"/>
+                    <constraint firstItem="6kX-Dx-a1x" firstAttribute="centerY" secondItem="plY-9Z-pvU" secondAttribute="centerY" constant="1" id="f1V-IN-SCE"/>
+                    <constraint firstAttribute="centerY" secondItem="6kX-Dx-a1x" secondAttribute="centerY" constant="3" id="ilD-Ed-CL2"/>
                     <constraint firstItem="DFi-CH-qcW" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="j38-Pk-uCA"/>
                     <constraint firstAttribute="trailing" secondItem="DFi-CH-qcW" secondAttribute="trailing" id="nyF-4e-TOr"/>
                     <constraint firstItem="lfd-xe-GZE" firstAttribute="top" secondItem="9Oa-GQ-QSD" secondAttribute="bottom" constant="6" id="r2c-0t-1Ai"/>
@@ -90,6 +100,7 @@
                 <outlet property="lbl_Description" destination="lfd-xe-GZE" id="oDv-uz-c4I"/>
                 <outlet property="lbl_Price" destination="nPF-ra-tPz" id="Klb-ey-Ujd"/>
                 <outlet property="lbl_Title" destination="9Oa-GQ-QSD" id="Hau-DP-0vM"/>
+                <outlet property="vw_ImageHolder" destination="plY-9Z-pvU" id="Tnx-kv-E0g"/>
             </connections>
             <point key="canvasLocation" x="254.5" y="253.5"/>
         </tableViewCell>

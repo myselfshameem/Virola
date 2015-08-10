@@ -124,6 +124,7 @@
     if (!cell) {
         
         cell = [[[NSBundle mainBundle] loadNibNamed:@"ArticleCell" owner:self options:nil] firstObject];
+        [cell initilizeCell];
     }
     Articles *article = [[self arr_ClientList] objectAtIndex:indexPath.row];
     cell.lbl_Title.text = [article articlename];
@@ -153,7 +154,7 @@
 
     AddToCartViewController *addToCartViewController = [[self storyboard] instantiateViewControllerWithIdentifier:@"AddToCartViewController"];
     [[AppDataManager sharedAppDatamanager] setTransaction:nil];
-    [[AppDataManager sharedAppDatamanager] newTransactionWithArticleId:article.articleid];
+    [[AppDataManager sharedAppDatamanager] newTransactionWithArticleId:article.articleid withNewDevelopment:NO];
     [self.navigationController pushViewController:addToCartViewController animated:YES];
     
     
