@@ -22,6 +22,8 @@
 @property (nonatomic, strong) NSString *mLC;
 @property (nonatomic, strong) NSArray *images;
 @property (nonatomic, strong) NSString *sizefrom;
+@property (nonatomic, strong) NSString *lastname;
+@property (nonatomic, strong) NSString *solename;
 
 + (Articles *)modelObjectWithDictionary:(NSDictionary *)dict;
 - (instancetype)initWithDictionary:(NSDictionary *)dict;

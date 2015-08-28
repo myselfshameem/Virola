@@ -23,6 +23,17 @@
 @property (weak, nonatomic) IBOutlet UITextField *txt_SoleMatarial;
 
 
+//Socks
+@property (weak, nonatomic) IBOutlet UILabel *lbl_Socks;
+@property (weak, nonatomic) IBOutlet UIView *vw_Socks;
+@property (weak, nonatomic) IBOutlet UITextField *txt_Socks;
+
+//Socks Colors
+@property (weak, nonatomic) IBOutlet UILabel *lbl_SocksColors;
+@property (weak, nonatomic) IBOutlet UIView *vw_SocksColors;
+@property (weak, nonatomic) IBOutlet UITextField *txt_SocksColors;
+
+
 @property (nonatomic,strong) Lasts *last;
 @property (nonatomic,strong) Rawmaterials *Sole;
 @property (nonatomic,strong) Rawmaterials *SoleMaterial;

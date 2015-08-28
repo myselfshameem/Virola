@@ -315,6 +315,36 @@ static ApiHandler *apiHandler;
     
 }
 
+
+- (void)getOrdersApiHandlerWithApiCallBlock:(LoginApiCallBlock)logoutApiCallBlock{
+    
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:PROGRESS_COUNT object:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:0],@"totalRecords",[NSNumber numberWithInteger:0],@"totalInsertedRecords",@"Fetching Orders...",@"Title", nil]];
+    
+    [NSURLConnection sendAsynchronousRequest:[self getURLRequestForGetOrders] queue:[self apiHandlerQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+        
+        if (connectionError) {
+            
+            logoutApiCallBlock(nil,connectionError);
+        }else{
+            
+            NSError *jsonError = nil;
+            id responsedData = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&jsonError];
+            GetOrdersApiResponse *response = [[GetOrdersApiResponse alloc] initWithDictionary:responsedData];
+            //Update to DB
+            if ([[response orders] isKindOfClass:[NSArray class]])
+                [[CXSSqliteHelper sharedSqliteHelper] insertOrdersTerms:[response orders]];
+            
+            logoutApiCallBlock(responsedData,connectionError);
+        }
+        
+        
+    }];
+    
+    
+    
+}
+
 #pragma mark - NSURLRequest
 
 - (NSURLRequest*)getURLRequestForLoginAPIWith:(NSString*)username andPassword:(NSString*)pwd{
@@ -498,5 +528,17 @@ static ApiHandler *apiHandler;
     return request;
     
 }
-
+- (NSURLRequest*)getURLRequestForGetOrders{
+    
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",ROOT_API_PATH ,GET_Orders]];
+    NSMutableURLRequest  *request = [NSMutableURLRequest requestWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    AppDataManager *sharedAppDatamanager = [AppDataManager sharedAppDatamanager];
+    NSString *postString = [NSString stringWithFormat:@"userid=%@&sessionid=%@",[[[sharedAppDatamanager account] user] userId],[[sharedAppDatamanager account] sessionId]];
+    NSData *postData = [postString dataUsingEncoding:NSUTF8StringEncoding];
+    [request setHTTPBody:postData];
+    return request;
+    
+}
 @end

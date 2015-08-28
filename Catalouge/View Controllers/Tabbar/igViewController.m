@@ -107,16 +107,32 @@ CustomeAlert *alert;
             if ([arr count]) {
                 
                 Articles *article = [arr firstObject];
+                [self showActivityIndicator:@"Loading Article..."];
+
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+                    
+                    AddToCartViewController *addToCartViewController = [[self storyboard] instantiateViewControllerWithIdentifier:@"AddToCartViewController"];
+                    [[AppDataManager sharedAppDatamanager] newTransactionWithArticleId:article.articleid withNewDevelopment:NO];
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            
+                            [self hideActivityIndicator];
+                            
+                            [self.navigationController pushViewController:addToCartViewController animated:YES];
+                            
+                            
+                        });
+                    
+                });
                 
-                AddToCartViewController *addToCartViewController = [[self storyboard] instantiateViewControllerWithIdentifier:@"AddToCartViewController"];
-                [[AppDataManager sharedAppDatamanager] newTransactionWithArticleId:article.articleid withNewDevelopment:NO];
-                [self.navigationController pushViewController:addToCartViewController animated:YES];
                 
                 
             }else{
                 
                 alert = [[CustomeAlert alloc] init];
                 [alert showAlertWithTitle:nil message:[NSString stringWithFormat:@"Article not found for Scanned Barcode : [%@]",detectionString] cancelButtonTitle:@"OK" otherButtonTitles:nil withButtonHandler:^(NSInteger buttonIndex) {
+                    
+                    [[self navigationController] popViewControllerAnimated:YES];
+                    
                 }];
                 
             }
@@ -135,4 +151,20 @@ CustomeAlert *alert;
 - (void)barcodeScanned:(BarcodeScanned)barcodeScanned1{
     _barcodeScanned = barcodeScanned1;
 }
+
+
+- (void)showActivityIndicator:(NSString*)msg{
+    
+    [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [hud setLabelText:msg];
+    
+    
+}
+
+- (void)hideActivityIndicator{
+    [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
+}
+
+
 @end

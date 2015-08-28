@@ -12,8 +12,9 @@
 #import "AlertWithTableViewController.h"
 #import "CXTableView.h"
 @interface ArticleSelectionViewController ()<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>
-
+@property(nonatomic,strong) NSOperationQueue *localQueue;
 @end
+static dispatch_once_t onceToken;
 
 @implementation ArticleSelectionViewController
 
@@ -28,27 +29,120 @@
 
     [self setTitle:@"Article"];
 
-    self.txtField_Search_Clients.text = self.strSearchString;
-    
-    
-//    [[self tbl_ClientList] setSeparatorColor:[UIColor lightGrayColor]];
-//    [[self tbl_ClientList] setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
+    //self.txtField_Search_Clients.text = self.strSearchString;
+    onceToken = 0;
 
 }
+- (NSOperationQueue*)localQueue{
 
+    if (!_localQueue) {
+        _localQueue = [[NSOperationQueue alloc] init];
+        [_localQueue setName:@"com.articleselection.virola"];
+    }
+    return _localQueue;
+}
 - (void)viewWillAppear:(BOOL)animated{
 
-    [self refreshArticleList:self.txtField_Search_Clients.text];
+}
+- (void)viewDidAppear:(BOOL)animated{
+    
+    dispatch_once(&onceToken, ^{
+        [self loadArticles];
+        
+    });
+
 }
 
+- (void)viewDidDisappear:(BOOL)animated{
+
+    [[self localQueue] cancelAllOperations];
+
+
+}
+
+
+- (NSString *)getFilterCriteria{
+
+    NSString *sqlQuery =@"SELECT * FROM Article_Master order by articleid";
+    if ([[self strSearchString] length]) {
+        
+        if ([[self searchCriteria] isEqualToString:@"ARTICLE"]) {
+            
+            sqlQuery = [NSString stringWithFormat:@"SELECT * FROM Article_Master WHERE (articleid like '%%%@%%') order by articleid",self.strSearchString];
+            
+        }else if ([[self searchCriteria] isEqualToString:@"LAST"]){
+        
+            sqlQuery = [NSString stringWithFormat:@"SELECT * FROM Article_Master WHERE (lastname like '%%%@%%') order by lastname",self.strSearchString];
+
+        }else if ([[self searchCriteria] isEqualToString:@"SOLE"]){
+            
+            sqlQuery = [NSString stringWithFormat:@"SELECT * FROM Article_Master WHERE (solename like '%%%@%%') order by solename",self.strSearchString];
+        }
+        
+    }
+    return sqlQuery;
+}
+
+- (void)loadArticles{
+
+    
+    
+    __weak ArticleSelectionViewController *weakSelf = self;
+    
+    
+    [weakSelf showActivityIndicator:@"Loading Articles..."];
+    [[weakSelf localQueue] cancelAllOperations];
+    
+    [[weakSelf localQueue] addOperationWithBlock:^{
+        
+        NSString *sqlQuery =[weakSelf getFilterCriteria];
+        self.arr_ClientList = [NSMutableArray arrayWithArray:[[CXSSqliteHelper sharedSqliteHelper] runQuery:sqlQuery asObject:[Articles class]]];
+        self.arr_Common_List = self.arr_ClientList;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf hideActivityIndicator];
+            [[weakSelf tbl_ClientList] reloadData];
+        });
+        
+    }];
+    
+
+
+}
 - (void)refreshArticleList:(NSString*)searchString{
     
-    NSString *sqlQuery =@"SELECT * FROM Article_Master";
     
-    if ([searchString length]) {
-        sqlQuery = [NSString stringWithFormat:@"SELECT * FROM Article_Master WHERE (articlename like '%%%@%%') OR (articleid like '%%%@%%')",searchString,searchString];
+    NSString *strPredicate = nil;
+    NSPredicate *predicate = nil;
+    
+    
+    
+    if ([[self searchCriteria] length]) {
+        
+        if ([[self searchCriteria] isEqualToString:@"ARTICLE"]) {
+            
+            strPredicate = [NSString stringWithFormat:@"lastname contains[c]'%@' OR solename contains[c]'%@'",searchString,searchString];
+            
+        }else if ([[self searchCriteria] isEqualToString:@"LAST"]){
+            
+            strPredicate = [NSString stringWithFormat:@"articleid contains[c]'%@' OR solename contains[c]'%@'",searchString,searchString];
+            
+        }else if ([[self searchCriteria] isEqualToString:@"SOLE"]){
+            
+            strPredicate = [NSString stringWithFormat:@"articleid contains[c]'%@' OR lastname contains[c]'%@'",searchString,searchString];
+        }
+        
+        predicate = [NSPredicate predicateWithFormat:strPredicate];
+        //NSArray *arr = [self.arr_ClientList filteredArrayUsingPredicate:predicate];
+        //self.arr_Common_List = [NSMutableArray arrayWithArray:arr];
+        
+    }else{
+    
+        self.arr_Common_List = self.arr_ClientList;
+
     }
-    self.arr_ClientList = [NSMutableArray arrayWithArray:[[CXSSqliteHelper sharedSqliteHelper] runQuery:sqlQuery asObject:[Articles class]]];
+
+    self.arr_Common_List = self.arr_ClientList;
+
     [[self tbl_ClientList] reloadData];
     
 }
@@ -83,6 +177,23 @@
 
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    
+    
+    
+    NSString *textString = textField.text;
+    if (range.length > 0) {
+        textString = [textString stringByReplacingCharactersInRange:range withString:@""];
+    }
+    else {
+        if(range.location == [textString length]) {
+            textString = [textString stringByAppendingString:string];
+        }
+        else {
+            textString = [textString stringByReplacingCharactersInRange:range withString:string];
+        }
+    }
+    
+    [self refreshArticleList:textString];
     return YES;
 }
 - (BOOL)textFieldShouldClear:(UITextField *)textField{
@@ -93,7 +204,6 @@
 - (void)textFieldDidEndEditing:(UITextField *)textField{
     // [textField resignFirstResponder];
     
-    [self refreshArticleList:textField.text];
     
     
 }
@@ -115,7 +225,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return [[self arr_ClientList] count];
+    return [[self arr_Common_List] count];
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -126,22 +236,54 @@
         cell = [[[NSBundle mainBundle] loadNibNamed:@"ArticleCell" owner:self options:nil] firstObject];
         [cell initilizeCell];
     }
-    Articles *article = [[self arr_ClientList] objectAtIndex:indexPath.row];
+    Articles *article = [[self arr_Common_List] objectAtIndex:indexPath.row];
     cell.lbl_Title.text = [article articlename];
     cell.lbl_Description.text = [NSString stringWithFormat:@"Article No.: %@",[article articleid]];
     cell.lbl_Price.text = [NSString stringWithFormat:@"€%@",[article price]];
     
     cell.backgroundColor = [UIColor clearColor];
-    Article_Image *articleImage = [article.images firstObject];
-    if (articleImage) {
-        NSString *fileName = [articleImage.imagePath lastPathComponent];
-        NSString *filePath = [[[AppDataManager sharedAppDatamanager] imageDirPath] stringByAppendingPathComponent:fileName];
-        cell.imgV_Logo.image = [UIImage imageWithContentsOfFile:filePath];
- 
-    }else{
     
-        cell.imgV_Logo = nil;
-    }
+    
+//    Article_Image *articleImage = [article.images firstObject];
+//    
+//    if (articleImage) {
+//        NSString *fileName = [articleImage.imagePath lastPathComponent];
+//        NSString *filePath = [[[AppDataManager sharedAppDatamanager] imageDirPath] stringByAppendingPathComponent:fileName];
+//        
+//        
+//            cell.imgV_Logo.image = [UIImage imageWithContentsOfFile:filePath];
+//
+//    }
+    
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        Article_Image *articleImage = [article.images firstObject];
+        
+        if (articleImage) {
+            NSString *fileName = [articleImage.imagePath lastPathComponent];
+            NSString *filePath = [[[AppDataManager sharedAppDatamanager] imageDirPath] stringByAppendingPathComponent:fileName];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                cell.imgV_Logo.image = [UIImage imageWithContentsOfFile:filePath];
+                
+            });
+
+        }else{
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                cell.imgV_Logo.image = nil;
+                
+            });
+        }
+
+        
+    });
+
+    
+    
     return cell;
 }
 
@@ -150,7 +292,7 @@
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
 
-    Articles *article = [[self arr_ClientList] objectAtIndex:indexPath.row];
+    Articles *article = [[self arr_Common_List] objectAtIndex:indexPath.row];
 
     AddToCartViewController *addToCartViewController = [[self storyboard] instantiateViewControllerWithIdentifier:@"AddToCartViewController"];
     [[AppDataManager sharedAppDatamanager] setTransaction:nil];
@@ -160,6 +302,17 @@
     
 }
 
+- (void)showActivityIndicator:(NSString*)msg{
+    
+    [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [hud setLabelText:msg];
+    
+    
+}
 
+- (void)hideActivityIndicator{
+    [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
+}
 
 @end

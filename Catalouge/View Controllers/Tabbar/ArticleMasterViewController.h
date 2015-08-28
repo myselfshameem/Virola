@@ -12,6 +12,9 @@
 @property (strong, nonatomic) IBOutlet UITextField *txtField_barcode;
 @property (strong, nonatomic) IBOutlet UITextField *txtField_QRCode;
 @property (strong, nonatomic) IBOutlet UITextField *txtField_ArticleId;
+@property (strong, nonatomic) IBOutlet UITextField *txtField_Last;
+@property (strong, nonatomic) IBOutlet UITextField *txtField_Sole;
+
 @property (assign, nonatomic) UITextField *common_TxtField;
 - (IBAction)barcodeScanner:(id)sender;
 - (IBAction)browseArticle:(id)sender;

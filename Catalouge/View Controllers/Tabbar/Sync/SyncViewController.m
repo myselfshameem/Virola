@@ -84,7 +84,7 @@ CustomeAlert *alert;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return 6;
+    return 7;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -115,6 +115,9 @@ CustomeAlert *alert;
 
         case 5:
             cell.lblClient_Name.text = @"Sync Payment & Shipping Terms";
+            break;
+        case 6:
+            cell.lblClient_Name.text = @"Sync Orders";
             break;
 
         default:
@@ -195,6 +198,7 @@ CustomeAlert *alert;
                 
                 NSString *successCode = [data objectForKey:@"errorcode"];
                 NSString *message = [data objectForKey:@"message"];
+                
                 if (([successCode isEqualToString:@"200"] || [successCode isEqualToString:@"823"])) {
                     [self syncArticle];
                 }else{
@@ -255,6 +259,7 @@ CustomeAlert *alert;
                     [self syncClient];
                 }else{
 
+                    [self errorWhileSynching];
                     dispatch_sync(dispatch_get_main_queue(), ^{
                         alert = [[CustomeAlert alloc] init];
                         [alert showAlertWithTitle:nil message:message cancelButtonTitle:@"OK" otherButtonTitles:nil withButtonHandler:^(NSInteger buttonIndex) {
@@ -371,6 +376,7 @@ CustomeAlert *alert;
                 NSString *message = [data objectForKey:@"message"];
                 if (([successCode isEqualToString:@"200"] || [successCode isEqualToString:@"823"])) {
                     [self downloadImages];
+                
                 }else{
                     
                     [self errorWhileSynching];
@@ -427,7 +433,7 @@ CustomeAlert *alert;
                 [[AppDataManager sharedAppDatamanager]writeDataToImageFileName:fileName withData:data];
             }
             
-            [[NSNotificationCenter defaultCenter] postNotificationName:PROGRESS_COUNT object:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:[imageArr count]],@"totalRecords",[NSNumber numberWithInteger:idx],@"totalInsertedRecords",@"Fetching Colors...",@"Title", nil]];
+            [[NSNotificationCenter defaultCenter] postNotificationName:PROGRESS_COUNT object:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:[imageArr count]],@"totalRecords",[NSNumber numberWithInteger:idx],@"totalInsertedRecords",@"Fetching Article Images...",@"Title", nil]];
             
         }];
         
@@ -471,14 +477,8 @@ CustomeAlert *alert;
                 NSString *message = [data objectForKey:@"message"];
                 if (([successCode isEqualToString:@"200"] || [successCode isEqualToString:@"823"])) {
 
-                    dispatch_sync(dispatch_get_main_queue(), ^{
-                        alert = [[CustomeAlert alloc] init];
-                        [alert showAlertWithTitle:nil message:@"Syncing completed" cancelButtonTitle:@"OK" otherButtonTitles:nil withButtonHandler:^(NSInteger buttonIndex) {
-                            
-                        }];
-                        [[self lbl_ProgressHeader] setText:@""];
-                        [[self progressView] setProgress:0 animated:NO];
-                    });
+                    
+                    [self synOrders];
 
                     
                 }else{
@@ -502,6 +502,80 @@ CustomeAlert *alert;
         }];
     }else{
         
+        [self synOrders];
+        
+    }
+    
+    
+    
+    
+    
+    
+}
+
+
+- (void)synOrders{
+
+    SyncTableViewCell *cell = (SyncTableViewCell*)[[self tbl_Clients] cellForRowAtIndexPath:[NSIndexPath indexPathForItem:6 inSection:0]];
+
+    if([[cell checkBox] isSelected]){
+        
+        
+        [[ApiHandler sharedApiHandler] getOrdersApiHandlerWithApiCallBlock:^(id data, NSError *error) {
+            
+            
+            if (error) {
+                
+                [self errorWhileSynching];
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    alert = [[CustomeAlert alloc] init];
+                    [alert showAlertWithTitle:nil message:@"Error in Syncing." cancelButtonTitle:@"OK" otherButtonTitles:nil withButtonHandler:^(NSInteger buttonIndex) {
+                        
+                    }];
+                    
+                });
+                return ;
+            }else{
+                
+                
+                NSString *successCode = [data objectForKey:@"errorcode"];
+                NSString *message = [data objectForKey:@"message"];
+                if (([successCode isEqualToString:@"200"] || [successCode isEqualToString:@"823"])) {
+                    
+                    
+                    [self errorWhileSynching];
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        alert = [[CustomeAlert alloc] init];
+                        [alert showAlertWithTitle:nil message:@"Syncing completed" cancelButtonTitle:@"OK" otherButtonTitles:nil withButtonHandler:^(NSInteger buttonIndex) {
+                            
+                        }];
+                        [[self lbl_ProgressHeader] setText:@""];
+                        [[self progressView] setProgress:0 animated:NO];
+                    });
+                    
+                    
+                }else{
+                    
+                    [self errorWhileSynching];
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        alert = [[CustomeAlert alloc] init];
+                        [alert showAlertWithTitle:nil message:message cancelButtonTitle:@"OK" otherButtonTitles:nil withButtonHandler:^(NSInteger buttonIndex) {
+                            
+                        }];
+                        
+                    });
+                    return;
+                }
+                
+            }
+            
+            
+            
+            
+        }];
+    }else{
+    
+        
         [self errorWhileSynching];
         dispatch_sync(dispatch_get_main_queue(), ^{
             alert = [[CustomeAlert alloc] init];
@@ -511,12 +585,6 @@ CustomeAlert *alert;
         });
 
     }
-    
-    
-    
-    
-    
-    
 }
 
 - (void)selectAllSyn{
@@ -601,7 +669,7 @@ CustomeAlert *alert;
     }else{
     
     
-        dispatch_async(dispatch_get_main_queue(), ^{
+        dispatch_sync(dispatch_get_main_queue(), ^{
             [[self progressView] setProgress:0 animated:NO];
             [[self progressView] setAlpha:0];
             [[self lbl_ProgressHeader] setText:@""];

@@ -50,4 +50,5 @@
 - (void)insertPaymentTermRemarks:(NSArray*)paymentTermArr;
 - (void)insertShippingTerms:(NSArray*)paymentTermArr;
 - (void)insertModeofshipping:(NSArray*)paymentTermArr;
+- (void)insertOrdersTerms:(NSArray*)OrdersArr;
 @end

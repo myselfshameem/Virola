@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0C08161A1B87B06A00728448 /* OrderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C0816191B87B06A00728448 /* OrderViewController.m */; };
+		0C08161E1B87B42F00728448 /* OrderCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C08161C1B87B42F00728448 /* OrderCellTableViewCell.m */; };
+		0C08161F1B87B42F00728448 /* OrderCellTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0C08161D1B87B42F00728448 /* OrderCellTableViewCell.xib */; };
 		0C1AB5D71B6A542D00AA7463 /* UIDevice+IdentifierAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C1AB5D61B6A542D00AA7463 /* UIDevice+IdentifierAddition.m */; };
 		0C1B85611B2CA4AE0001E0DB /* SyncableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0C1B855C1B2CA4AE0001E0DB /* SyncableViewCell.xib */; };
 		0C1B85621B2CA4AE0001E0DB /* SyncTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C1B855E1B2CA4AE0001E0DB /* SyncTableViewCell.m */; };
@@ -155,6 +158,12 @@
 		0CB72A351B0CEAB700E8B4F5 /* Home_Sync_Dashboard.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CB72A2D1B0CEAB700E8B4F5 /* Home_Sync_Dashboard.png */; };
 		0CB72A361B0CEAB700E8B4F5 /* Home_Sync_Dashboard@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CB72A2E1B0CEAB700E8B4F5 /* Home_Sync_Dashboard@2x.png */; };
 		0CB72A381B0D0B4C00E8B4F5 /* navBariOS7.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CB72A371B0D0B4C00E8B4F5 /* navBariOS7.png */; };
+		0CB8AD821B7873B700C586D0 /* JTSImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CB8AD771B7873B700C586D0 /* JTSImageViewController.m */; };
+		0CB8AD831B7873B700C586D0 /* JTSImageInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CB8AD791B7873B700C586D0 /* JTSImageInfo.m */; };
+		0CB8AD841B7873B700C586D0 /* JTSSimpleImageDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CB8AD7B1B7873B700C586D0 /* JTSSimpleImageDownloader.m */; };
+		0CB8AD851B7873B700C586D0 /* JTSAnimatedGIFUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CB8AD7D1B7873B700C586D0 /* JTSAnimatedGIFUtility.m */; };
+		0CB8AD861B7873B700C586D0 /* UIImage+JTSImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CB8AD7F1B7873B700C586D0 /* UIImage+JTSImageEffects.m */; };
+		0CB8AD871B7873B700C586D0 /* UIApplication+JTSImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CB8AD811B7873B700C586D0 /* UIApplication+JTSImageViewController.m */; };
 		0CBDEE5C1B137C49009CE5E3 /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CBDEE5B1B137C49009CE5E3 /* QuickLook.framework */; };
 		0CBDEE5F1B137D70009CE5E3 /* QuickLookViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CBDEE5E1B137D70009CE5E3 /* QuickLookViewController.m */; };
 		0CBEDF4B1B70FD8C00EDC08D /* NewDevelopmentCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CBEDF4A1B70FD8C00EDC08D /* NewDevelopmentCtrl.m */; };
@@ -194,6 +203,8 @@
 		0CD3F7B91B10C83100800F66 /* Article_Related_Cell_BG@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CD3F7B71B10C83100800F66 /* Article_Related_Cell_BG@2x.png */; };
 		0CD3F7C41B10C91200800F66 /* RelatedProductTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CD3F7C21B10C91200800F66 /* RelatedProductTableViewCell.m */; };
 		0CD3F7C51B10C91200800F66 /* RelatedProductTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0CD3F7C31B10C91200800F66 /* RelatedProductTableViewCell.xib */; };
+		0CD6159E1B8F677300790D9E /* GetOrdersApiResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CD6159B1B8F677300790D9E /* GetOrdersApiResponse.m */; };
+		0CD6159F1B8F677300790D9E /* Orders.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CD6159D1B8F677300790D9E /* Orders.m */; };
 		0CD65BE41ADC1E5E0053672E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CD65BE31ADC1E5E0053672E /* main.m */; };
 		0CD65BE71ADC1E5E0053672E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CD65BE61ADC1E5E0053672E /* AppDelegate.m */; };
 		0CD65BEA1ADC1E5E0053672E /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CD65BE91ADC1E5E0053672E /* ViewController.m */; };
@@ -220,6 +231,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0C0816181B87B06A00728448 /* OrderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderViewController.h; sourceTree = "<group>"; };
+		0C0816191B87B06A00728448 /* OrderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderViewController.m; sourceTree = "<group>"; };
+		0C08161B1B87B42F00728448 /* OrderCellTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderCellTableViewCell.h; sourceTree = "<group>"; };
+		0C08161C1B87B42F00728448 /* OrderCellTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderCellTableViewCell.m; sourceTree = "<group>"; };
+		0C08161D1B87B42F00728448 /* OrderCellTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OrderCellTableViewCell.xib; sourceTree = "<group>"; };
 		0C1AB5D51B6A542D00AA7463 /* UIDevice+IdentifierAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+IdentifierAddition.h"; sourceTree = "<group>"; };
 		0C1AB5D61B6A542D00AA7463 /* UIDevice+IdentifierAddition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+IdentifierAddition.m"; sourceTree = "<group>"; };
 		0C1B855C1B2CA4AE0001E0DB /* SyncableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SyncableViewCell.xib; sourceTree = "<group>"; };
@@ -419,6 +435,18 @@
 		0CB72A2D1B0CEAB700E8B4F5 /* Home_Sync_Dashboard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Home_Sync_Dashboard.png; sourceTree = "<group>"; };
 		0CB72A2E1B0CEAB700E8B4F5 /* Home_Sync_Dashboard@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Home_Sync_Dashboard@2x.png"; sourceTree = "<group>"; };
 		0CB72A371B0D0B4C00E8B4F5 /* navBariOS7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navBariOS7.png; sourceTree = "<group>"; };
+		0CB8AD761B7873B700C586D0 /* JTSImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JTSImageViewController.h; sourceTree = "<group>"; };
+		0CB8AD771B7873B700C586D0 /* JTSImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JTSImageViewController.m; sourceTree = "<group>"; };
+		0CB8AD781B7873B700C586D0 /* JTSImageInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JTSImageInfo.h; sourceTree = "<group>"; };
+		0CB8AD791B7873B700C586D0 /* JTSImageInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JTSImageInfo.m; sourceTree = "<group>"; };
+		0CB8AD7A1B7873B700C586D0 /* JTSSimpleImageDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JTSSimpleImageDownloader.h; sourceTree = "<group>"; };
+		0CB8AD7B1B7873B700C586D0 /* JTSSimpleImageDownloader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JTSSimpleImageDownloader.m; sourceTree = "<group>"; };
+		0CB8AD7C1B7873B700C586D0 /* JTSAnimatedGIFUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JTSAnimatedGIFUtility.h; sourceTree = "<group>"; };
+		0CB8AD7D1B7873B700C586D0 /* JTSAnimatedGIFUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JTSAnimatedGIFUtility.m; sourceTree = "<group>"; };
+		0CB8AD7E1B7873B700C586D0 /* UIImage+JTSImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+JTSImageEffects.h"; sourceTree = "<group>"; };
+		0CB8AD7F1B7873B700C586D0 /* UIImage+JTSImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+JTSImageEffects.m"; sourceTree = "<group>"; };
+		0CB8AD801B7873B700C586D0 /* UIApplication+JTSImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIApplication+JTSImageViewController.h"; sourceTree = "<group>"; };
+		0CB8AD811B7873B700C586D0 /* UIApplication+JTSImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIApplication+JTSImageViewController.m"; sourceTree = "<group>"; };
 		0CBDEE5B1B137C49009CE5E3 /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
 		0CBDEE5D1B137D70009CE5E3 /* QuickLookViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuickLookViewController.h; sourceTree = "<group>"; };
 		0CBDEE5E1B137D70009CE5E3 /* QuickLookViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QuickLookViewController.m; sourceTree = "<group>"; };
@@ -471,6 +499,10 @@
 		0CD3F7C11B10C91200800F66 /* RelatedProductTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RelatedProductTableViewCell.h; sourceTree = "<group>"; };
 		0CD3F7C21B10C91200800F66 /* RelatedProductTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RelatedProductTableViewCell.m; sourceTree = "<group>"; };
 		0CD3F7C31B10C91200800F66 /* RelatedProductTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RelatedProductTableViewCell.xib; sourceTree = "<group>"; };
+		0CD6159A1B8F677300790D9E /* GetOrdersApiResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetOrdersApiResponse.h; sourceTree = "<group>"; };
+		0CD6159B1B8F677300790D9E /* GetOrdersApiResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetOrdersApiResponse.m; sourceTree = "<group>"; };
+		0CD6159C1B8F677300790D9E /* Orders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Orders.h; sourceTree = "<group>"; };
+		0CD6159D1B8F677300790D9E /* Orders.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Orders.m; sourceTree = "<group>"; };
 		0CD65BDE1ADC1E5E0053672E /* Catalouge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Catalouge.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0CD65BE21ADC1E5E0053672E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0CD65BE31ADC1E5E0053672E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -517,6 +549,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0C0816171B87B04C00728448 /* Orders */ = {
+			isa = PBXGroup;
+			children = (
+				0C0816181B87B06A00728448 /* OrderViewController.h */,
+				0C0816191B87B06A00728448 /* OrderViewController.m */,
+				0C08161B1B87B42F00728448 /* OrderCellTableViewCell.h */,
+				0C08161C1B87B42F00728448 /* OrderCellTableViewCell.m */,
+				0C08161D1B87B42F00728448 /* OrderCellTableViewCell.xib */,
+			);
+			path = Orders;
+			sourceTree = "<group>";
+		};
 		0C1AB5D41B6A542D00AA7463 /* Device Id */ = {
 			isa = PBXGroup;
 			children = (
@@ -642,6 +686,7 @@
 			children = (
 				0C6224281AFF1628004B6C3B /* MainTabbarController.h */,
 				0C6224291AFF1628004B6C3B /* MainTabbarController.m */,
+				0C0816171B87B04C00728448 /* Orders */,
 				0CBEDF481B70FD6B00EDC08D /* New Development */,
 				0C1B856D1B2D3D370001E0DB /* Selection View Ctrl */,
 				0C84B27E1B0FC53100F0495C /* Sync */,
@@ -820,6 +865,7 @@
 			isa = PBXGroup;
 			children = (
 				0C830D2B1B262D560085917B /* DataModels.h */,
+				0CD615991B8F677300790D9E /* Get Orders */,
 				0C2243C71B725CAC00A4D864 /* OtherDetails */,
 				0C830D131B262D560085917B /* Account */,
 				0C830D181B262D560085917B /* Article */,
@@ -970,6 +1016,18 @@
 		0CB8AD751B78732C00C586D0 /* Preview Images */ = {
 			isa = PBXGroup;
 			children = (
+				0CB8AD761B7873B700C586D0 /* JTSImageViewController.h */,
+				0CB8AD771B7873B700C586D0 /* JTSImageViewController.m */,
+				0CB8AD781B7873B700C586D0 /* JTSImageInfo.h */,
+				0CB8AD791B7873B700C586D0 /* JTSImageInfo.m */,
+				0CB8AD7A1B7873B700C586D0 /* JTSSimpleImageDownloader.h */,
+				0CB8AD7B1B7873B700C586D0 /* JTSSimpleImageDownloader.m */,
+				0CB8AD7C1B7873B700C586D0 /* JTSAnimatedGIFUtility.h */,
+				0CB8AD7D1B7873B700C586D0 /* JTSAnimatedGIFUtility.m */,
+				0CB8AD7E1B7873B700C586D0 /* UIImage+JTSImageEffects.h */,
+				0CB8AD7F1B7873B700C586D0 /* UIImage+JTSImageEffects.m */,
+				0CB8AD801B7873B700C586D0 /* UIApplication+JTSImageViewController.h */,
+				0CB8AD811B7873B700C586D0 /* UIApplication+JTSImageViewController.m */,
 			);
 			path = "Preview Images";
 			sourceTree = "<group>";
@@ -1030,6 +1088,17 @@
 				0CD3F7C31B10C91200800F66 /* RelatedProductTableViewCell.xib */,
 			);
 			name = "Related Product";
+			sourceTree = "<group>";
+		};
+		0CD615991B8F677300790D9E /* Get Orders */ = {
+			isa = PBXGroup;
+			children = (
+				0CD6159A1B8F677300790D9E /* GetOrdersApiResponse.h */,
+				0CD6159B1B8F677300790D9E /* GetOrdersApiResponse.m */,
+				0CD6159C1B8F677300790D9E /* Orders.h */,
+				0CD6159D1B8F677300790D9E /* Orders.m */,
+			);
+			path = "Get Orders";
 			sourceTree = "<group>";
 		};
 		0CD65BD51ADC1E5E0053672E = {
@@ -1173,6 +1242,7 @@
 				TargetAttributes = {
 					0CD65BDD1ADC1E5E0053672E = {
 						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = H837T6743G;
 					};
 					0CD65BF61ADC1E5F0053672E = {
 						CreatedOnToolsVersion = 6.2;
@@ -1266,6 +1336,7 @@
 				0C404BF81B2230B000F47E15 /* Add_To_Cart_icon.png in Resources */,
 				0C84B2841B0FC99300F0495C /* Demo@2x.png in Resources */,
 				0CC547401B0B8B40003725F1 /* Cart_Cell_View_Details@2x.png in Resources */,
+				0C08161F1B87B42F00728448 /* OrderCellTableViewCell.xib in Resources */,
 				0C84B26A1B0FC0E200F0495C /* Tabbar_Clients.png in Resources */,
 				0C84B2611B0FC0E200F0495C /* Tabbar_Account_Selected@2x.png in Resources */,
 				0CC8C2CE1B0A423D00C5228D /* Account_Logout_BG@2x.png in Resources */,
@@ -1350,6 +1421,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0C6224261AFF14D9004B6C3B /* LoginViewController.m in Sources */,
+				0CB8AD871B7873B700C586D0 /* UIApplication+JTSImageViewController.m in Sources */,
 				0C2987FE1B6FA0A7008AD5DC /* Lasts.m in Sources */,
 				0C830D481B262D560085917B /* RawmaterialApiResponse.m in Sources */,
 				0CC547331B0B85E8003725F1 /* CartTableViewCell.m in Sources */,
@@ -1376,15 +1448,21 @@
 				0C830D471B262D560085917B /* Colors.m in Sources */,
 				0CBEDF501B71025100EDC08D /* UIImage+Resize.m in Sources */,
 				0C6224891AFFD876004B6C3B /* ArticleSelectionViewController.m in Sources */,
+				0CB8AD861B7873B700C586D0 /* UIImage+JTSImageEffects.m in Sources */,
 				0CF2BE061B6BC43E00C3FB17 /* RawMatarialCell.m in Sources */,
 				0C830D421B262D560085917B /* ArticlesRawmaterials.m in Sources */,
+				0C08161A1B87B06A00728448 /* OrderViewController.m in Sources */,
 				0C62242D1AFF18BE004B6C3B /* NSUserDefaults+UserDetail.m in Sources */,
 				0C2243D21B725CAC00A4D864 /* GetOtherDetailsApiResponse.m in Sources */,
+				0CB8AD821B7873B700C586D0 /* JTSImageViewController.m in Sources */,
+				0CB8AD851B7873B700C586D0 /* JTSAnimatedGIFUtility.m in Sources */,
 				0CC8C2DF1B0A66D100C5228D /* CXTableView.m in Sources */,
 				0C830D3C1B262D560085917B /* CustomeAlert.m in Sources */,
 				0C2988081B6FA8B8008AD5DC /* ClientsApiResponse.m in Sources */,
+				0CB8AD841B7873B700C586D0 /* JTSSimpleImageDownloader.m in Sources */,
 				0CD3F7B11B10AED000800F66 /* MyCustomeButton.m in Sources */,
 				0CC8C2D91B0A52E500C5228D /* ArticleCell.m in Sources */,
+				0CD6159F1B8F677300790D9E /* Orders.m in Sources */,
 				0CBDEE5F1B137D70009CE5E3 /* QuickLookViewController.m in Sources */,
 				0C1B85701B2D3D4C0001E0DB /* SearchViewController.m in Sources */,
 				0C1B85631B2CA4AE0001E0DB /* SyncViewController.m in Sources */,
@@ -1397,6 +1475,8 @@
 				0C830D3E1B262D560085917B /* Account.m in Sources */,
 				0C62244B1AFF3691004B6C3B /* AddClientViewController.m in Sources */,
 				0CBEDF4B1B70FD8C00EDC08D /* NewDevelopmentCtrl.m in Sources */,
+				0C08161E1B87B42F00728448 /* OrderCellTableViewCell.m in Sources */,
+				0CB8AD831B7873B700C586D0 /* JTSImageInfo.m in Sources */,
 				0CD65BE41ADC1E5E0053672E /* main.m in Sources */,
 				0C830D3A1B262D560085917B /* AppDataManager.m in Sources */,
 				0C29880B1B6FBBAF008AD5DC /* Article_Image.m in Sources */,
@@ -1406,6 +1486,7 @@
 				0C2988111B6FBBEF008AD5DC /* Trx_Rawmaterials.m in Sources */,
 				0CC5472F1B0B85D1003725F1 /* CartViewController.m in Sources */,
 				0C84B27D1B0FC47B00F0495C /* ReportViewController.m in Sources */,
+				0CD6159E1B8F677300790D9E /* GetOrdersApiResponse.m in Sources */,
 				0C267AA31B754FE300716721 /* AddMoreLeatherTableViewCell.m in Sources */,
 				0CD3F7AD1B10834F00800F66 /* AlertWithTableViewController.m in Sources */,
 				0C830D391B262D560085917B /* ApiHandler.m in Sources */,
@@ -1539,13 +1620,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Pankaj Mathur (5LRM65VA87)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PREFIX_HEADER = Catalouge/Catalouge.pch;
 				INFOPLIST_FILE = Catalouge/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "1e34d884-e932-43cc-a18c-9504543bbd01";
+				PROVISIONING_PROFILE = "f6d1caec-5a93-44a2-8d63-503418b41a65";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1555,13 +1636,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Pankaj Mathur (5LRM65VA87)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PREFIX_HEADER = Catalouge/Catalouge.pch;
 				INFOPLIST_FILE = Catalouge/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "1e34d884-e932-43cc-a18c-9504543bbd01";
+				PROVISIONING_PROFILE = "f6d1caec-5a93-44a2-8d63-503418b41a65";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

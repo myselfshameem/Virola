@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-
 @interface TrxTransaction : NSObject
 
 @property(nonatomic,strong) NSString *TransactionId;
@@ -18,6 +17,7 @@
 @property(nonatomic,strong) NSString *isnew;
 @property(nonatomic,strong) NSString *lastid;
 @property(nonatomic,strong) NSString *soleid;
+@property(nonatomic,assign) TransactionType transactionType;
 
 
 

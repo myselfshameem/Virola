@@ -15,6 +15,7 @@
 #import "AddMoreLeatherTableViewCell.h"
 #import "BottomTableViewCell.h"
 #import "CartViewController.h"
+#import "UIImage+Resize.h"
 @interface NewDevelopmentCtrl ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate,UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,strong) TrxTransaction *localTransaction;
 
@@ -76,6 +77,13 @@
 - (IBAction)openCamera:(id)sender{
 
 
+    [self performSelectorOnMainThread:@selector(openCameraMainThread) withObject:nil waitUntilDone:NO];
+    
+    
+
+}
+- (void)openCameraMainThread{
+
     if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
         
         UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Error"
@@ -85,11 +93,11 @@
                                                     otherButtonTitles: nil];
         
         [myAlertView show];
-     
+        
         myAlertView = nil;
         return;
     }
-
+    
     
     UIImagePickerController *picker = [[UIImagePickerController alloc] init];
     picker.delegate = self;
@@ -98,34 +106,44 @@
     picker.showsCameraControls = YES;
     [self presentViewController:picker animated:YES completion:NULL];
 
-    
-    
-
 }
 #pragma mark - Image Picker Controller delegate methods
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     
-    UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
-    //self.imageView.image = chosenImage;
-    
-    [[self imageThumb] setImage:chosenImage];
-    
-    NSData *data = UIImagePNGRepresentation(chosenImage);
-    
-    NSString *filePath = [NSString stringWithFormat:@"%@/%@.png",[[AppDataManager sharedAppDatamanager] DevelopmentImageDir],[[[AppDataManager sharedAppDatamanager] transaction] TransactionId]];
-    
-    [[AppDataManager sharedAppDatamanager]writeDataToImageFileName:filePath withData:data];
-    
-    [data writeToFile:filePath atomically:YES];
-    [[[AppDataManager sharedAppDatamanager] transaction] setTakeAPicturePath:filePath];
-    
     [picker dismissViewControllerAnimated:YES completion:NULL];
+
+    [self.activityIndicator startAnimating];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
+        //self.imageView.image = chosenImage;
+        UIImage *newImage =  [UIImage imageWithImage:chosenImage scaledToSize:CGSizeMake(320, 568)];
+        
+        NSData *data = UIImagePNGRepresentation(newImage);
+        
+        NSString *filePath = [NSString stringWithFormat:@"%@/%@.png",[[AppDataManager sharedAppDatamanager] DevelopmentImageDir],[[[AppDataManager sharedAppDatamanager] transaction] TransactionId]];
+        
+        [[AppDataManager sharedAppDatamanager]writeDataToImageFileName:filePath withData:data];
+        
+        [data writeToFile:filePath atomically:YES];
+        [[[AppDataManager sharedAppDatamanager] transaction] setTakeAPicturePath:filePath];
+        
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [[self imageThumb] setImage:newImage];
+            [self.activityIndicator stopAnimating];
+
+        });
+
+    });
+    
     
 }
 
+
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
     
+    [self.activityIndicator stopAnimating];
     [picker dismissViewControllerAnimated:YES completion:NULL];
     
 }
@@ -185,7 +203,7 @@
     if (tableView == [self tblMain]) {
         
         if (indexPath.row == 0) {
-            return 145;
+            return 210;
         }else if (indexPath.row == 1){
             return [self calculateHeightOfRow];
         }else if (indexPath.row == 2){
@@ -211,7 +229,7 @@
         cell = [tableView dequeueReusableCellWithIdentifier:@"LastSoleCell"];
         
         if (!cell) {
-            cell = [[[NSBundle mainBundle] loadNibNamed:@"LastSoleTableViewCell" owner:self options:nil] objectAtIndex:0];
+            cell = [[[NSBundle mainBundle] loadNibNamed:@"LastSoleTableViewCell" owner:self options:nil] objectAtIndex:1];
             [cell initilizeCell];
         }
 
@@ -455,8 +473,10 @@
        __block __weak NewDevelopmentCtrl *weakSelf = self;
        [cell registerCallbackForAddToCart:^{
            
-           CartViewController *cart =  [[weakSelf storyboard] instantiateViewControllerWithIdentifier:@"CartViewController"];
-           [[weakSelf navigationController] pushViewController:cart animated:YES];
+//           CartViewController *cart =  [[weakSelf storyboard] instantiateViewControllerWithIdentifier:@"CartViewController"];
+//           [[weakSelf navigationController] pushViewController:cart animated:YES];
+           
+           [[weakSelf tabBarController] setSelectedIndex:3];
        }];
 
        
@@ -479,7 +499,6 @@
 }
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
 
-    __block TrxTransaction *local = [[AppDataManager sharedAppDatamanager] transaction];
     
     if (tableView == [self tblLeather]) {
         AddMoreLeatherTableViewCell *cell = [[[NSBundle mainBundle] loadNibNamed:@"AddMoreLeatherTableViewCell" owner:self options:nil] firstObject];

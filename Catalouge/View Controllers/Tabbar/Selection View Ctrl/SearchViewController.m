@@ -154,6 +154,23 @@
 
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    
+
+    
+    NSString *textString = textField.text;
+    if (range.length > 0) {
+        textString = [textString stringByReplacingCharactersInRange:range withString:@""];
+    }
+    else {
+        if(range.location == [textString length]) {
+            textString = [textString stringByAppendingString:string];
+        }
+        else {
+            textString = [textString stringByReplacingCharactersInRange:range withString:string];
+        }
+    }
+    
+    [self refreshArticleList:textString];
     return YES;
 }
 - (BOOL)textFieldShouldClear:(UITextField *)textField{
@@ -164,7 +181,6 @@
 - (void)textFieldDidEndEditing:(UITextField *)textField{
     // [textField resignFirstResponder];
     
-    [self refreshArticleList:textField.text];
     
     
 }

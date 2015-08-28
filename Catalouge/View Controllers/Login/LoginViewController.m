@@ -29,6 +29,13 @@ CustomeAlert *alert;
     // Do any additional setup after loading the view.
     self.Txt_Fld_Pwd.delegate = self;
     self.txt_Fld_UserName.delegate = self;
+    
+    NSString *versionName = [NSString stringWithFormat:@"Version - %@",[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
+    NSString *versionNameBuild = [NSString stringWithFormat:@"Build Version - %@",[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]];
+
+    [[self lbl_Version] setText:versionName];
+    [[self lbl_Build_Version] setText:versionNameBuild];
+
 }
 
 - (void)didReceiveMemoryWarning {

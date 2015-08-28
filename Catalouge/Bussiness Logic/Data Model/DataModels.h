@@ -6,6 +6,13 @@
 //
 
 
+typedef enum : NSUInteger {
+    TransactionTypeNotAvailable = -1,
+    TransactionTypeNewDevelopment = 0,
+    TransactionTypeArticle = 1,
+} TransactionType;
+
+
 #import "ShippingTerms.h"
 #import "PaymentTermRemarks.h"
 #import "Modeofshipping.h"
@@ -45,12 +52,12 @@
 #import "Trx_Rawmaterials.h"
 #import "NSString+MyString.h"
 #import "NSUserDefaults+UserDetail.h"
-#import "MyOrder.h"
-
+#import "Orders.h"
+#import "GetOrdersApiResponse.h"
 
 #define ROOT_API_PATH                           @"http://demo.dselva.info/virolainternational/api/mobile/v2"
 
-//#define ROOT_API_PATH                         @"http://103.237.173.71/virolainternational/api/mobile/v1"
+//#define ROOT_API_PATH                           @"http://103.237.173.71/virolainternational/api/mobile/v2/"
 #define GET_LOG_IN_API                          @"login.php"
 #define GET_LOG_OUT_API                         @"logout.php"
 #define GET_RAW_MATERIAL_API                    @"getrawmaterials.php"
@@ -61,6 +68,7 @@
 #define ADD_CLIENTS_API                         @"addclient.php"
 #define ADD_ORDER_API                           @"addorder.php"
 #define GET_PAYMENT_SHIPPING_TERMS              @"getotherdetails.php"
+#define GET_Orders                              @"getOrder.php"
 
 
 #define isIPad()                ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
@@ -70,6 +78,9 @@
 #define PROGRESS_COUNT @"PROGRESS_COUNT"
 static NSString *kDetailedViewControllerID = @"DetailView";    // view controller storyboard id
 static NSString *kCellID = @"NewCell";                          // UICollectionViewCell storyboard id
+
+
+
 
 
 

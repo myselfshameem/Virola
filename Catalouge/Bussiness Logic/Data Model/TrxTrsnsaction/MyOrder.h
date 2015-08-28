@@ -11,5 +11,7 @@
 @interface MyOrder : NSObject
 @property(nonatomic,strong) NSString *order_number;
 @property(nonatomic,strong) NSString *orderid;
+@property(nonatomic,strong) NSString *clientid;
+@property(nonatomic,strong) NSString *orderdate;
 
 @end

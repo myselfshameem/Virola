@@ -18,4 +18,7 @@
 @property (strong, nonatomic) NSMutableArray *arrArticles;
 - (IBAction)syncData:(id)sender;
 - (IBAction)newDevelopment:(id)sender;
+- (IBAction)order:(id)sender;
+- (IBAction)article:(id)sender;
+- (IBAction)client:(id)sender;
 @end

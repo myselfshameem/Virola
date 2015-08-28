@@ -13,5 +13,8 @@
 @property (strong, nonatomic) IBOutlet UITextField *txtField_Search_Clients;
 @property (strong, nonatomic) IBOutlet CXTableView *tbl_ClientList;
 @property (strong, nonatomic) NSMutableArray *arr_ClientList;
+@property (strong, nonatomic) NSMutableArray *arr_Common_List;
 @property (strong, nonatomic) NSString *strSearchString;
+@property (strong, nonatomic) NSString *searchCriteria;
+
 @end

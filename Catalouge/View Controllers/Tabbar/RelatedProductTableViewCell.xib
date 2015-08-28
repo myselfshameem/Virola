@@ -22,14 +22,6 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KF2-ub-yg7">
-                        <rect key="frame" x="46" y="7" width="100" height="77"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="100" id="LLy-lD-Ndu"/>
-                            <constraint firstAttribute="height" constant="77" id="dum-Ot-a1f"/>
-                        </constraints>
-                    </view>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="xgK-JR-8jO">
                         <rect key="frame" x="47" y="8" width="99" height="76"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -80,7 +72,6 @@
                     <constraint firstAttribute="centerX" secondItem="xgK-JR-8jO" secondAttribute="centerX" id="23e-EX-tMe"/>
                     <constraint firstItem="i2K-XD-zsm" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="FFx-w5-prF"/>
                     <constraint firstItem="xgK-JR-8jO" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="FKG-7D-TBh"/>
-                    <constraint firstItem="KF2-ub-yg7" firstAttribute="centerY" secondItem="xgK-JR-8jO" secondAttribute="centerY" constant="-0.5" id="H78-Y6-QuF"/>
                     <constraint firstItem="xu4-Ay-MNX" firstAttribute="top" secondItem="1tZ-nZ-VcC" secondAttribute="bottom" constant="1" id="JcX-lE-en5"/>
                     <constraint firstItem="1tZ-nZ-VcC" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="Je5-nC-q73"/>
                     <constraint firstItem="i2K-XD-zsm" firstAttribute="top" secondItem="xgK-JR-8jO" secondAttribute="bottom" constant="8" id="R82-My-k19"/>
@@ -91,13 +82,11 @@
                     <constraint firstItem="1tZ-nZ-VcC" firstAttribute="top" secondItem="xgK-JR-8jO" secondAttribute="bottom" constant="26" id="neZ-o8-kXr"/>
                     <constraint firstItem="1tZ-nZ-VcC" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="quB-1W-5an"/>
                     <constraint firstItem="xu4-Ay-MNX" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="t36-vo-DKp"/>
-                    <constraint firstItem="KF2-ub-yg7" firstAttribute="centerX" secondItem="xgK-JR-8jO" secondAttribute="centerX" constant="-0.5" id="uvO-pY-1yN"/>
                     <constraint firstAttribute="trailing" secondItem="xk6-pw-dWi" secondAttribute="trailing" id="weX-Oc-K9a"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="imgV_Logo" destination="xgK-JR-8jO" id="65l-Y8-ZBc"/>
-                <outlet property="imgV_Logo_Holder" destination="KF2-ub-yg7" id="tKT-Wl-LrZ"/>
                 <outlet property="lbl_Description" destination="1tZ-nZ-VcC" id="YjS-2Y-9QV"/>
                 <outlet property="lbl_Price" destination="xu4-Ay-MNX" id="B4a-zP-xW4"/>
                 <outlet property="lbl_Title" destination="i2K-XD-zsm" id="zcK-Qg-zef"/>

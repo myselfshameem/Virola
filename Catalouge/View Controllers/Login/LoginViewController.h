@@ -10,4 +10,7 @@
 
 @interface LoginViewController : UIViewController
 @property(nonatomic,strong) IBOutlet UIImageView *imgView_LOGO;
+@property(nonatomic,strong) IBOutlet UILabel *lbl_Version;
+@property(nonatomic,strong) IBOutlet UILabel *lbl_Build_Version;
 @end
+

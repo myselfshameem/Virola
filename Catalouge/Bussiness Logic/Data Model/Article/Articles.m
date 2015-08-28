@@ -20,6 +20,8 @@ NSString *const kArticlesRawmaterials = @"rawmaterials";
 NSString *const kArticlesMLC = @"m_l_c";
 NSString *const kArticlesImages = @"images";
 NSString *const kArticlesSizefrom = @"sizefrom";
+NSString *const kArticlesLastName = @"lastname";
+NSString *const kArticlesSoleName = @"solename";
 
 
 @interface Articles ()
@@ -41,6 +43,8 @@ NSString *const kArticlesSizefrom = @"sizefrom";
 @synthesize mLC = _mLC;
 @synthesize images = _images;
 @synthesize sizefrom = _sizefrom;
+@synthesize lastname = _lastname;
+@synthesize solename = _solename;
 
 
 + (Articles *)modelObjectWithDictionary:(NSDictionary *)dict
@@ -63,6 +67,10 @@ NSString *const kArticlesSizefrom = @"sizefrom";
         self.price = [self objectOrNilForKey:kArticlesPrice fromDictionary:dict];
         self.articleid = [self objectOrNilForKey:kArticlesArticleid fromDictionary:dict];
         self.sizeto = [self objectOrNilForKey:kArticlesSizeto fromDictionary:dict];
+        self.lastname = [self objectOrNilForKey:kArticlesLastName fromDictionary:dict];
+        self.solename = [self objectOrNilForKey:kArticlesSoleName fromDictionary:dict];
+
+        
         NSObject *receivedRawmaterials = [dict objectForKey:kArticlesRawmaterials];
         NSMutableArray *parsedRawmaterials = [NSMutableArray array];
         if ([receivedRawmaterials isKindOfClass:[NSArray class]]) {
@@ -176,7 +184,7 @@ NSString *const kArticlesSizefrom = @"sizefrom";
 - (NSArray*)images{
 
     if (!_images)
-        _images = [[CXSSqliteHelper sharedSqliteHelper] runQuery:[NSString stringWithFormat:@"SELECT * FROM Article_Images WHERE '%@'",_articleid] asObject:[Article_Image class]];
+        _images = [[CXSSqliteHelper sharedSqliteHelper] runQuery:[NSString stringWithFormat:@"SELECT * FROM Article_Images WHERE articleid = '%@' limit 1",_articleid] asObject:[Article_Image class]];
 
     return _images;
 }

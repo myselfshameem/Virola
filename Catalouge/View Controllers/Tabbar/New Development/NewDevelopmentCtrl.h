@@ -16,7 +16,7 @@
 @property(nonatomic,strong) IBOutlet UITableView *tblMain;
 @property(nonatomic,strong) IBOutlet UITableView *tblLeather;
 @property(nonatomic,strong) IBOutlet UITableView *tblLining;
-
+@property(nonatomic,strong) IBOutlet UIActivityIndicatorView *activityIndicator;
 - (IBAction)openCamera:(id)sender;
 
 @end

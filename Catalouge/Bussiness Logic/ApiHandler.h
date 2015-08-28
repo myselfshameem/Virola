@@ -34,4 +34,5 @@ typedef void(^LoginApiCallBlock)(id data,NSError *error);
 - (void)updateClientsApiHandlerWithApiCallBlock:(LoginApiCallBlock)logoutApiCallBlock withClient:(id)client;
 - (void)addClientsApiHandlerWithApiCallBlock:(LoginApiCallBlock)logoutApiCallBlock withClient:(id)client;
 - (void)getPaymentShippingTermsApiHandlerWithApiCallBlock:(LoginApiCallBlock)logoutApiCallBlock;
+- (void)getOrdersApiHandlerWithApiCallBlock:(LoginApiCallBlock)logoutApiCallBlock;
 @end

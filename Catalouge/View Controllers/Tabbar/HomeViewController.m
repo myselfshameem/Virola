@@ -10,7 +10,9 @@
 #import "HomeCollectionViewCell.h"
 #import "SyncViewController.h"
 #import "NewDevelopmentCtrl.h"
-
+#import "ArticleMasterViewController.h"
+#import "ClientViewController.h"
+#import "OrderViewController.h"
 CustomeAlert *alert;
 @interface HomeViewController ()
 
@@ -29,17 +31,14 @@ CustomeAlert *alert;
 
     
     //
-//    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-//    [btn setFrame:CGRectMake(0, 0, 30, 30)];
-//    [btn setImage:[UIImage imageNamed:@"Tabbar_Account_Selected"] forState:UIControlStateNormal];
-//    [btn setImage:[UIImage imageNamed:@"Tabbar_Account_Selected"] forState:UIControlStateSelected];
-//
-//    UIBarButtonItem *bar = [[UIBarButtonItem alloc] initWithCustomView:btn];
-//    
-//    
-////    [bar setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont fontWithName:@"MyriadPro-Regular" size:16],NSFontAttributeName, [UIColor whiteColor], NSForegroundColorAttributeName, nil] forState:UIControlStateNormal];
-////    [bar setImage:[UIImage imageNamed:@"Tabbar_Account"]];
-//    [[self navigationItem] setRightBarButtonItem:bar];
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [btn setFrame:CGRectMake(0, 0, 30, 30)];
+    [btn setImage:[UIImage imageNamed:@"Tabbar_Account_Selected"] forState:UIControlStateNormal];
+    [btn setImage:[UIImage imageNamed:@"Tabbar_Account_Selected"] forState:UIControlStateSelected];
+
+    UIBarButtonItem *bar = [[UIBarButtonItem alloc] initWithCustomView:btn];
+    
+    [[self navigationItem] setRightBarButtonItem:bar];
 
     
 }
@@ -56,12 +55,6 @@ CustomeAlert *alert;
 - (void)configureUI{
 
     NSArray *arrArticles = [[CXSSqliteHelper sharedSqliteHelper] runQuery:@"SELECT articleid FROM Article_Master" asObject:[Articles class]];
-    
-    
-//    NSArray *arrArticlesImaegs = [[CXSSqliteHelper sharedSqliteHelper] runQuery:@"SELECT * FROM Article_Images LIMIT 5" asObject:[Article_Image class]];
-
-//    self.arrArticles = [NSMutableArray arrayWithArray:arrArticlesImaegs];
-    
     [[self lbl_NumberOfArticles] setText:[NSString stringWithFormat:@"%lu",(unsigned long)[arrArticles count]]];
     
     NSArray *arrClients = [[CXSSqliteHelper sharedSqliteHelper] runQuery:@"SELECT name FROM Client_Master" asObject:[Clients class]];
@@ -69,12 +62,8 @@ CustomeAlert *alert;
     [[self lbl_NumberOfClients] setText:[NSString stringWithFormat:@"%lu",(unsigned long)[arrClients count]]];
     
     [[self lbl_SyncDate] setText:[NSUserDefaults lastSynTime]];
-
-//    [self.pageCtrl setNumberOfPages:[self.arrArticles count]];
-//
-//    [[self CollectionView] reloadData];
-
-    NSArray *arrMyOrder = [[CXSSqliteHelper sharedSqliteHelper] runQuery:@"SELECT * FROM MyOrder" asObject:[Articles class]];
+    
+    NSArray *arrMyOrder = [[CXSSqliteHelper sharedSqliteHelper] runQuery:@"SELECT * FROM Orders" asObject:[Orders class]];
 
     [[self lbl_NumberOfReports] setText:[NSString stringWithFormat:@"%lu",(unsigned long)[arrMyOrder count]]];
 
@@ -182,5 +171,28 @@ CustomeAlert *alert;
     [[AppDataManager sharedAppDatamanager] newTransactionWithArticleId:@"" withNewDevelopment:YES];
     newDev = nil;
 }
+
+- (IBAction)order:(id)sender{
+
+    OrderViewController *sync = [[self storyboard] instantiateViewControllerWithIdentifier:@"OrderViewController"];
+    
+    [[self navigationController] pushViewController:sync animated:YES];
+
+}
+- (IBAction)article:(id)sender{
+     ArticleMasterViewController *article = [[self storyboard] instantiateViewControllerWithIdentifier:@"ArticleMasterViewController"];
+    [[self navigationController] pushViewController:article animated:YES];
+
+
+}
+- (IBAction)client:(id)sender{
+
+    ClientViewController *article = [[self storyboard] instantiateViewControllerWithIdentifier:@"ClientViewController"];
+    [[self navigationController] pushViewController:article animated:YES];
+
+}
+
+
+
 
 @end

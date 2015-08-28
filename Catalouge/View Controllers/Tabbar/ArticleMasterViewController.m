@@ -17,6 +17,9 @@ CustomeAlert *alert;
 @property (weak, nonatomic) IBOutlet UIView *view_Barcode_Scan;
 @property (weak, nonatomic) IBOutlet UIView *view_QR_Code_Scan;
 @property (weak, nonatomic) IBOutlet UIView *view_Article;
+@property (weak, nonatomic) IBOutlet UIView *view_Last;
+@property (weak, nonatomic) IBOutlet UIView *view_Sole;
+
 @end
 
 @implementation ArticleMasterViewController
@@ -28,6 +31,9 @@ CustomeAlert *alert;
     self.view_Barcode_Scan.layer.cornerRadius = 22;
     self.view_QR_Code_Scan.layer.cornerRadius = 22;
     self.view_Article.layer.cornerRadius = 22;
+    self.view_Last.layer.cornerRadius = 22;
+    self.view_Sole.layer.cornerRadius = 22;
+
     self.view_Article.layer.borderColor = [UIColor grayColor].CGColor;
     self.view_Article.layer.borderWidth = 1;
 
@@ -38,6 +44,17 @@ CustomeAlert *alert;
     self.view_QR_Code_Scan.layer.borderColor = [UIColor grayColor].CGColor;
     self.view_QR_Code_Scan.layer.borderWidth = 1;
 
+    
+    self.view_Last.layer.borderColor = [UIColor grayColor].CGColor;
+    self.view_Last.layer.borderWidth = 1;
+
+    
+    self.view_Sole.layer.borderColor = [UIColor grayColor].CGColor;
+    self.view_Sole.layer.borderWidth = 1;
+
+    
+    
+    
     [self.txtField_barcode setDelegate:self];
     [self.txtField_QRCode setDelegate:self];
     [self.txtField_ArticleId setDelegate:self];
@@ -46,6 +63,8 @@ CustomeAlert *alert;
     [self.txtField_barcode setPlaceholder:@"ENTER BARCODE"];
     [self.txtField_QRCode setPlaceholder:@"ENTER QR CODE"];
     [self.txtField_ArticleId setPlaceholder:@"ENTER ARTICLE NUMBER"];
+    [self.txtField_Last setPlaceholder:@"ENTER LAST"];
+    [self.txtField_Sole setPlaceholder:@"ENTER SOLE"];
 
     
     [self setTitle:@"Article"];
@@ -90,6 +109,10 @@ CustomeAlert *alert;
         self.common_TxtField = [self txtField_barcode];
     }else if ([sender tag] == 2){
         self.common_TxtField = [self txtField_QRCode];
+    }else if ([sender tag] == 3){
+        self.common_TxtField = [self txtField_Last];
+    }else if ([sender tag] == 4){
+        self.common_TxtField = [self txtField_Sole];
     }
 
     __block igViewController *IgViewController = [[self storyboard] instantiateViewControllerWithIdentifier:@"igViewController"];
@@ -134,6 +157,17 @@ CustomeAlert *alert;
 
     ArticleSelectionViewController *articleSelection = [[self storyboard] instantiateViewControllerWithIdentifier:@"ArticleSelectionViewController"];
     articleSelection.strSearchString = self.common_TxtField.text;
+    
+    if (self.common_TxtField == [self txtField_ArticleId]){
+        [articleSelection setSearchCriteria:@"ARTICLE"];
+    }else
+    if (self.common_TxtField == [self txtField_Last]){
+        [articleSelection setSearchCriteria:@"LAST"];
+    }else if (self.common_TxtField == [self txtField_Sole]){
+        [articleSelection setSearchCriteria:@"SOLE"];
+    }
+
+    
     [[self navigationController] pushViewController:articleSelection animated:YES];
     articleSelection = nil;
     

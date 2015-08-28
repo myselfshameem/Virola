@@ -30,7 +30,9 @@
 @property (assign, nonatomic) IBOutlet UILabel *lbl_Title;
 @property (strong, nonatomic) IBOutlet UILabel *lbl_ArticleNo;
 @property (strong, nonatomic) IBOutlet UILabel *lbl_ArticleName;
-@property (strong, nonatomic) IBOutlet UILabel *lbl_ArticlePrice;
+@property (strong, nonatomic) IBOutlet UILabel *lbl_ArticlePrice_USD;
+@property (strong, nonatomic) IBOutlet UILabel *lbl_ArticlePrice_EURO;
+@property (strong, nonatomic) IBOutlet UILabel *lbl_ArticlePrice_GBP;
 
 
 -(IBAction)zoomButtonPressed:(id)sender;

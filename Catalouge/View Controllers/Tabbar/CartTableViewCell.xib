@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7531" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -27,7 +27,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="312" height="90"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vmj-4c-NUD">
@@ -79,10 +79,9 @@
                         </connections>
                     </button>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rs. 2499.00" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ye2-Kv-sZK">
-                        <rect key="frame" x="78" y="70" width="167" height="20"/>
+                        <rect key="frame" x="78" y="70" width="226" height="20"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="20" id="Fr6-yp-DJq"/>
-                            <constraint firstAttribute="width" constant="167" id="qks-eP-Oog"/>
                         </constraints>
                         <fontDescription key="fontDescription" name="MyriadPro-Regular" family="Myriad Pro" pointSize="18"/>
                         <color key="textColor" red="0.2627450980392157" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -134,6 +133,7 @@
                     <constraint firstItem="6zI-bX-DQI" firstAttribute="leading" secondItem="vmj-4c-NUD" secondAttribute="trailing" constant="13" id="F9B-po-npP"/>
                     <constraint firstAttribute="trailing" secondItem="89D-Gp-Tnx" secondAttribute="trailing" constant="2" id="HdN-Ta-wAG"/>
                     <constraint firstAttribute="bottom" secondItem="ye2-Kv-sZK" secondAttribute="bottom" constant="10" id="IbW-s9-3zO"/>
+                    <constraint firstAttribute="trailing" secondItem="ye2-Kv-sZK" secondAttribute="trailing" constant="8" id="MhA-Nz-mOK"/>
                     <constraint firstItem="ye2-Kv-sZK" firstAttribute="leading" secondItem="vmj-4c-NUD" secondAttribute="trailing" constant="14" id="NHf-q1-pZR"/>
                     <constraint firstItem="6zI-bX-DQI" firstAttribute="top" secondItem="pRc-NK-oQC" secondAttribute="bottom" constant="5" id="OI2-PK-jwK"/>
                     <constraint firstAttribute="trailing" secondItem="RSp-Ro-qCi" secondAttribute="trailing" constant="2" id="U1N-M9-roe"/>

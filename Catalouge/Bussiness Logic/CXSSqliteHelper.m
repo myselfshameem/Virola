@@ -473,7 +473,7 @@ static CXSSqliteHelper *sqliteHelper = nil;
         
         
         
-        if (idx %2 == 0) {
+        if (idx %200 == 0) {
             
             [[NSNotificationCenter defaultCenter] postNotificationName:PROGRESS_COUNT object:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:totalRecords],@"totalRecords",[NSNumber numberWithInteger:idx],@"totalInsertedRecords",@"Syncing Articles...",@"Title", nil]];
         }
@@ -796,5 +796,56 @@ static CXSSqliteHelper *sqliteHelper = nil;
     
 }
 
+#pragma mark - Payment Terms
+- (void)insertOrdersTerms:(NSArray*)OrdersArr{
+    
+    
+    __block NSInteger totalRecords = [OrdersArr count];
+    
+    [self deleteFromTable:@"DELETE FROM Orders"];
+    
+    [OrdersArr enumerateObjectsUsingBlock:^(Orders *order, NSUInteger idx, BOOL *stop) {
+        
+        if (idx %2 == 0) {
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:PROGRESS_COUNT object:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:totalRecords],@"totalRecords",[NSNumber numberWithInteger:idx],@"totalInsertedRecords",@"Syncing Orders...",@"Title", nil]];
+        }
+        
+        
+//        paymentTerms;
+//        modeShippingTerms;
+//        shippingTermsRemarks;
+//        clientType;
+//        orderID;
+//        orderDate;
+//        remark;
+//        paymentTermsRemarks;
+//        company;
+//        orderNo;
+//        shippingTerms;
+//        buyerID;
+//        clientCode;
+//        agentID;
+//        modeShippingTermsRemarks;
+//        orderType;
 
+        
+        NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                              
+                              [[AppDataManager sharedAppDatamanager] validateString:[order orderID]],@"orderID",
+                              [[AppDataManager sharedAppDatamanager] validateString:[order orderDate]],@"orderDate",
+                              [[AppDataManager sharedAppDatamanager] validateString:[order company]],@"company",
+                              [[AppDataManager sharedAppDatamanager] validateString:[order orderNo]],@"orderNo",
+                              [[AppDataManager sharedAppDatamanager] validateString:[order clientCode]],@"clientCode",
+                              [[AppDataManager sharedAppDatamanager] validateString:[order agentID]],@"agentID",
+                              [[AppDataManager sharedAppDatamanager] validateString:[order orderType]],@"orderType",
+
+                              nil];
+        
+        [self insertInto:@"Orders" ColumnsAndValues:dict];
+        
+    }];
+    
+    
+}
 @end

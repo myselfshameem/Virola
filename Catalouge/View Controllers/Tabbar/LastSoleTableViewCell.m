@@ -41,7 +41,21 @@
     self.vw_SoleMatarial.layer.cornerRadius = 1;
     self.vw_SoleMatarial.layer.borderWidth = 1.0;
     self.vw_SoleMatarial.layer.borderColor = [UIColor grayColor].CGColor;
+
     
+    
+    
+    
+    self.vw_Socks.layer.cornerRadius = 1;
+    self.vw_Socks.layer.borderWidth = 1.0;
+    self.vw_Socks.layer.borderColor = [UIColor grayColor].CGColor;
+
+    
+    
+    self.vw_SocksColors.layer.cornerRadius = 1;
+    self.vw_SocksColors.layer.borderWidth = 1.0;
+    self.vw_SocksColors.layer.borderColor = [UIColor grayColor].CGColor;
+
     
 //    self.txt_Last.adjustsFontSizeToFitWidth = YES;
 //    self.txt_Sole.adjustsFontSizeToFitWidth = YES;

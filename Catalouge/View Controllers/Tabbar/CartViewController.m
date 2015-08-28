@@ -21,7 +21,9 @@ CustomeAlert *alert;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.btn_PlaceOrder.layer.cornerRadius = 12;
+    self.btn_PlaceOrder.layer.cornerRadius = 10;
+    self.btn_Refresh.layer.cornerRadius = 10;
+    self.btn_Refresh.clipsToBounds = YES;
     [self setTitle:@"Cart"];
     
     UIView *vw = [[[NSBundle mainBundle] loadNibNamed:@"CartListFooter" owner:self options:nil] lastObject];
@@ -30,7 +32,7 @@ CustomeAlert *alert;
     self.txt_ShippingTermsRemarks.delegate = self;
     self.lbl_Client_Name.adjustsFontSizeToFitWidth = YES;
     self.lbl_UserName.adjustsFontSizeToFitWidth = YES;
-    
+    [[[self btn_Refresh] titleLabel] setAdjustsFontSizeToFitWidth:YES];
 }
 - (void)viewWillAppear:(BOOL)animated{
     
@@ -55,7 +57,7 @@ CustomeAlert *alert;
     
     NSString *cleintName = [[[AppDataManager sharedAppDatamanager] selectedClient] company];
     
-    [[self lbl_Client_Name] setText:[NSString stringWithFormat:@"Client - %@",[cleintName length] ? cleintName : @""]];
+    [[self btn_Refresh] setTitle:[NSString stringWithFormat:@"Client - %@",[cleintName length] ? cleintName : @""] forState:UIControlStateNormal];
 
     [[self lbl_UserName] setText:[NSString stringWithFormat:@"Agent - %@",[[[[AppDataManager sharedAppDatamanager] account] user] username] ? [[[[AppDataManager sharedAppDatamanager] account] user] username] : @""]];
 
@@ -97,7 +99,9 @@ CustomeAlert *alert;
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    CartTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
+    
+    static NSString *cellIndentifierForCartCell = @"cellIndentifierForCartCell";
+    CartTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIndentifierForCartCell];
     
     if (!cell) {
         cell = [[[NSBundle mainBundle] loadNibNamed:@"CartTableViewCell" owner:self options:nil] firstObject];
@@ -129,14 +133,28 @@ CustomeAlert *alert;
     
     if ([[trx isnew] isEqualToString:@"1"]) {
         NSString *filePath = [[[AppDataManager sharedAppDatamanager] fetchNewDevelopmentImageDir] stringByAppendingFormat:@"/%@.png",[trx TransactionId]];
-        cell.imgVw_Logo.image = [UIImage imageWithContentsOfFile:filePath];
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            
+            UIImage *img = [UIImage imageWithContentsOfFile:filePath];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                cell.imgVw_Logo.image = img;
+            });
+        });
+        
     }else{
         Article_Image *articleImage = [article.images firstObject];
         if (articleImage) {
             NSString *fileName = [articleImage.imagePath lastPathComponent];
             NSString *filePath = [[[AppDataManager sharedAppDatamanager] imageDirPath] stringByAppendingPathComponent:fileName];
-            cell.imgVw_Logo.image = [UIImage imageWithContentsOfFile:filePath];
-            
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                
+                UIImage *img = [UIImage imageWithContentsOfFile:filePath];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    cell.imgVw_Logo.image = img;
+                });
+            });
+
         }
 
     }
@@ -239,13 +257,15 @@ CustomeAlert *alert;
             NSMutableArray *arrRawMaetrial = [[NSMutableArray alloc] init];
             [[trx trx_Rawmaterials] enumerateObjectsUsingBlock:^(Trx_Rawmaterials *rawmaterials, NSUInteger idx, BOOL *stop) {
                 
-                NSMutableDictionary *dictRaw = [[NSMutableDictionary alloc] init];
-                [dictRaw setObject:rawmaterials.rawmaterialid forKey:@"rawmaterialid"];
-                [dictRaw setObject:rawmaterials.rawmaterialgroupid forKey:@"rawmaterialgroupid"];
-                [dictRaw setObject:rawmaterials.colorid forKey:@"colorid"];
-                [dictRaw setObject:@"0" forKey:@"leatherpriority"];
-                
-                [arrRawMaetrial addObject:dictRaw];
+                if ([rawmaterials.rawmaterialid length]) {
+                    NSMutableDictionary *dictRaw = [[NSMutableDictionary alloc] init];
+                    [dictRaw setObject:rawmaterials.rawmaterialid forKey:@"rawmaterialid"];
+                    [dictRaw setObject:rawmaterials.rawmaterialgroupid forKey:@"rawmaterialgroupid"];
+                    [dictRaw setObject:rawmaterials.colorid forKey:@"colorid"];
+                    [dictRaw setObject:@"0" forKey:@"leatherpriority"];
+                    
+                    [arrRawMaetrial addObject:dictRaw];
+                }
             }];
             
             [dict setObject:arrRawMaetrial forKey:@"rawmaterials"];
@@ -348,17 +368,17 @@ CustomeAlert *alert;
 
                     NSString *insertOrderQuery = [NSString stringWithFormat:@"Insert Into MyOrder (order_number,orderid) Values ('%@','%@')",[[AppDataManager sharedAppDatamanager] validateString:[responsedData objectForKey:@"order_number"]],[[AppDataManager sharedAppDatamanager] validateString:[responsedData objectForKey:@"orderid"]]];
                     
-                    [[CXSSqliteHelper sharedSqliteHelper] runQuery:insertOrderQuery asObject:[MyOrder class]];
+                    [[CXSSqliteHelper sharedSqliteHelper] runQuery:insertOrderQuery asObject:[Orders class]];
 
                     
                     dispatch_sync(dispatch_get_main_queue(), ^{
                             alert = [[CustomeAlert alloc] init];
                             [alert showAlertWithTitle:nil message:[responsedData objectForKey:@"message"] cancelButtonTitle:@"OK" otherButtonTitles:nil withButtonHandler:^(NSInteger buttonIndex) {
-                                
+                                [self refreshUI];
                                 [[self tabBarController] setSelectedIndex:0];
                                 
                             }];
-                        [self refreshUI];
+                        
                     });
                 }else{
                 

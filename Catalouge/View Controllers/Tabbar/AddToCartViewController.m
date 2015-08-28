@@ -22,6 +22,9 @@
 #import "AddMoreLeatherTableViewCell.h"
 #import "BottomTableViewCell.h"
 
+#import "JTSImageInfo.h"
+#import "JTSImageViewController.h"
+#define TRY_AN_ANIMATED_GIF 0
 
 
 
@@ -47,16 +50,35 @@
     [[self pageCtrl] setBackgroundColor:[UIColor clearColor]];
     [self setTitle:@"Article"];
     
-    self.lbl_ArticlePrice.layer.cornerRadius = 5;
-    self.lbl_ArticlePrice.clipsToBounds = YES;
+    self.lbl_ArticlePrice_EURO.layer.cornerRadius = 5;
+    self.lbl_ArticlePrice_EURO.clipsToBounds = YES;
+
+    self.lbl_ArticlePrice_GBP.layer.cornerRadius = 5;
+    self.lbl_ArticlePrice_GBP.clipsToBounds = YES;
+
+    
+    self.lbl_ArticlePrice_USD.layer.cornerRadius = 5;
+    self.lbl_ArticlePrice_USD.clipsToBounds = YES;
+
+    
+    
     [[self tbl_RawMatarial] setBackgroundColor:[UIColor whiteColor]];
     
-    
-    
-    
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc]
+                                   initWithTitle: @"Back"
+                                   style:UIBarButtonItemStylePlain
+                                   target:self
+                                   action:@selector(backbtnPressed)];
+    self.navigationItem.backBarButtonItem = backButton;
     
 }
+- (void)backbtnPressed{
 
+    [[[self navigationController] viewControllers] enumerateObjectsUsingBlock:^(UIViewController   *obj, NSUInteger idx, BOOL *stop) {
+        
+        
+    }];
+}
 - (void)refreshUI{
     
     TrxTransaction *local = [[AppDataManager sharedAppDatamanager] transaction];
@@ -64,9 +86,11 @@
     [[self lbl_Title] setText:[[[[AppDataManager sharedAppDatamanager] transaction] article] articlename]];
     
     [[self lbl_ArticleName] setText:[[[[AppDataManager sharedAppDatamanager] transaction] article] articlename]];
-    [[self lbl_ArticlePrice] setText:[NSString stringWithFormat:@"€%@",[[[[AppDataManager sharedAppDatamanager] transaction] article] price]]];
+    [[self lbl_ArticlePrice_EURO] setText:[NSString stringWithFormat:@"€%@",[[[[AppDataManager sharedAppDatamanager] transaction] article] price]]];
+    [[self lbl_ArticlePrice_GBP] setText:[NSString stringWithFormat:@"€%@",[[[[AppDataManager sharedAppDatamanager] transaction] article] price]]];
+    [[self lbl_ArticlePrice_USD] setText:[NSString stringWithFormat:@"€%@",[[[[AppDataManager sharedAppDatamanager] transaction] article] price]]];
+
     
-        
     NSArray *img_arr = [[CXSSqliteHelper sharedSqliteHelper] runQuery:[NSString stringWithFormat:@"SELECT * FROM Article_Images WHERE articleid = '%@'",local.articleid] asObject:[Article_Image class]];
     self.article_Images = [NSMutableArray arrayWithArray:img_arr];
     
@@ -161,9 +185,24 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     
     
+    HomeCollectionViewCell *cell = (HomeCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
+    // Create image info
+    JTSImageInfo *imageInfo = [[JTSImageInfo alloc] init];
+    imageInfo.image = cell.imageCell.image;
+    imageInfo.referenceRect = cell.imageCell.frame;
+    imageInfo.referenceView = cell.imageCell.superview;
+    imageInfo.referenceContentMode = cell.imageCell.contentMode;
+    imageInfo.referenceCornerRadius = cell.imageCell.layer.cornerRadius;
     
+    // Setup view controller
+    JTSImageViewController *imageViewer = [[JTSImageViewController alloc]
+                                           initWithImageInfo:imageInfo
+                                           mode:JTSImageViewControllerMode_Image
+                                           backgroundStyle:JTSImageViewControllerBackgroundOption_Scaled];
     
-    
+    // Present the view controller.
+    [imageViewer showFromViewController:self transition:JTSImageViewControllerTransition_FromOriginalPosition];
+
     
 }
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
@@ -188,6 +227,9 @@
 -(IBAction)zoomButtonPressed:(id)sender{
 
     //TODO::
+    
+    
+
     
 }
 
@@ -791,8 +833,13 @@
         __block __weak AddToCartViewController *weakSelf = self;
         [cell registerCallbackForAddToCart:^{
             
-           CartViewController *cart =  [[weakSelf storyboard] instantiateViewControllerWithIdentifier:@"CartViewController"];
-            [[weakSelf navigationController] pushViewController:cart animated:YES];
+//           CartViewController *cart =  [[weakSelf storyboard] instantiateViewControllerWithIdentifier:@"CartViewController"];
+//            [[weakSelf navigationController] pushViewController:cart animated:YES];
+//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Article added to card" delegate:<#(id)#> cancelButtonTitle:<#(NSString *)#> otherButtonTitles:<#(NSString *), ...#>, nil];
+            
+            
+            [[weakSelf tabBarController] setSelectedIndex:3];
+
         }];
         
     }
