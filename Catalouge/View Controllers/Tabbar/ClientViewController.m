@@ -9,6 +9,7 @@
 #import "ClientViewController.h"
 #import "ClientTableViewCell.h"
 #import "ArticleSelectionViewController.h"
+#import "SearchViewController.h"
 @interface ClientViewController ()<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,strong) NSArray *arr_Clients;
 @end
@@ -126,7 +127,9 @@
         Clients *clinet = [[self arr_Clients] objectAtIndex:indexPath.row];
         [[AppDataManager sharedAppDatamanager] setSelectedClient:clinet];
         self.clientSelectedBlock(clinet.clientid);
-        [[self navigationController] popViewControllerAnimated:YES];
+        //[[self navigationController] popViewControllerAnimated:YES];
+        
+        [self selectAgent];
         return;
         
     }else{
@@ -138,7 +141,60 @@
     
     
 }
+- (void)selectAgent{
+    
+    NSArray *agents = [[[AppDataManager sharedAppDatamanager] selectedClient] agents];
+    
+    if ([agents count]) {
+        
+        if ([agents count] == 1) {
+            
+            SearchViewController *search = [[self storyboard] instantiateViewControllerWithIdentifier:@"SearchViewController"];
+            
+            search.tag = AGENT_SELECTION;
+            [search registerOptionSelectionCallback:^(id selectedData) {
+                
+                [[[AppDataManager sharedAppDatamanager] selectedClient] setDefaultAgentCode:[selectedData agentid]];
+                [[[AppDataManager sharedAppDatamanager] selectedClient] setDefaultAgent:selectedData];
 
+                //[[self navigationController] popViewControllerAnimated:YES];
+            }];
+            
+            
+            [self showActivityIndicator:@"Fetching Agents..."];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                
+                search.arr_Common_List = [agents mutableCopy];
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    
+                    [self hideActivityIndicator];
+                    [[self navigationController] pushViewController:search animated:YES];
+                    
+                    
+                });
+            });
+            
+            
+        }else{
+            
+            Agents *agent = [agents firstObject];
+            [[[AppDataManager sharedAppDatamanager] selectedClient] setDefaultAgentCode:[agent agentid]];
+            
+            [[self navigationController] popViewControllerAnimated:YES];
+
+        }
+    }else{
+        
+        [[[AppDataManager sharedAppDatamanager] selectedClient] setDefaultAgentCode:@""];
+        [[[AppDataManager sharedAppDatamanager] selectedClient] setDefaultAgent:nil];
+
+        [[self navigationController] popViewControllerAnimated:YES];
+
+        
+    }
+    
+}
 
 #pragma mark - Add New Client
 - (IBAction)addNewClient:(id)sender{
@@ -156,5 +212,17 @@
     self.clientSelectedBlock = clientCallBlock;
 }
 
+- (void)showActivityIndicator:(NSString*)msg{
+    
+    [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [hud setLabelText:msg];
+    
+    
+}
+
+- (void)hideActivityIndicator{
+    [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
+}
 
 @end

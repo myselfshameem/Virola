@@ -61,6 +61,19 @@ static AppDataManager *appdataManager;
     _transaction.rawmaterialsForLeathers = [[NSMutableArray alloc] init];
     _transaction.rawmaterialsForLinings = [[NSMutableArray alloc] init];
 
+   
+    
+    //Socks Material
+    if (!flag) {
+        
+        NSString *socksQuery = [NSString stringWithFormat:@"SELECT * FROM Article_Rawmaterials WHERE articleid = '%@' AND rawmaterialgroupid = '12' AND (insraw = 'SOCK FULL' OR insraw = 'SOCK HALF' OR insraw = 'SOCK FULL - PRINTED LEATHER HOLE OPTIC' OR insraw = 'SOCK HALF - PRINTED LEATHER HOLE OPTIC' OR insraw = 'INSOLE COVER')",_transaction.articleid];
+        NSArray *SocksArr = [[CXSSqliteHelper sharedSqliteHelper] runQuery:socksQuery asObject:[ArticlesRawmaterials class]];
+
+        [SocksArr count] ? _transaction.socksMaterial = [SocksArr firstObject] : @"";
+    }
+    
+    
+    
     //Leather
     if (flag) {
         [[_transaction rawmaterialsForLeathers] addObject:[[Rawmaterials alloc] init]];
@@ -88,7 +101,7 @@ static AppDataManager *appdataManager;
         [[_transaction rawmaterialsForLinings] addObject:[[Rawmaterials alloc] init]];
     }else{
     
-        NSString *query = [NSString stringWithFormat:@"SELECT * FROM Article_Rawmaterials WHERE articleid = '%@' AND rawmaterialgroupid = '12'",articleId];
+        NSString *query = [NSString stringWithFormat:@"SELECT * FROM Article_Rawmaterials WHERE articleid = '%@' AND rawmaterialgroupid = '12' AND (insraw != 'SOCK FULL' AND insraw != 'SOCK HALF' AND insraw != 'SOCK FULL - PRINTED LEATHER HOLE OPTIC' AND insraw != 'SOCK HALF - PRINTED LEATHER HOLE OPTIC' AND insraw != 'INSOLE COVER')",articleId];
         NSArray *liningArr = [[CXSSqliteHelper sharedSqliteHelper] runQuery:query asObject:[Rawmaterials class]];
         
         [liningArr enumerateObjectsUsingBlock:^(ArticlesRawmaterials *obj, NSUInteger idx, BOOL *stop) {
@@ -139,6 +152,20 @@ static AppDataManager *appdataManager;
     }];
 
     
+    
+    
+    if (!flag && [_transaction.article.images count]) {
+        //Copy and move Product Image to NewDev Dir
+        Article_Image *image = [_transaction.article.images firstObject];
+        NSString *oldFilePath = [[self imageDirPath] stringByAppendingPathComponent:[[image imagePath] lastPathComponent]];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:oldFilePath isDirectory:NO]) {
+            NSString *newFilePath = [[self fetchNewDevelopmentImageDir] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",[_transaction TransactionId]]];
+            [[NSFileManager defaultManager] copyItemAtPath:oldFilePath toPath:newFilePath error:nil];
+            
+            
+        }
+    }
+    
     return _transaction;
     
 
@@ -146,7 +173,6 @@ static AppDataManager *appdataManager;
 
 - (void)writeDataToImageFileName:(NSString*)filename withData:(NSData*)data{
 
-    NSError *error = nil;
     NSString *path = [[self imageDirPath] stringByAppendingPathComponent:filename];
     [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
     if ([[NSFileManager defaultManager] createFileAtPath:path contents:data attributes:nil]) {
@@ -285,7 +311,10 @@ static AppDataManager *appdataManager;
         
         rawmaterial.rawmaterialid = [rawmaterial.rawmaterialid length] ? rawmaterial.rawmaterialid : @"";
         rawmaterial.rawmaterialgroupid = [rawmaterial.rawmaterialgroupid length] ? rawmaterial.rawmaterialgroupid : @"";
-        NSString *sqlQury = [NSString stringWithFormat:@"INSERT INTO Trx_Rawmaterials (TransactionId,rawmaterialid,rawmaterialgroupid,leatherpriority,colorid) VALUES ('%@','%@','%@','%@','%@')",local.TransactionId,rawmaterial.rawmaterialid,rawmaterial.rawmaterialgroupid,@"0",rawmaterial.colorid];
+        rawmaterial.insraw = [rawmaterial.insraw length] ? rawmaterial.insraw : @"";
+        rawmaterial.colorid = [rawmaterial.colorid length] ? rawmaterial.colorid : @"";
+
+        NSString *sqlQury = [NSString stringWithFormat:@"INSERT INTO Trx_Rawmaterials (TransactionId,rawmaterialid,rawmaterialgroupid,leatherpriority,colorid,insraw) VALUES ('%@','%@','%@','%@','%@','%@')",local.TransactionId,rawmaterial.rawmaterialid,rawmaterial.rawmaterialgroupid,@"0",rawmaterial.colorid,rawmaterial.insraw];
         [[CXSSqliteHelper sharedSqliteHelper] runQuery:sqlQury asObject:[Trx_Rawmaterials class]];
     }
     
@@ -392,6 +421,28 @@ static AppDataManager *appdataManager;
 
     
     return isChange;
+}
+
+
+- (UIBarButtonItem *)backBarButtonWithTitle:(NSString *)title target:(id)target selector:(SEL)selector{
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button setFrame:CGRectMake(0, 0, 80, 30)];
+    [button setTitle:title forState:UIControlStateNormal];
+    // button.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    //[[button titleLabel] setFont:[UIFont fontWithName:@"MyriadPro-Regular" size:16]];
+    [button.titleLabel setShadowColor:[UIColor clearColor]];
+    [button.titleLabel setShadowOffset:CGSizeMake(0, 0)];
+    
+    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [button setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
+    UIImage *image = [[UIImage imageNamed:@"back_btn"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 30, 0, 0)];
+    [button setTitleEdgeInsets:UIEdgeInsetsMake(0, 10, 0, 0)];
+    [button setBackgroundImage:image forState:UIControlStateNormal];
+    [button addTarget:target action:selector forControlEvents:UIControlEventTouchUpInside];
+    [button setBackgroundColor:[UIColor clearColor]];
+    UIBarButtonItem *barButton = [[UIBarButtonItem alloc] initWithCustomView:button];
+    return barButton;
 }
 
 @end

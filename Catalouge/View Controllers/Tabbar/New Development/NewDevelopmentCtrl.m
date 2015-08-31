@@ -120,15 +120,14 @@
         //self.imageView.image = chosenImage;
         UIImage *newImage =  [UIImage imageWithImage:chosenImage scaledToSize:CGSizeMake(320, 568)];
         
-        NSData *data = UIImagePNGRepresentation(newImage);
+        NSData *data = UIImageJPEGRepresentation(newImage, 0.3);
         
-        NSString *filePath = [NSString stringWithFormat:@"%@/%@.png",[[AppDataManager sharedAppDatamanager] DevelopmentImageDir],[[[AppDataManager sharedAppDatamanager] transaction] TransactionId]];
+        NSString *filePath = [NSString stringWithFormat:@"%@/%@.jpg",[[AppDataManager sharedAppDatamanager] DevelopmentImageDir],[[[AppDataManager sharedAppDatamanager] transaction] TransactionId]];
         
         [[AppDataManager sharedAppDatamanager]writeDataToImageFileName:filePath withData:data];
         
         [data writeToFile:filePath atomically:YES];
-        [[[AppDataManager sharedAppDatamanager] transaction] setTakeAPicturePath:filePath];
-        
+
         dispatch_sync(dispatch_get_main_queue(), ^{
             [[self imageThumb] setImage:newImage];
             [self.activityIndicator stopAnimating];
@@ -365,7 +364,85 @@
                
                }
                    break;
+               case 5:{
+                  
+                   
+                   //TODO::
+                   //SOCK_SELECTION
+                   [self showActivityIndicator:@"Fetching Socks..."];
+                   
+                   SearchViewController *search = [[self storyboard] instantiateViewControllerWithIdentifier:@"SearchViewController"];
+                   [search registerOptionSelectionCallback:^(id selectedData) {
+                       
+                       [[[AppDataManager sharedAppDatamanager] transaction] setSocksMaterialNew:selectedData];
+                       cell.txt_Socks.text = [(Rawmaterials*)selectedData name];
+                       cell.txt_SocksColors.text = [[(Rawmaterials*)selectedData colors] colorname];
 
+                       
+                   }];
+                   
+                   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                       
+                       search.tag = SOCK_SELECTION;
+                       
+                       search.arr_Common_List = [[[CXSSqliteHelper sharedSqliteHelper] runQuery:@"SELECT * FROM Rawmaterial_Master WHERE rawmaterialgroupid = '12' GROUP BY name" asObject:[Rawmaterials class]] mutableCopy];
+                       
+                       dispatch_async(dispatch_get_main_queue(), ^{
+                           
+                           [self hideActivityIndicator];
+                           [[self navigationController] pushViewController:search animated:YES];
+                           
+                           
+                       });
+                   });
+                   
+                   
+               }
+                   break;
+
+               case 6:{
+                   
+                   //TODO::
+                   //SOCK_COLOR_SELECTION
+                   
+                   if (![[[AppDataManager sharedAppDatamanager] transaction] socksMaterialNew]) {
+                    
+                       return ;
+                   }
+                   
+                   
+                   [self showActivityIndicator:@"Fetching Sock Colors..."];
+                   
+                   SearchViewController *search = [[self storyboard] instantiateViewControllerWithIdentifier:@"SearchViewController"];
+                   [search registerOptionSelectionCallback:^(id selectedData) {
+                       
+                       [[[AppDataManager sharedAppDatamanager] transaction] setSocksMaterialNew:(Rawmaterials*)selectedData];
+                       cell.txt_Socks.text = [(Rawmaterials*)selectedData name];
+                       cell.txt_SocksColors.text = [[(Rawmaterials*)selectedData colors] colorname];
+
+                   }];
+                   
+                   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                       
+                       search.tag = SOCK_COLOR_SELECTION;
+                       Rawmaterials *sockMaterials = [[[AppDataManager sharedAppDatamanager] transaction] socksMaterialNew];
+
+                       NSString *query = [NSString stringWithFormat:@"SELECT * FROM Rawmaterial_Master WHERE rawmaterialgroupid = '12' and name = '%@'",[sockMaterials name]];
+
+                       search.arr_Common_List = [[[CXSSqliteHelper sharedSqliteHelper] runQuery:query asObject:[Rawmaterials class]] mutableCopy];
+                       
+                       dispatch_async(dispatch_get_main_queue(), ^{
+                           
+                           [self hideActivityIndicator];
+                           [[self navigationController] pushViewController:search animated:YES];
+                           
+                           
+                       });
+                   });
+                   
+                   
+               }
+                   break;
                default:
                    break;
            }
@@ -406,8 +483,7 @@
            switch (tag) {
                    
                case 1:{
-                   //Last
-                   
+
                    SearchViewController *search = [[self storyboard] instantiateViewControllerWithIdentifier:@"SearchViewController"];
                    search.tag = QTY_SELECTION;
                    search.arr_Common_List = [[AppDataManager sharedAppDatamanager] quantityOption];
@@ -473,10 +549,10 @@
        __block __weak NewDevelopmentCtrl *weakSelf = self;
        [cell registerCallbackForAddToCart:^{
            
-//           CartViewController *cart =  [[weakSelf storyboard] instantiateViewControllerWithIdentifier:@"CartViewController"];
-//           [[weakSelf navigationController] pushViewController:cart animated:YES];
-           
-           [[weakSelf tabBarController] setSelectedIndex:3];
+           //[[weakSelf navigationController] popViewControllerAnimated:NO];
+           CartViewController *cart =  [[weakSelf storyboard] instantiateViewControllerWithIdentifier:@"CartViewController"];
+           [[weakSelf navigationController] pushViewController:cart animated:YES];
+//           [[weakSelf tabBarController] setSelectedIndex:3];
        }];
 
        

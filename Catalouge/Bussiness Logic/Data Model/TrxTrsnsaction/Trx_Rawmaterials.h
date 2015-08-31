@@ -15,7 +15,7 @@
 @property (nonatomic, strong) NSString *colorid;
 @property (nonatomic, strong) NSString *leatherpriority;
 @property (nonatomic, strong) NSString *rawmaterialid;
-
+@property (nonatomic, strong) NSString *insraw;
 + (Trx_Rawmaterials *)modelObjectWithDictionary:(NSDictionary *)dict;
 - (instancetype)initWithDictionary:(NSDictionary *)dict;
 - (NSDictionary *)dictionaryRepresentation;

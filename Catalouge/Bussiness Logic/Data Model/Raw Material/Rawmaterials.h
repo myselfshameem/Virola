@@ -16,6 +16,7 @@
 @property (nonatomic, strong) NSString *colorid;
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSString *rawmaterialid;
+@property (nonatomic, strong) NSString *insraw;
 @property (nonatomic, strong) Colors *colors;
 + (Rawmaterials *)modelObjectWithDictionary:(NSDictionary *)dict;
 - (instancetype)initWithDictionary:(NSDictionary *)dict;

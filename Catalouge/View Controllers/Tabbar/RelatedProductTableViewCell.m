@@ -24,6 +24,6 @@
 
     self.imgV_Logo_Holder.layer.cornerRadius = 2.0f;
     self.imgV_Logo_Holder.layer.borderWidth = 1.0f;
-    self.imgV_Logo_Holder.layer.borderColor = [UIColor blackColor].CGColor;
+    self.imgV_Logo_Holder.layer.borderColor = [UIColor grayColor].CGColor;
 }
 @end

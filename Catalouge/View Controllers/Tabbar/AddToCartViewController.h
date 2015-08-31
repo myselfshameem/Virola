@@ -35,6 +35,6 @@
 @property (strong, nonatomic) IBOutlet UILabel *lbl_ArticlePrice_GBP;
 
 
--(IBAction)zoomButtonPressed:(id)sender;
 - (IBAction)tapOnRelatedBtn:(id)sender;
+- (IBAction)captureNewImageForArticle:(id)sender;
 @end

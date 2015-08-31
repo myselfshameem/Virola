@@ -21,7 +21,7 @@
 
 - (void)initilizeCell{
     
-    self.vw_ImageHolder.layer.cornerRadius = 1;
+    self.vw_ImageHolder.layer.cornerRadius = 2;
     self.vw_ImageHolder.layer.borderWidth = 1;
     self.vw_ImageHolder.layer.borderColor = [UIColor grayColor].CGColor;
     

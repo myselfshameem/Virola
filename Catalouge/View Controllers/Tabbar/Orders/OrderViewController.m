@@ -33,7 +33,7 @@ static dispatch_once_t onceTokenForOrders;
     //Reset
     onceTokenForOrders = 0;
 
-    
+    [self setTitle:@"Orders"];
 }
 
 
@@ -69,7 +69,7 @@ static dispatch_once_t onceTokenForOrders;
     
     [[weakSelf localQueue] addOperationWithBlock:^{
         
-        NSString *sqlQuery = @"SELECT * FROM Orders order by orderNo";
+        NSString *sqlQuery = @"SELECT * FROM Orders";
         self.arr_ClientList = [NSMutableArray arrayWithArray:[[CXSSqliteHelper sharedSqliteHelper] runQuery:sqlQuery asObject:[Orders class]]];
         self.arr_Common_List = self.arr_ClientList;
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -95,7 +95,7 @@ static dispatch_once_t onceTokenForOrders;
     
     NSString *strPredicate = nil;
     NSPredicate *predicate = nil;
-    strPredicate = [NSString stringWithFormat:@"paymentTerm contains[c]'%@'",searchString];
+    strPredicate = [NSString stringWithFormat:@"orderID contains[c]'%@' OR orderNo contains[c]'%@' OR clientCode contains[c]'%@'",searchString,searchString,searchString];
     predicate = [NSPredicate predicateWithFormat:strPredicate];
 
     
@@ -172,17 +172,26 @@ static dispatch_once_t onceTokenForOrders;
         
         cell = [[[NSBundle mainBundle] loadNibNamed:@"OrderCellTableViewCell" owner:self options:nil] firstObject];
         cell.backgroundColor = [UIColor clearColor];
+        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     }
     
     Orders *order = [[self arr_Common_List] objectAtIndex:indexPath.row];
     [[cell lbl_OrderNo] setText:[NSString stringWithFormat:@"Order No : %@",[order orderNo]]];
-    [[cell lbl_OrderDate] setText:[NSString stringWithFormat:@"Order Date : %@",[order orderDate]]];
+    [[cell lbl_OrderDate] setText:[NSString stringWithFormat:@"Order Date : %@",[[order orderDate] substringWithRange:NSMakeRange(0, 10)]]];
     [[cell lbl_ClientName] setText:[NSString stringWithFormat:@"Client Name : %@",[order company]]];
+    
+    
+    [cell registerResendOrderCallBlock:^(NSString *orderId) {
+       
+        //Call Resend PHP
+        
+    }];
+    
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 45;
+    return 93;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     

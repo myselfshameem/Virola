@@ -32,4 +32,6 @@
 - (instancetype)initWithDictionary:(NSDictionary *)dict;
 - (NSDictionary *)dictionaryRepresentation;
 
+
+
 @end

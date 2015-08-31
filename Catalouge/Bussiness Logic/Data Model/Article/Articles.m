@@ -20,8 +20,10 @@ NSString *const kArticlesRawmaterials = @"rawmaterials";
 NSString *const kArticlesMLC = @"m_l_c";
 NSString *const kArticlesImages = @"images";
 NSString *const kArticlesSizefrom = @"sizefrom";
-NSString *const kArticlesLastName = @"lastname";
-NSString *const kArticlesSoleName = @"solename";
+NSString *const kArticlesLastName = @"lastName";
+NSString *const kArticlesSoleName = @"soleName";
+NSString *const kArticlesprice_usd = @"price_usd";
+NSString *const kArticlesprice_gbp = @"price_gbp";
 
 
 @interface Articles ()
@@ -43,8 +45,10 @@ NSString *const kArticlesSoleName = @"solename";
 @synthesize mLC = _mLC;
 @synthesize images = _images;
 @synthesize sizefrom = _sizefrom;
-@synthesize lastname = _lastname;
-@synthesize solename = _solename;
+@synthesize lastName = _lastName;
+@synthesize soleName = _soleName;
+@synthesize price_gbp = _price_gbp;
+@synthesize price_usd = _price_usd;
 
 
 + (Articles *)modelObjectWithDictionary:(NSDictionary *)dict
@@ -67,10 +71,10 @@ NSString *const kArticlesSoleName = @"solename";
         self.price = [self objectOrNilForKey:kArticlesPrice fromDictionary:dict];
         self.articleid = [self objectOrNilForKey:kArticlesArticleid fromDictionary:dict];
         self.sizeto = [self objectOrNilForKey:kArticlesSizeto fromDictionary:dict];
-        self.lastname = [self objectOrNilForKey:kArticlesLastName fromDictionary:dict];
-        self.solename = [self objectOrNilForKey:kArticlesSoleName fromDictionary:dict];
-
-        
+        self.lastName = [self objectOrNilForKey:kArticlesLastName fromDictionary:dict];
+        self.lastName = [self objectOrNilForKey:kArticlesSoleName fromDictionary:dict];
+        self.price_usd = [self objectOrNilForKey:kArticlesprice_usd fromDictionary:dict];
+        self.price_gbp = [self objectOrNilForKey:kArticlesprice_gbp fromDictionary:dict];
         NSObject *receivedRawmaterials = [dict objectForKey:kArticlesRawmaterials];
         NSMutableArray *parsedRawmaterials = [NSMutableArray array];
         if ([receivedRawmaterials isKindOfClass:[NSArray class]]) {

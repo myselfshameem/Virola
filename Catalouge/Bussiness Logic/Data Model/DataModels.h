@@ -69,6 +69,7 @@ typedef enum : NSUInteger {
 #define ADD_ORDER_API                           @"addorder.php"
 #define GET_PAYMENT_SHIPPING_TERMS              @"getotherdetails.php"
 #define GET_Orders                              @"getOrder.php"
+#define UPLOAD_Image_API                            @"uploadPhoto.php"
 
 
 #define isIPad()                ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
@@ -105,6 +106,9 @@ static NSString *kCellID = @"NewCell";                          // UICollectionV
 #define PAYMENT_TERMS_REMARKS_SELECTION 1987
 #define SHIPPING_TERMS_SELECTION 1986
 #define MODE_OF_SHIPPING_SELECTION 1985
+#define SOCK_SELECTION 1984
+#define SOCK_COLOR_SELECTION 1983
+#define AGENT_SELECTION 1982
 
 
 

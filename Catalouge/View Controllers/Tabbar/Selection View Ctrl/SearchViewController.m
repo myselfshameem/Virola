@@ -10,6 +10,7 @@
 
 #import "SearchViewController.h"
 #import "ClientTableViewCell.h"
+#import "CartViewController.h"
 @interface SearchViewController ()
 
 @end
@@ -28,6 +29,28 @@
     self.txtField_Search_Clients.text = self.strSearchString;
     self.arr_ClientList = self.arr_Common_List;
 
+    
+        switch ([self tag]) {
+                
+            case AGENT_SELECTION:{
+                
+
+                [self setTitle:@"Select Agent"];
+            }
+                break;
+                
+                
+                
+            default:{
+                
+                
+            }
+                break;
+        }
+        
+
+        
+    
     // Do any additional setup after loading the view.
 }
 
@@ -112,7 +135,30 @@
                 
             }
                 break;
-         
+
+            case SOCK_SELECTION:{
+                
+                if ([[[[AppDataManager sharedAppDatamanager] transaction] isnew] isEqualToString:@"1"]) {
+                    strPredicate = [NSString stringWithFormat:@"self.name contains[c]'%@'",searchString];
+
+                }else{
+                    strPredicate = [NSString stringWithFormat:@"self.insraw contains[c]'%@'",searchString];
+
+                }
+                predicate = [NSPredicate predicateWithFormat:strPredicate];
+                
+            }
+                break;
+                
+            case AGENT_SELECTION:{
+                
+                strPredicate = [NSString stringWithFormat:@"self.agentid contains[c]'%@' OR self.company contains[c]'%@' OR self.agentcode contains[c]'%@'",searchString,searchString,searchString];
+                predicate = [NSPredicate predicateWithFormat:strPredicate];
+                
+            }
+                break;
+
+
             
         default:{
             
@@ -281,6 +327,40 @@
         Modeofshipping *lasts = [self.arr_Common_List objectAtIndex:indexPath.row];
         cell.lblClient_Name.text = [lasts shippingMode];
         
+    }else if ([self tag] == SOCK_SELECTION){
+        
+        if ([[[[AppDataManager sharedAppDatamanager] transaction] isnew] isEqualToString:@"1"]) {
+            Rawmaterials *articlesRawmaterials = [self.arr_Common_List objectAtIndex:indexPath.row];
+            cell.lblClient_Name.text = [articlesRawmaterials name];
+
+        }else{
+            ArticlesRawmaterials *articlesRawmaterials = [self.arr_Common_List objectAtIndex:indexPath.row];
+            cell.lblClient_Name.text = [articlesRawmaterials insraw];
+
+        }
+        
+    }else if ([self tag] == SOCK_COLOR_SELECTION){
+        
+        //TODO:: colorid to Colorname
+        if ([[[[AppDataManager sharedAppDatamanager] transaction] isnew] isEqualToString:@"1"]) {
+            Rawmaterials *articlesRawmaterials = [self.arr_Common_List objectAtIndex:indexPath.row];
+            cell.lblClient_Name.text = [[articlesRawmaterials colors] colorname];
+
+        }else{
+            ArticlesRawmaterials *articlesRawmaterials = [self.arr_Common_List objectAtIndex:indexPath.row];
+            cell.lblClient_Name.text = [[articlesRawmaterials colors] colorname];
+
+        }
+        
+    }
+    
+    
+    else if ([self tag] == AGENT_SELECTION){
+    
+        Agents *agents = [self.arr_Common_List objectAtIndex:indexPath.row];
+        cell.lblClient_Name.text = [NSString stringWithFormat:@"Agent Id - %@, Company - %@",[agents agentid],[agents company]];
+
+        
     }
     
     
@@ -363,7 +443,32 @@
         Modeofshipping *lasts = [self.arr_Common_List objectAtIndex:indexPath.row];
         _optionSelectedCallBack ? _optionSelectedCallBack(lasts) : nil;
         
+    }else if ([self tag] == SOCK_SELECTION){
+        
+        id lasts = [self.arr_Common_List objectAtIndex:indexPath.row];
+        _optionSelectedCallBack ? _optionSelectedCallBack(lasts) : nil;
+        
+    }else if ([self tag] == SOCK_COLOR_SELECTION){
+    
+        id lasts = [self.arr_Common_List objectAtIndex:indexPath.row];
+        _optionSelectedCallBack ? _optionSelectedCallBack(lasts) : nil;
     }
+    
+    else if ([self tag] == AGENT_SELECTION){
+        
+        Agents *agents = [self.arr_Common_List objectAtIndex:indexPath.row];
+        _optionSelectedCallBack ? _optionSelectedCallBack(agents) : nil;
+        
+        [[[self navigationController] viewControllers] enumerateObjectsUsingBlock:^(UIViewController *obj, NSUInteger idx, BOOL *stop) {
+            
+            if ([obj isKindOfClass:[CartViewController class]]) {
+                [[self navigationController] popToViewController:obj animated:YES];
+                *stop = YES;
+            }
+        }];
+        return;
+    }
+    
     
 
     

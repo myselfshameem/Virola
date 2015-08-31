@@ -72,11 +72,11 @@ static dispatch_once_t onceToken;
             
         }else if ([[self searchCriteria] isEqualToString:@"LAST"]){
         
-            sqlQuery = [NSString stringWithFormat:@"SELECT * FROM Article_Master WHERE (lastname like '%%%@%%') order by lastname",self.strSearchString];
+            sqlQuery = [NSString stringWithFormat:@"SELECT * FROM Article_Master WHERE (lastName like '%%%@%%') order by lastName",self.strSearchString];
 
         }else if ([[self searchCriteria] isEqualToString:@"SOLE"]){
             
-            sqlQuery = [NSString stringWithFormat:@"SELECT * FROM Article_Master WHERE (solename like '%%%@%%') order by solename",self.strSearchString];
+            sqlQuery = [NSString stringWithFormat:@"SELECT * FROM Article_Master WHERE (soleName like '%%%@%%') order by soleName",self.strSearchString];
         }
         
     }
@@ -116,32 +116,38 @@ static dispatch_once_t onceToken;
     
     
     
-    if ([[self searchCriteria] length]) {
+    if ([[self searchCriteria] length] && [searchString length]) {
         
         if ([[self searchCriteria] isEqualToString:@"ARTICLE"]) {
             
-            strPredicate = [NSString stringWithFormat:@"lastname contains[c]'%@' OR solename contains[c]'%@'",searchString,searchString];
+            strPredicate = [NSString stringWithFormat:@"lastName contains[c]'%@' OR soleName contains[c]'%@'",searchString,searchString];
             
         }else if ([[self searchCriteria] isEqualToString:@"LAST"]){
             
-            strPredicate = [NSString stringWithFormat:@"articleid contains[c]'%@' OR solename contains[c]'%@'",searchString,searchString];
+            strPredicate = [NSString stringWithFormat:@"articleid contains[c]'%@' OR soleName contains[c]'%@'",searchString,searchString];
             
         }else if ([[self searchCriteria] isEqualToString:@"SOLE"]){
             
-            strPredicate = [NSString stringWithFormat:@"articleid contains[c]'%@' OR lastname contains[c]'%@'",searchString,searchString];
+            strPredicate = [NSString stringWithFormat:@"articleid contains[c]'%@' OR lastName contains[c]'%@'",searchString,searchString];
         }
         
         predicate = [NSPredicate predicateWithFormat:strPredicate];
-        //NSArray *arr = [self.arr_ClientList filteredArrayUsingPredicate:predicate];
-        //self.arr_Common_List = [NSMutableArray arrayWithArray:arr];
+        NSArray *arr = [self.arr_ClientList filteredArrayUsingPredicate:predicate];
+        self.arr_Common_List = [NSMutableArray arrayWithArray:arr];
         
+    }else if([searchString length]){
+    
+        strPredicate = [NSString stringWithFormat:@"lastName contains[c]'%@' OR soleName contains[c]'%@'",searchString,searchString];
+        predicate = [NSPredicate predicateWithFormat:strPredicate];
+        NSArray *arr = [self.arr_ClientList filteredArrayUsingPredicate:predicate];
+        self.arr_Common_List = [NSMutableArray arrayWithArray:arr];
+
     }else{
     
         self.arr_Common_List = self.arr_ClientList;
 
     }
 
-    self.arr_Common_List = self.arr_ClientList;
 
     [[self tbl_ClientList] reloadData];
     
@@ -240,22 +246,10 @@ static dispatch_once_t onceToken;
     cell.lbl_Title.text = [article articlename];
     cell.lbl_Description.text = [NSString stringWithFormat:@"Article No.: %@",[article articleid]];
     cell.lbl_Price.text = [NSString stringWithFormat:@"€%@",[article price]];
-    
+    [[cell lbl_Price_Gbp] setText:[NSString stringWithFormat:@"£%@",[article price_gbp]]];
+    [[cell lbl_Price_Usd] setText:[NSString stringWithFormat:@"$%@",[article price_usd]]];
+
     cell.backgroundColor = [UIColor clearColor];
-    
-    
-//    Article_Image *articleImage = [article.images firstObject];
-//    
-//    if (articleImage) {
-//        NSString *fileName = [articleImage.imagePath lastPathComponent];
-//        NSString *filePath = [[[AppDataManager sharedAppDatamanager] imageDirPath] stringByAppendingPathComponent:fileName];
-//        
-//        
-//            cell.imgV_Logo.image = [UIImage imageWithContentsOfFile:filePath];
-//
-//    }
-    
-    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
         Article_Image *articleImage = [article.images firstObject];
@@ -288,7 +282,7 @@ static dispatch_once_t onceToken;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 89.0f;
+    return 99.0;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
 

@@ -13,6 +13,9 @@
 @property (strong, nonatomic) IBOutlet UILabel *lbl_Title;
 @property (strong, nonatomic) IBOutlet UILabel *lbl_Description;
 @property (strong, nonatomic) IBOutlet UILabel *lbl_Price;
+@property (strong, nonatomic) IBOutlet UILabel *lbl_Price_Usd;
+@property (strong, nonatomic) IBOutlet UILabel *lbl_Price_Gbp;
+
 @property (strong, nonatomic) IBOutlet UIView *vw_ImageHolder;
 - (void)initilizeCell;
 @end

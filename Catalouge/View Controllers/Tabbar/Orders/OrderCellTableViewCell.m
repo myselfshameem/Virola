@@ -19,5 +19,19 @@
 
     // Configure the view for the selected state
 }
+- (void)registerResendOrderCallBlock:(ResendOrderBlock)resendOrderBlock{
+
+    self.resendOrderBlock = resendOrderBlock;
+    
+}
+
+- (IBAction)resendOrder:(id)sender{
+
+    
+    if (self.resendOrderBlock) {
+        self.resendOrderBlock(self.lbl_OrderNo.text);
+    }
+
+}
 
 @end

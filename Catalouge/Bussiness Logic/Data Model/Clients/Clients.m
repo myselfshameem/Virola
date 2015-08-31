@@ -176,5 +176,23 @@ NSMutableArray *tempArrayForAgents = [NSMutableArray array];
 
 }
 
+- (NSArray*)agents{
 
+    if (!_agents) {
+        _agents = [[CXSSqliteHelper sharedSqliteHelper] runQuery:[NSString stringWithFormat:@"SELECT * FROM Agents_Master Where clientid = '%@'",self.clientid] asObject:[Agents class]];
+    }
+
+    return _agents;
+}
+
+- (Agents*)defaultAgent{
+    
+    if (!_defaultAgent) {
+        
+        NSArray *arr = [[CXSSqliteHelper sharedSqliteHelper] runQuery:[NSString stringWithFormat:@"SELECT * FROM Agents_Master Where clientid = '%@'",self.clientid] asObject:[Agents class]];
+        [arr count] ? (_defaultAgent = [arr firstObject]) : nil;
+    }
+    
+    return _defaultAgent;
+}
 @end

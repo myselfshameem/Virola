@@ -13,6 +13,8 @@
 #import "ArticleMasterViewController.h"
 #import "ClientViewController.h"
 #import "OrderViewController.h"
+#import "AccountViewController.h"
+
 CustomeAlert *alert;
 @interface HomeViewController ()
 
@@ -28,18 +30,71 @@ CustomeAlert *alert;
     [self.CollectionView registerNib:cellNib forCellWithReuseIdentifier:kCellID];
     [self setTitle:@"Home"];
     
+    
 
     
     //
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btn setFrame:CGRectMake(0, 0, 30, 30)];
-    [btn setImage:[UIImage imageNamed:@"Tabbar_Account_Selected"] forState:UIControlStateNormal];
-    [btn setImage:[UIImage imageNamed:@"Tabbar_Account_Selected"] forState:UIControlStateSelected];
+    [btn addTarget:self action:@selector(openUserProfile) forControlEvents:UIControlEventTouchUpInside];
+    [btn setFrame:CGRectMake(0, 0, 20, 25)];
+    [btn setImage:[UIImage imageNamed:@"Home_Account_Menu"] forState:UIControlStateNormal];
+    [btn setImage:[UIImage imageNamed:@"Home_Account_Menu"] forState:UIControlStateSelected];
 
     UIBarButtonItem *bar = [[UIBarButtonItem alloc] initWithCustomView:btn];
     
     [[self navigationItem] setRightBarButtonItem:bar];
 
+    
+    CGRect bounds = [[UIScreen mainScreen] bounds];
+    if (bounds.size.height<=480) {
+        NSLayoutConstraint *myConstraint =[NSLayoutConstraint
+                                           constraintWithItem:self.vw_bottom
+                                           attribute:NSLayoutAttributeHeight
+                                           relatedBy:NSLayoutRelationEqual
+                                           toItem:self.vw_Top
+                                           attribute:NSLayoutAttributeHeight
+                                           multiplier:3.1
+                                           constant:0];
+        
+        myConstraint.priority = 1000;
+        
+        [[self view] addConstraint:myConstraint];
+ 
+    }else if(isIPad()){
+        
+        
+        NSLayoutConstraint *myConstraint =[NSLayoutConstraint
+                                           constraintWithItem:self.vw_bottom
+                                           attribute:NSLayoutAttributeHeight
+                                           relatedBy:NSLayoutRelationEqual
+                                           toItem:self.vw_Top
+                                           attribute:NSLayoutAttributeHeight
+                                           multiplier:1
+                                           constant:0];
+        
+        myConstraint.priority = 1000;
+        
+        [[self view] addConstraint:myConstraint];
+        
+    }else{
+    
+    
+        NSLayoutConstraint *myConstraint =[NSLayoutConstraint
+                                           constraintWithItem:self.vw_bottom
+                                           attribute:NSLayoutAttributeHeight
+                                           relatedBy:NSLayoutRelationEqual
+                                           toItem:self.vw_Top
+                                           attribute:NSLayoutAttributeHeight
+                                           multiplier:1.7
+                                           constant:0];
+        
+        myConstraint.priority = 1000;
+        
+        [[self view] addConstraint:myConstraint];
+
+    }
+    
+    
     
 }
 
@@ -192,7 +247,13 @@ CustomeAlert *alert;
 
 }
 
+- (void)openUserProfile{
 
+    AccountViewController *article = [[self storyboard] instantiateViewControllerWithIdentifier:@"AccountViewController"];
+    [[self navigationController] pushViewController:article animated:YES];
+
+
+}
 
 
 @end

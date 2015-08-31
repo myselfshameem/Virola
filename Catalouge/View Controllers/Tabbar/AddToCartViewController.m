@@ -14,6 +14,8 @@
 #import "TrxTransaction.h"
 #import "CartViewController.h"
 #import "SearchViewController.h"
+#import <AVFoundation/AVFoundation.h>
+#import "UIImage+Resize.h"
 
 #import "RawMatarialCell.h"
 #import "LeatherLiningTableViewCell.h"
@@ -71,6 +73,29 @@
                                    action:@selector(backbtnPressed)];
     self.navigationItem.backBarButtonItem = backButton;
     
+    
+    AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
+    if(authStatus == AVAuthorizationStatusAuthorized) {
+        // do your logic
+    } else if(authStatus == AVAuthorizationStatusDenied){
+        // denied
+    } else if(authStatus == AVAuthorizationStatusRestricted){
+        // restricted, normally won't happen
+    } else if(authStatus == AVAuthorizationStatusNotDetermined){
+        // not determined?!
+        [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
+            if(granted){
+                NSLog(@"Granted access to %@", AVMediaTypeVideo);
+            } else {
+                NSLog(@"Not granted access to %@", AVMediaTypeVideo);
+            }
+        }];
+    } else {
+        // impossible, unknown authorization status
+    }
+
+    
+    
 }
 - (void)backbtnPressed{
 
@@ -82,13 +107,14 @@
 - (void)refreshUI{
     
     TrxTransaction *local = [[AppDataManager sharedAppDatamanager] transaction];
-    
-    [[self lbl_Title] setText:[[[[AppDataManager sharedAppDatamanager] transaction] article] articlename]];
-    
-    [[self lbl_ArticleName] setText:[[[[AppDataManager sharedAppDatamanager] transaction] article] articlename]];
-    [[self lbl_ArticlePrice_EURO] setText:[NSString stringWithFormat:@"€%@",[[[[AppDataManager sharedAppDatamanager] transaction] article] price]]];
-    [[self lbl_ArticlePrice_GBP] setText:[NSString stringWithFormat:@"€%@",[[[[AppDataManager sharedAppDatamanager] transaction] article] price]]];
-    [[self lbl_ArticlePrice_USD] setText:[NSString stringWithFormat:@"€%@",[[[[AppDataManager sharedAppDatamanager] transaction] article] price]]];
+    Articles *article = [local article];
+
+    [[self lbl_Title] setText:[article articlename]];
+    [[self lbl_ArticleName] setText:[article articlename]];
+
+    [[self lbl_ArticlePrice_EURO] setText:[NSString stringWithFormat:@"€%@",[article price]]];
+    [[self lbl_ArticlePrice_GBP] setText:[NSString stringWithFormat:@"£%@",[article price_gbp]]];
+    [[self lbl_ArticlePrice_USD] setText:[NSString stringWithFormat:@"$%@",[article price_usd]]];
 
     
     NSArray *img_arr = [[CXSSqliteHelper sharedSqliteHelper] runQuery:[NSString stringWithFormat:@"SELECT * FROM Article_Images WHERE articleid = '%@'",local.articleid] asObject:[Article_Image class]];
@@ -168,10 +194,12 @@
     
     [[self pageCtrl] setCurrentPage:indexPath.row];
 
-    Article_Image *article = [[self article_Images] objectAtIndex:indexPath.row];
-    NSString *fileName = [article.imagePath lastPathComponent];
-    NSString *filePath = [[[AppDataManager sharedAppDatamanager] imageDirPath] stringByAppendingPathComponent:fileName];
-    cell.imageCell.image = [UIImage imageWithContentsOfFile:filePath];
+//    Article_Image *article = [[self article_Images] objectAtIndex:indexPath.row];
+//    NSString *fileName = [article.imagePath lastPathComponent];
+//    NSString *filePath = [[[AppDataManager sharedAppDatamanager] imageDirPath] stringByAppendingPathComponent:fileName];
+    
+    NSString *imageFilePath = [[[AppDataManager sharedAppDatamanager] fetchNewDevelopmentImageDir] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg",[[[AppDataManager sharedAppDatamanager] transaction] TransactionId]]];
+    cell.imageCell.image = [UIImage imageWithContentsOfFile:imageFilePath];
 
     
     return cell;
@@ -224,14 +252,7 @@
 
 
 
--(IBAction)zoomButtonPressed:(id)sender{
 
-    //TODO::
-    
-    
-
-    
-}
 
 
 
@@ -313,6 +334,7 @@
 
 }
 
+
 - (float)calculateHeightOfRow{
     
     TrxTransaction *localTrx = [[AppDataManager sharedAppDatamanager] transaction];
@@ -329,7 +351,7 @@
     }
     
     
-    float height = 130.0*totalCount+40;
+    float height = 130.0*totalCount;
     
     return height;
     
@@ -340,7 +362,7 @@
     if (tableView == [self tbl_RawMatarial]) {
         
         if (indexPath.row == 0) {
-            return 145;
+            return 210;
         }else if (indexPath.row == 1){
             return [self calculateHeightOfRow];
         }else if (indexPath.row == 2){
@@ -575,7 +597,6 @@
     
     
     static NSString *FirstCell  = @"FirstCell";
-    static NSString *AddCell    = @"AddCell";
     static NSString *bottomTableViewCellIdentifier   = @"BottomTableViewCell";
     
     id cell = nil;
@@ -583,7 +604,7 @@
         cell = [tableView dequeueReusableCellWithIdentifier:@"LastSoleCell"];
         
         if (!cell) {
-            cell = [[[NSBundle mainBundle] loadNibNamed:@"LastSoleTableViewCell" owner:self options:nil] objectAtIndex:0];
+            cell = [[[NSBundle mainBundle] loadNibNamed:@"LastSoleTableViewCell" owner:self options:nil] objectAtIndex:1];
             [cell initilizeCell];
         }
         
@@ -593,6 +614,15 @@
         [[(LastSoleTableViewCell*)cell txt_Sole] setText:localTxr.Sole.name];
         [[(LastSoleTableViewCell*)cell txt_SoleColor] setText:localTxr.Sole.colors.colorname];
         [[(LastSoleTableViewCell*)cell txt_SoleMatarial] setText:localTxr.SoleMaterial.name];
+        if ([[localTxr isnew] isEqualToString:@"1"]) {
+            [[(LastSoleTableViewCell*)cell txt_Socks] setText:localTxr.socksMaterialNew.name];
+            [[(LastSoleTableViewCell*)cell txt_SocksColors] setText:localTxr.socksMaterialNew.colors.colorname];
+ 
+        }else{
+            [[(LastSoleTableViewCell*)cell txt_Socks] setText:localTxr.socksMaterial.insraw];
+            [[(LastSoleTableViewCell*)cell txt_SocksColors] setText:localTxr.socksMaterial.colors.colorname];
+
+        }
 
         
         [cell callbackForDropdown:^(LastSoleTableViewCell *cell, NSInteger tag) {
@@ -723,7 +753,88 @@
                     
                 }
                     break;
+                case 5:{
                     
+                    //SOCK_SELECTION
+                    [self showActivityIndicator:@"Fetching Socks..."];
+                    
+                    SearchViewController *search = [[self storyboard] instantiateViewControllerWithIdentifier:@"SearchViewController"];
+                    
+                    [search registerOptionSelectionCallback:^(id selectedData) {
+                        
+                        [[[AppDataManager sharedAppDatamanager] transaction] setSocksMaterial:selectedData];
+                        cell.txt_Socks.text = [(ArticlesRawmaterials*)selectedData insraw];
+                        
+                        //TODO::
+                        cell.txt_SocksColors.text = [[(ArticlesRawmaterials*)selectedData colors] colorname];
+
+                    }];
+                    
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                        
+                        search.tag = SOCK_SELECTION;
+                        
+                        search.arr_Common_List = [[[CXSSqliteHelper sharedSqliteHelper] runQuery:@"SELECT distinct * FROM Article_Rawmaterials WHERE (rawmaterialgroupid = '12' AND (insraw = 'SOCK FULL' OR insraw = 'SOCK HALF' OR insraw = 'SOCK FULL - PRINTED LEATHER HOLE OPTIC' OR insraw = 'SOCK HALF - PRINTED LEATHER HOLE OPTIC' OR insraw = 'INSOLE COVER'))" asObject:[ArticlesRawmaterials class]] mutableCopy];
+                        
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            
+                            [self hideActivityIndicator];
+                            [[self navigationController] pushViewController:search animated:YES];
+                            
+                            
+                        });
+                    });
+                    
+                    
+                }
+                    break;
+                    
+                case 6:{
+                    
+                    
+                    if (![[[AppDataManager sharedAppDatamanager] transaction] socksMaterial]) {
+                        
+                        return ;
+                    }
+                    
+                    
+                    
+                    //SOCK_COLOR_SELECTION
+                    [self showActivityIndicator:@"Fetching Socks Colors..."];
+                    
+                    SearchViewController *search = [[self storyboard] instantiateViewControllerWithIdentifier:@"SearchViewController"];
+                    
+                    [search registerOptionSelectionCallback:^(id selectedData) {
+                        
+                        [[[AppDataManager sharedAppDatamanager] transaction] setSocksMaterial:selectedData];
+                        cell.txt_Socks.text = [(ArticlesRawmaterials*)selectedData insraw];
+                        cell.txt_SocksColors.text = [[(ArticlesRawmaterials*)selectedData colors] colorname];
+                        
+                    }];
+                    
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                        
+                        search.tag = SOCK_COLOR_SELECTION;
+                        
+                        //TODO::
+                        ArticlesRawmaterials *sockMaterials = [[[AppDataManager sharedAppDatamanager] transaction] socksMaterial];
+                        
+                        NSString *colorQuery = [NSString stringWithFormat:@"SELECT DISTINCT * FROM Article_Rawmaterials WHERE (articleid = '%@' AND rawmaterialid = '%@' AND insraw = '%@')",[[[AppDataManager sharedAppDatamanager] transaction] articleid],[sockMaterials rawmaterialid],[sockMaterials insraw]];
+                        search.arr_Common_List = [[[CXSSqliteHelper sharedSqliteHelper] runQuery:colorQuery asObject:[ArticlesRawmaterials class]] mutableCopy];
+                        
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            
+                            [self hideActivityIndicator];
+                            [[self navigationController] pushViewController:search animated:YES];
+                            
+                            
+                        });
+                    });
+                    
+                    
+                }
+                    break;
+
                 default:
                     break;
             }
@@ -833,12 +944,12 @@
         __block __weak AddToCartViewController *weakSelf = self;
         [cell registerCallbackForAddToCart:^{
             
-//           CartViewController *cart =  [[weakSelf storyboard] instantiateViewControllerWithIdentifier:@"CartViewController"];
-//            [[weakSelf navigationController] pushViewController:cart animated:YES];
+           CartViewController *cart =  [[weakSelf storyboard] instantiateViewControllerWithIdentifier:@"CartViewController"];
+            [[weakSelf navigationController] pushViewController:cart animated:YES];
 //            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Article added to card" delegate:<#(id)#> cancelButtonTitle:<#(NSString *)#> otherButtonTitles:<#(NSString *), ...#>, nil];
             
             
-            [[weakSelf tabBarController] setSelectedIndex:3];
+//            [[weakSelf tabBarController] setSelectedIndex:3];
 
         }];
         
@@ -853,46 +964,46 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
     
-    if ((tableView == [self tblLeather]) || (tableView == [self tblLining]))
-        return 40.0;
+//    if ((tableView == [self tblLeather]) || (tableView == [self tblLining]))
+//        return 40.0;
     
     return 0.0;
     
 }
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
     
-    if (tableView == [self tblLeather]) {
-        AddMoreLeatherTableViewCell *cell = [[[NSBundle mainBundle] loadNibNamed:@"AddMoreLeatherTableViewCell" owner:self options:nil] firstObject];
-        [cell.lblTitle setAdjustsFontSizeToFitWidth:YES];
-        [cell.lblTitle setText:@"Add more Leather"];
-        
-        [cell callbackForDropdown:^(AddMoreLeatherTableViewCell *__weak cell, NSInteger tag) {
-            
-            Rawmaterials *raw = [[Rawmaterials alloc] init];
-            [[[[AppDataManager sharedAppDatamanager] transaction] rawmaterialsForLeathers] addObject:raw];
-            [[self tbl_RawMatarial] reloadRowsAtIndexPaths:[NSArray arrayWithObjects:[NSIndexPath indexPathForRow:1 inSection:0], nil] withRowAnimation:UITableViewRowAnimationNone];
-            [[self tblLeather] reloadData];
-            [[self tblLining] reloadData];
-            
-        }];
-        return cell;
-    }else if (tableView == [self tblLining]) {
-        AddMoreLeatherTableViewCell *cell = [[[NSBundle mainBundle] loadNibNamed:@"AddMoreLeatherTableViewCell" owner:self options:nil] firstObject];
-        [cell.lblTitle setAdjustsFontSizeToFitWidth:YES];
-        [cell.lblTitle setText:@" Add more Lining"];
-
-        [cell callbackForDropdown:^(AddMoreLeatherTableViewCell *__weak cell, NSInteger tag) {
-            
-            Rawmaterials *raw = [[Rawmaterials alloc] init];
-            [[[[AppDataManager sharedAppDatamanager] transaction] rawmaterialsForLinings] addObject:raw];
-            [[self tbl_RawMatarial] reloadRowsAtIndexPaths:[NSArray arrayWithObjects:[NSIndexPath indexPathForRow:1 inSection:0], nil] withRowAnimation:UITableViewRowAnimationNone];
-            [[self tblLeather] reloadData];
-            [[self tblLining] reloadData];
-            
-            
-        }];
-        return cell;
-    }
+//    if (tableView == [self tblLeather]) {
+//        AddMoreLeatherTableViewCell *cell = [[[NSBundle mainBundle] loadNibNamed:@"AddMoreLeatherTableViewCell" owner:self options:nil] firstObject];
+//        [cell.lblTitle setAdjustsFontSizeToFitWidth:YES];
+//        [cell.lblTitle setText:@"Add more Leather"];
+//        
+//        [cell callbackForDropdown:^(AddMoreLeatherTableViewCell *__weak cell, NSInteger tag) {
+//            
+//            Rawmaterials *raw = [[Rawmaterials alloc] init];
+//            [[[[AppDataManager sharedAppDatamanager] transaction] rawmaterialsForLeathers] addObject:raw];
+//            [[self tbl_RawMatarial] reloadRowsAtIndexPaths:[NSArray arrayWithObjects:[NSIndexPath indexPathForRow:1 inSection:0], nil] withRowAnimation:UITableViewRowAnimationNone];
+//            [[self tblLeather] reloadData];
+//            [[self tblLining] reloadData];
+//            
+//        }];
+//        return cell;
+//    }else if (tableView == [self tblLining]) {
+//        AddMoreLeatherTableViewCell *cell = [[[NSBundle mainBundle] loadNibNamed:@"AddMoreLeatherTableViewCell" owner:self options:nil] firstObject];
+//        [cell.lblTitle setAdjustsFontSizeToFitWidth:YES];
+//        [cell.lblTitle setText:@" Add more Lining"];
+//
+//        [cell callbackForDropdown:^(AddMoreLeatherTableViewCell *__weak cell, NSInteger tag) {
+//            
+//            Rawmaterials *raw = [[Rawmaterials alloc] init];
+//            [[[[AppDataManager sharedAppDatamanager] transaction] rawmaterialsForLinings] addObject:raw];
+//            [[self tbl_RawMatarial] reloadRowsAtIndexPaths:[NSArray arrayWithObjects:[NSIndexPath indexPathForRow:1 inSection:0], nil] withRowAnimation:UITableViewRowAnimationNone];
+//            [[self tblLeather] reloadData];
+//            [[self tblLining] reloadData];
+//            
+//            
+//        }];
+//        return cell;
+//    }
     
     
     return nil;
@@ -916,6 +1027,67 @@
     NSString *sqlQuery =@"SELECT * FROM Article_Master";
     self.arrArticles = [NSMutableArray arrayWithArray:[[CXSSqliteHelper sharedSqliteHelper] runQuery:sqlQuery asObject:[Articles class]]];
     [[self relatedProduct] reloadData];
+    
+}
+
+#pragma mark - Image Picker Controller delegate methods
+
+- (IBAction)captureNewImageForArticle:(id)sender{
+
+    if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        
+        UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                              message:@"Device has no camera"
+                                                             delegate:nil
+                                                    cancelButtonTitle:@"OK"
+                                                    otherButtonTitles: nil];
+        
+        [myAlertView show];
+        
+        myAlertView = nil;
+        return;
+    }
+    
+    
+    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    picker.delegate = self;
+    picker.allowsEditing = YES;
+    picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    picker.showsCameraControls = YES;
+    [self presentViewController:picker animated:YES completion:NULL];
+
+
+    
+
+}
+
+
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    
+    [picker dismissViewControllerAnimated:YES completion:NULL];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
+        //self.imageView.image = chosenImage;
+        UIImage *newImage =  [UIImage imageWithImage:chosenImage scaledToSize:CGSizeMake(320, 568)];
+        
+        NSData *data = UIImageJPEGRepresentation(newImage, 0.3);
+        
+        NSString *filePath = [NSString stringWithFormat:@"%@/%@.jpg",[[AppDataManager sharedAppDatamanager] DevelopmentImageDir],[[[AppDataManager sharedAppDatamanager] transaction] TransactionId]];
+        
+        [[AppDataManager sharedAppDatamanager]writeDataToImageFileName:filePath withData:data];
+        
+        [data writeToFile:filePath atomically:YES];
+        
+        dispatch_sync(dispatch_get_main_queue(), ^{
+
+            [[self CollectionView] reloadData];
+        });
+        
+    });
+    
     
 }
 

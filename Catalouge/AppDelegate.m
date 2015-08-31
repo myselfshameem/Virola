@@ -46,8 +46,105 @@
 
     [tabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor colorWithRed:59/255 green:89/255 blue:152/255 alpha:1],NSForegroundColorAttributeName, nil] forState:UIControlStateSelected];
 
+    
+    //
+    [self checkImageUpload];
+    
+    
     return YES;
 }
+
+//- (void)checkImageUpload{
+//    
+//    
+//    
+//    NSData *imageData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"back_btn" ofType:@"png"]];
+//    NSString *boundary = @"---------------------------14737809831466499882746641449";
+//    
+//    
+//    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+//    [request setURL:[NSURL URLWithString:@"http://localhost/xampp/Messages.php"]];
+//    [request setHTTPMethod:@"POST"];
+//
+//    NSMutableData *body = [NSMutableData data];
+//    [body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+//    [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"fileToUpload\"; filename=\"test.png\"\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+//    [body appendData:[[NSString stringWithFormat:@"Content-Type: image/jpeg\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+//    [body appendData:imageData];
+//    [body appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+//    [request setHTTPBody:body];
+//    
+//        NSURLResponse *response ;
+//        NSError *error;
+//        NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+//        NSString * responseString = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+//        NSLog(@"\n☀☀☀☀<response>: %@\n☀☀☀☀\n",responseString);
+//
+//    
+//    
+//}
+
+- (void)checkImageUpload{
+    
+    // @"http://demo.dselva.info/virolainternational/api/mobile/v2/uploadPhoto.php"
+    
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://localhost/xampp/Messages.php"]];
+    
+    UIImage *image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"NewDevelopment_Camera_Icon" ofType:@"png"]];
+    NSData *imageData = UIImageJPEGRepresentation(image, 1.0);
+    
+    //[request setCachePolicy:NSURLRequestReloadIgnoringCacheData];
+    [request setHTTPShouldHandleCookies:NO];
+    [request setTimeoutInterval:60];
+    [request setHTTPMethod:@"POST"];
+    
+    NSString *boundary = @"unique-consistent-string";
+    
+    // set Content-Type in HTTP header
+    NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];
+    [request setValue:contentType forHTTPHeaderField: @"Content-Type"];
+    
+    // post body
+    NSMutableData *body = [NSMutableData data];
+    
+    // add params (all params are strings)
+//    [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+//    [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=%@\r\n\r\n", @"imageCaption"] dataUsingEncoding:NSUTF8StringEncoding]];
+//    [body appendData:[[NSString stringWithFormat:@"%@\r\n", @"Some Caption"] dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    // add image data
+    if (imageData) {
+        [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+        [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=%@; filename=imageName.jpg\r\n", @"product_photo"] dataUsingEncoding:NSUTF8StringEncoding]];
+        [body appendData:[@"Content-Type: image/jpeg\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+        [body appendData:imageData];
+        [body appendData:[[NSString stringWithFormat:@"\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+    }
+    
+    [body appendData:[[NSString stringWithFormat:@"--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    // setting the body of the post to the reqeust
+    [request setHTTPBody:body];
+    
+    // set the content-length
+    NSString *postLength = [NSString stringWithFormat:@"%d", [body length]];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    
+    
+    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue currentQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+        if(data.length > 0)
+        {
+            //success
+            NSString * responseString = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+            NSLog(@"\n☀☀☀☀<response>: %@\n☀☀☀☀\n",responseString);
+
+        }
+    }];
+    
+    
+}
+
+
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

@@ -46,4 +46,5 @@
 - (void)addRawMaterialLeather:(Rawmaterials*)raw;
 - (void)addRawMaterialLining:(Rawmaterials*)raw;
 - (NSString*)getIsChange;
+- (UIBarButtonItem *)backBarButtonWithTitle:(NSString *)title target:(id)target selector:(SEL)selector;
 @end

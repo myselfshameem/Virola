@@ -13,6 +13,8 @@
 @property (strong, nonatomic) IBOutlet UILabel *lbl_Title;
 @property (strong, nonatomic) IBOutlet UILabel *lbl_Description;
 @property (strong, nonatomic) IBOutlet UILabel *lbl_Price;
+@property (strong, nonatomic) IBOutlet UILabel *lbl_Price_USD;
+@property (strong, nonatomic) IBOutlet UILabel *lbl_Price_GBP;
 @property (strong, nonatomic) IBOutlet UILabel *lbl_Quantity;
 @property (strong, nonatomic) IBOutlet UIButton *btn_Close;
 @property (strong, nonatomic) IBOutlet UIButton *btn_View_Details;

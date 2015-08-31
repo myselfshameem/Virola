@@ -27,8 +27,9 @@
 @property(nonatomic,strong) Lasts *last;
 @property(nonatomic,strong) Rawmaterials *Sole;
 @property(nonatomic,strong) Rawmaterials *SoleMaterial;
-
-
+//TODO:: Change ArticlesRawmaterials--> Rawmaterials
+@property(nonatomic,strong) ArticlesRawmaterials *socksMaterial;
+@property(nonatomic,strong) Rawmaterials *socksMaterialNew;
 //Footer
 @property(nonatomic,strong) NSString *qty;
 @property(nonatomic,strong) NSString *qty_unit;
@@ -41,8 +42,6 @@
 @property(nonatomic,strong) NSMutableArray *rawmaterialsForLinings;
 
 
-//ImagesPath
-@property(nonatomic,strong) NSString *takeAPicturePath;
 
 
 @property(nonatomic,strong) NSArray *trx_Rawmaterials;

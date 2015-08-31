@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@class SynModelClass;
 @interface SyncTableViewCell : UITableViewCell
 @property (strong, nonatomic) IBOutlet UILabel *lblClient_Name;
 @property (strong, nonatomic) IBOutlet UIButton *checkBox;
+@property (assign, nonatomic) SynModelClass *synModel;
 -(IBAction)btnPressed:(id)sender;
 @end

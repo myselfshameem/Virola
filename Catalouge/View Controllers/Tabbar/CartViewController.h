@@ -12,6 +12,9 @@
 @property (strong, nonatomic) IBOutlet UILabel *lbl_Client_Name;
 @property (strong, nonatomic) IBOutlet UILabel *lbl_Total_Item;
 @property (strong, nonatomic) IBOutlet UILabel *lbl_Price;
+@property (strong, nonatomic) IBOutlet UILabel *lbl_Price_USD;
+@property (strong, nonatomic) IBOutlet UILabel *lbl_Price_GBP;
+
 @property (strong, nonatomic) IBOutlet UIButton *btn_PlaceOrder;
 @property (strong, nonatomic) IBOutlet UIButton *btn_Refresh;
 @property (strong, nonatomic) IBOutlet __block UITableView *tbl_List_Cart;

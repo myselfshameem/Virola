@@ -15,6 +15,9 @@
 @property (strong, nonatomic) IBOutlet UILabel *lbl_NumberOfClients;
 @property (strong, nonatomic) IBOutlet UILabel *lbl_NumberOfReports;
 @property (strong, nonatomic) IBOutlet UILabel *lbl_SyncDate;
+@property (strong, nonatomic) IBOutlet UIView *vw_Top;
+@property (strong, nonatomic) IBOutlet UIView *vw_bottom;
+
 @property (strong, nonatomic) NSMutableArray *arrArticles;
 - (IBAction)syncData:(id)sender;
 - (IBAction)newDevelopment:(id)sender;

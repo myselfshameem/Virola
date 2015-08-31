@@ -25,6 +25,8 @@
 @property (nonatomic, strong) NSString *contactperson;
 @property (nonatomic, strong) NSString *country;
 @property (nonatomic, strong) NSString *email;
+@property (nonatomic, strong) NSString *defaultAgentCode;
+@property (nonatomic, strong) Agents *defaultAgent;
 
 + (Clients *)modelObjectWithDictionary:(NSDictionary *)dict;
 - (instancetype)initWithDictionary:(NSDictionary *)dict;

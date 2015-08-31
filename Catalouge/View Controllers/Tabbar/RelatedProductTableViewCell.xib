@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7531" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -22,6 +22,14 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KqX-EP-hh8">
+                        <rect key="frame" x="45" y="6" width="103" height="80"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="80" id="Gpk-IG-Zv1"/>
+                            <constraint firstAttribute="width" constant="103" id="iHO-Rj-vi8"/>
+                        </constraints>
+                    </view>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="xgK-JR-8jO">
                         <rect key="frame" x="47" y="8" width="99" height="76"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -70,6 +78,7 @@
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="centerX" secondItem="xgK-JR-8jO" secondAttribute="centerX" id="23e-EX-tMe"/>
+                    <constraint firstItem="KqX-EP-hh8" firstAttribute="centerX" secondItem="xgK-JR-8jO" secondAttribute="centerX" id="4a3-rb-5dM"/>
                     <constraint firstItem="i2K-XD-zsm" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="FFx-w5-prF"/>
                     <constraint firstItem="xgK-JR-8jO" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="FKG-7D-TBh"/>
                     <constraint firstItem="xu4-Ay-MNX" firstAttribute="top" secondItem="1tZ-nZ-VcC" secondAttribute="bottom" constant="1" id="JcX-lE-en5"/>
@@ -80,6 +89,7 @@
                     <constraint firstItem="i2K-XD-zsm" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="efg-1X-TQz"/>
                     <constraint firstItem="xu4-Ay-MNX" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="fu1-jZ-d0c"/>
                     <constraint firstItem="1tZ-nZ-VcC" firstAttribute="top" secondItem="xgK-JR-8jO" secondAttribute="bottom" constant="26" id="neZ-o8-kXr"/>
+                    <constraint firstItem="KqX-EP-hh8" firstAttribute="centerY" secondItem="xgK-JR-8jO" secondAttribute="centerY" id="pWI-wT-8Zy"/>
                     <constraint firstItem="1tZ-nZ-VcC" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="quB-1W-5an"/>
                     <constraint firstItem="xu4-Ay-MNX" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="t36-vo-DKp"/>
                     <constraint firstAttribute="trailing" secondItem="xk6-pw-dWi" secondAttribute="trailing" id="weX-Oc-K9a"/>
@@ -87,6 +97,7 @@
             </tableViewCellContentView>
             <connections>
                 <outlet property="imgV_Logo" destination="xgK-JR-8jO" id="65l-Y8-ZBc"/>
+                <outlet property="imgV_Logo_Holder" destination="KqX-EP-hh8" id="GUP-kf-DWM"/>
                 <outlet property="lbl_Description" destination="1tZ-nZ-VcC" id="YjS-2Y-9QV"/>
                 <outlet property="lbl_Price" destination="xu4-Ay-MNX" id="B4a-zP-xW4"/>
                 <outlet property="lbl_Title" destination="i2K-XD-zsm" id="zcK-Qg-zef"/>

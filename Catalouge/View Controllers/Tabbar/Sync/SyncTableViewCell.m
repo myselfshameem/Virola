@@ -7,7 +7,7 @@
 //
 
 #import "SyncTableViewCell.h"
-
+#import "SynModelClass.h"
 @implementation SyncTableViewCell
 
 - (void)awakeFromNib {
@@ -20,6 +20,8 @@
     // Configure the view for the selected state
 }
 -(IBAction)btnPressed:(id)sender{
-        self.checkBox.selected = !self.checkBox.selected;
+    BOOL flag = ![[[self synModel] selectedFlag] boolValue];
+    [[self synModel] setSelectedFlag:[NSNumber numberWithBool:flag]];
+    self.checkBox.selected = flag;
 }
 @end

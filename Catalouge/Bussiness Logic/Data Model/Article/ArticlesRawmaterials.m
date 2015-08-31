@@ -103,6 +103,16 @@ NSString *const kArticlesRawmaterialsRawmaterialid = @"rawmaterialid";
     [aCoder encodeObject:_colorid forKey:kArticlesRawmaterialsColorid];
     [aCoder encodeObject:_rawmaterialid forKey:kArticlesRawmaterialsRawmaterialid];
 }
+- (Colors*)colors{
+    
+    if (!_colors) {
+        if ([[self colorid] length]) {
+            NSArray *arr = [[CXSSqliteHelper sharedSqliteHelper] runQuery:[NSString stringWithFormat:@"SELECT * FROM Colors WHERE colorid = '%@'",[self colorid]] asObject:[Colors class]];
+            [arr count] ? _colors = [arr firstObject] : nil;
+        }
+    }
+    return _colors;
+}
 
 
 @end

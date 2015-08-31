@@ -77,7 +77,35 @@
         [[CXSSqliteHelper sharedSqliteHelper] runQuery:sqlQury asObject:[TrxTransaction class]];
         
         
-        //[[AppDataManager sharedAppDatamanager] insertIntoTrx_Rawmaterials:[local Sole] withTrx:local];
+        if ([[[[AppDataManager sharedAppDatamanager] transaction] isnew] isEqualToString:@"1"]) {
+            
+            Rawmaterials *oldRaw = [local socksMaterialNew];
+            [oldRaw setInsraw:@"SOCKS"];
+            if ([oldRaw.rawmaterialgroupid length] && [oldRaw.rawmaterialid length]) {
+                [[AppDataManager sharedAppDatamanager] insertIntoTrx_Rawmaterials:oldRaw withTrx:local];
+            }
+
+        }else{
+
+            ArticlesRawmaterials *oldRaw = [[[AppDataManager sharedAppDatamanager] transaction] socksMaterial];
+            Rawmaterials *rawMaterials = [[Rawmaterials alloc] init];
+            [rawMaterials setRawmaterialgroupid:oldRaw.rawmaterialgroupid];
+            [rawMaterials setAbbrname:@""];
+            [rawMaterials setColorid:oldRaw.colorid];
+            [rawMaterials setName:@""];
+            [rawMaterials setRawmaterialid:oldRaw.rawmaterialid];
+            [rawMaterials setInsraw:oldRaw.insraw];
+
+            if ([oldRaw.rawmaterialgroupid length] && [oldRaw.rawmaterialid length]) {
+               
+                [[AppDataManager sharedAppDatamanager] insertIntoTrx_Rawmaterials:rawMaterials withTrx:local];
+
+            }
+
+            
+        }
+        
+        
         
         [[AppDataManager sharedAppDatamanager] insertIntoTrx_Rawmaterials:[local SoleMaterial] withTrx:local];
         

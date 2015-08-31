@@ -8,7 +8,7 @@
 
 #import "MainTabbarController.h"
 #import "HomeViewController.h"
-@interface MainTabbarController ()
+@interface MainTabbarController ()<UITabBarControllerDelegate>
 
 @end
 
@@ -18,6 +18,10 @@
     UIViewController *ctrl = [[(UINavigationController*)[self selectedViewController] viewControllers] firstObject];
     if ([ctrl isKindOfClass:[HomeViewController class]] && !isIPad()) {
         
+//        if(!([self interfaceOrientation] == UIInterfaceOrientationPortrait) || ([self interfaceOrientation] == UIInterfaceOrientationPortraitUpsideDown)){
+//        
+//            [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationPortrait animated:YES];
+//        }
         return NO;
     }
     return YES;
@@ -40,6 +44,7 @@
     // Do any additional setup after loading the view.
     
     [self configureTabbar];
+    self.delegate = self;
     
 }
 - (void)configureTabbar {
@@ -110,6 +115,23 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+- (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController{
+
+    return YES;
+}
+
+- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController{
+
+    if ([tabBarController selectedIndex] == 0) {
+        
+        [[(UINavigationController*)viewController viewControllers] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            
+            //[self ];
+        }];
+        
+    }
+
 }
 
 /*

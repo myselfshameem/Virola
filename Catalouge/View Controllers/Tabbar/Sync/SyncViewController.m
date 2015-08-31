@@ -8,10 +8,14 @@
 
 #import "SyncTableViewCell.h"
 #import "SyncViewController.h"
+#import "SynModelClass.h"
+
 CustomeAlert *alert;
 @interface SyncViewController ()<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,strong) NSArray *arr_Clients;
 @property(nonatomic,strong) NSOperationQueue *synQueue;
+@property(nonatomic,strong) NSMutableArray *dataArray;
+
 @end
 
 @implementation SyncViewController
@@ -53,6 +57,56 @@ CustomeAlert *alert;
     [[self lbl_ProgressHeader] setText:@""];
 }
 
+- (NSMutableArray*)dataArray{
+
+    if (!_dataArray) {
+       
+        _dataArray = [[NSMutableArray alloc] init];
+       
+        SynModelClass *Raw = [[SynModelClass alloc] init];
+        [Raw setCellTitle:@"Sync Raw Rawmaterials"];
+        [Raw setSelectedFlag:[NSNumber numberWithBool:NO]];
+        
+        SynModelClass *Articles = [[SynModelClass alloc] init];
+        [Articles setCellTitle:@"Sync Articles"];
+        [Articles setSelectedFlag:[NSNumber numberWithBool:NO]];
+        
+        SynModelClass *Colors = [[SynModelClass alloc] init];
+        [Colors setCellTitle:@"Sync Colors"];
+        [Colors setSelectedFlag:[NSNumber numberWithBool:NO]];
+        
+        
+        SynModelClass *Clients = [[SynModelClass alloc] init];
+        [Clients setCellTitle:@"Sync Clients"];
+        [Clients setSelectedFlag:[NSNumber numberWithBool:NO]];
+        
+        SynModelClass *Images = [[SynModelClass alloc] init];
+        [Images setCellTitle:@"Sync Article Images"];
+        [Images setSelectedFlag:[NSNumber numberWithBool:NO]];
+        
+        SynModelClass *Shipping = [[SynModelClass alloc] init];
+        [Shipping setCellTitle:@"Sync Payment & Shipping Terms"];
+        [Shipping setSelectedFlag:[NSNumber numberWithBool:NO]];
+        
+        SynModelClass *Orders = [[SynModelClass alloc] init];
+        [Orders setCellTitle:@"Sync Orders"];
+        [Orders setSelectedFlag:[NSNumber numberWithBool:NO]];
+        
+        
+        
+        
+        [_dataArray addObject:Raw];
+        [_dataArray addObject:Articles];
+        [_dataArray addObject:Colors];
+        [_dataArray addObject:Clients];
+        [_dataArray addObject:Images];
+        [_dataArray addObject:Shipping];
+        [_dataArray addObject:Orders];
+
+    }
+    
+    return _dataArray;
+}
 - (void)viewWillAppear:(BOOL)animated{
     
     
@@ -84,58 +138,38 @@ CustomeAlert *alert;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return 7;
+    return [[self dataArray] count];
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString *cellIdentifier = @"Cell";
+    static NSString *cellIdentifier = @"SyncTableViewCellIdentifier";
     SyncTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) {
         
         cell = [[[NSBundle mainBundle] loadNibNamed:@"SyncableViewCell" owner:self options:nil] firstObject];
     }
 
-    switch (indexPath.row) {
-        case 0:
-            cell.lblClient_Name.text = @"Sync Raw Rawmaterials";
-            break;
-        case 1:
-            cell.lblClient_Name.text = @"Sync Articles";
-            break;
-        case 2:
-            cell.lblClient_Name.text = @"Sync Colors";
-            break;
-        case 3:
-            cell.lblClient_Name.text = @"Sync Clients";
-            break;
-
-        case 4:
-            cell.lblClient_Name.text = @"Sync Article Images";
-            break;
-
-        case 5:
-            cell.lblClient_Name.text = @"Sync Payment & Shipping Terms";
-            break;
-        case 6:
-            cell.lblClient_Name.text = @"Sync Orders";
-            break;
-
-        default:
-            break;
-    }
+    SynModelClass *sync = [[self dataArray] objectAtIndex:indexPath.row];
+    cell.synModel = sync;
+    cell.lblClient_Name.text = [sync cellTitle];
+    cell.checkBox.selected = [[sync selectedFlag] boolValue];
     
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 49.0f;
+    return 54;
 }
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     
     
-    SyncTableViewCell *cell = (SyncTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
-    cell.checkBox.selected = !cell.checkBox.selected;
+//    SyncTableViewCell *cell = (SyncTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
+//    SynModelClass *synClass = [[self dataArray] objectAtIndex:indexPath.row];
+//    BOOL flag = ![[synClass selectedFlag] boolValue];
+//    [synClass setSelectedFlag:[NSNumber numberWithBool:flag]];
+//    cell.checkBox.selected = flag;
     
 }
 
@@ -173,9 +207,9 @@ CustomeAlert *alert;
 - (void)syncRawMaterial{
     
     
-    SyncTableViewCell *cell = (SyncTableViewCell*)[[self tbl_Clients] cellForRowAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0]];
+    SynModelClass *synClass = [[self dataArray] objectAtIndex:0];
     
-    if ([[cell checkBox] isSelected]) {
+    if ([[synClass selectedFlag] boolValue]) {
         
 
         [[ApiHandler sharedApiHandler] getRawMaterialApiHandlerWithApiCallBlock:^(id data, NSError *error) {
@@ -230,9 +264,9 @@ CustomeAlert *alert;
 - (void)syncArticle{
     
     
-    SyncTableViewCell *cell = (SyncTableViewCell*)[[self tbl_Clients] cellForRowAtIndexPath:[NSIndexPath indexPathForItem:1 inSection:0]];
+    SynModelClass *synClass = [[self dataArray] objectAtIndex:1];
     
-    if ([[cell checkBox] isSelected]) {
+    if ([[synClass selectedFlag] boolValue]) {
         
 
 
@@ -291,9 +325,9 @@ CustomeAlert *alert;
 - (void)syncClient{
     
     
-    SyncTableViewCell *cell = (SyncTableViewCell*)[[self tbl_Clients] cellForRowAtIndexPath:[NSIndexPath indexPathForItem:3 inSection:0]];
+    SynModelClass *synClass = [[self dataArray] objectAtIndex:2];
     
-    if ([[cell checkBox] isSelected]) {
+    if ([[synClass selectedFlag] boolValue]) {
       
 
         [[ApiHandler sharedApiHandler] getClientsApiHandlerWithApiCallBlock:^(id data, NSError *error) {
@@ -350,9 +384,9 @@ CustomeAlert *alert;
     
     
     
-    SyncTableViewCell *cell = (SyncTableViewCell*)[[self tbl_Clients] cellForRowAtIndexPath:[NSIndexPath indexPathForItem:2 inSection:0]];
+    SynModelClass *synClass = [[self dataArray] objectAtIndex:3];
     
-    if ([[cell checkBox] isSelected]) {
+    if ([[synClass selectedFlag] boolValue]) {
         
         
 
@@ -404,9 +438,9 @@ CustomeAlert *alert;
 }
 - (void)downloadImages{
     
-    SyncTableViewCell *cell = (SyncTableViewCell*)[[self tbl_Clients] cellForRowAtIndexPath:[NSIndexPath indexPathForItem:4 inSection:0]];
+    SynModelClass *synClass = [[self dataArray] objectAtIndex:4];
     
-    if ([[cell checkBox] isSelected]){
+    if ([[synClass selectedFlag] boolValue]) {
     
 
         [[NSNotificationCenter defaultCenter] postNotificationName:PROGRESS_COUNT object:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:0],@"totalRecords",[NSNumber numberWithInteger:0],@"totalInsertedRecords",@"Fetching Article Images...",@"Title", nil]];
@@ -451,9 +485,9 @@ CustomeAlert *alert;
 - (void)synPayment_Shipping_Terms{
     
     
-    SyncTableViewCell *cell = (SyncTableViewCell*)[[self tbl_Clients] cellForRowAtIndexPath:[NSIndexPath indexPathForItem:5 inSection:0]];
+    SynModelClass *synClass = [[self dataArray] objectAtIndex:5];
     
-    if ([[cell checkBox] isSelected]) {
+    if ([[synClass selectedFlag] boolValue]) {
         
 
         [[ApiHandler sharedApiHandler] getPaymentShippingTermsApiHandlerWithApiCallBlock:^(id data, NSError *error) {
@@ -516,9 +550,9 @@ CustomeAlert *alert;
 
 - (void)synOrders{
 
-    SyncTableViewCell *cell = (SyncTableViewCell*)[[self tbl_Clients] cellForRowAtIndexPath:[NSIndexPath indexPathForItem:6 inSection:0]];
-
-    if([[cell checkBox] isSelected]){
+    SynModelClass *synClass = [[self dataArray] objectAtIndex:6];
+    
+    if ([[synClass selectedFlag] boolValue]) {
         
         
         [[ApiHandler sharedApiHandler] getOrdersApiHandlerWithApiCallBlock:^(id data, NSError *error) {
@@ -599,20 +633,20 @@ CustomeAlert *alert;
         [right setTitle:@"Select All"];
     }
     
-    [[[self tbl_Clients] visibleCells] enumerateObjectsUsingBlock:^(SyncTableViewCell *cell, NSUInteger idx, BOOL *stop) {
+    
+    [[self dataArray] enumerateObjectsUsingBlock:^(SynModelClass *obj, NSUInteger idx, BOOL *stop) {
         
-        if ([[right title] isEqualToString:@"Deselect All"]) {
-            
-            [cell.checkBox setSelected:YES];
- 
-        }else{
-        
-            [cell.checkBox setSelected:NO];
+        if ([[right title] isEqualToString:@"Deselect All"])
+            [obj setSelectedFlag:[NSNumber numberWithBool:YES]];
+        else
+            [obj setSelectedFlag:[NSNumber numberWithBool:NO]];
 
-        }
+        
+        
     }];
+    
 
-
+    [[self tbl_Clients] reloadData];
 }
 
 

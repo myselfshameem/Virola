@@ -22,8 +22,10 @@
 @property (nonatomic, strong) NSString *mLC;
 @property (nonatomic, strong) NSArray *images;
 @property (nonatomic, strong) NSString *sizefrom;
-@property (nonatomic, strong) NSString *lastname;
-@property (nonatomic, strong) NSString *solename;
+@property (nonatomic, strong) NSString *lastName;
+@property (nonatomic, strong) NSString *soleName;
+@property (nonatomic, strong) NSString *price_usd;
+@property (nonatomic, strong) NSString *price_gbp;
 
 + (Articles *)modelObjectWithDictionary:(NSDictionary *)dict;
 - (instancetype)initWithDictionary:(NSDictionary *)dict;

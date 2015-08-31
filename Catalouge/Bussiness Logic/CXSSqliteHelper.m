@@ -488,6 +488,11 @@ static CXSSqliteHelper *sqliteHelper = nil;
                               [[article sizeto] checkEmptyString],@"sizeto",
                               [[article mLC] checkEmptyString],@"mLC",
                               [[article sizefrom] checkEmptyString],@"sizefrom",
+                              [[AppDataManager sharedAppDatamanager] validateString:[article soleName]],@"soleName",
+                              [[AppDataManager sharedAppDatamanager] validateString:[article lastName]],@"lastName",
+                              [[AppDataManager sharedAppDatamanager] validateString:[article price_gbp]],@"price_gbp",
+                              [[AppDataManager sharedAppDatamanager] validateString:[article price_usd]],@"price_usd",
+
                               nil];
         
         [self insertInto:@"Article_Master" ColumnsAndValues:dict];

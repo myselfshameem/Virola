@@ -57,6 +57,11 @@
 		0C5A3C6A1B750BF600A4FCC8 /* NewDevelopment_Camera_Icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0C5A3C671B750BF600A4FCC8 /* NewDevelopment_Camera_Icon@3x.png */; };
 		0C5A3C6E1B752CEF00A4FCC8 /* LastSoleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C5A3C6C1B752CEF00A4FCC8 /* LastSoleTableViewCell.m */; };
 		0C5A3C6F1B752CEF00A4FCC8 /* LastSoleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0C5A3C6D1B752CEF00A4FCC8 /* LastSoleTableViewCell.xib */; };
+		0C6027111B9181F0005637AA /* Add_To_Cart_Camera.png in Resources */ = {isa = PBXBuildFile; fileRef = 0C60270F1B9181F0005637AA /* Add_To_Cart_Camera.png */; };
+		0C6027121B9181F0005637AA /* Add_To_Cart_Camera@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0C6027101B9181F0005637AA /* Add_To_Cart_Camera@2x.png */; };
+		0C6027151B918DD8005637AA /* SynModelClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C6027141B918DD8005637AA /* SynModelClass.m */; };
+		0C60271B1B91E240005637AA /* Home_Account_Menu.png in Resources */ = {isa = PBXBuildFile; fileRef = 0C6027191B91E240005637AA /* Home_Account_Menu.png */; };
+		0C60271C1B91E240005637AA /* Home_Account_Menu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0C60271A1B91E240005637AA /* Home_Account_Menu@2x.png */; };
 		0C6224261AFF14D9004B6C3B /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C6224251AFF14D9004B6C3B /* LoginViewController.m */; };
 		0C62242A1AFF1628004B6C3B /* MainTabbarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C6224291AFF1628004B6C3B /* MainTabbarController.m */; };
 		0C62242D1AFF18BE004B6C3B /* NSUserDefaults+UserDetail.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C62242C1AFF18BE004B6C3B /* NSUserDefaults+UserDetail.m */; };
@@ -148,6 +153,7 @@
 		0C84B28C1B0FCCB500F0495C /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C84B28B1B0FCCB500F0495C /* AVFoundation.framework */; };
 		0C84B28E1B0FCCC000F0495C /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C84B28D1B0FCCC000F0495C /* QuartzCore.framework */; };
 		0C98A22F1B77D85F009330EC /* ImagePreviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C98A22E1B77D85F009330EC /* ImagePreviewViewController.m */; };
+		0CA929AA1B93730000EDC2C6 /* UINavigationController+Delegats.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CA929A91B93730000EDC2C6 /* UINavigationController+Delegats.m */; };
 		0CB72A251B0CE5BB00E8B4F5 /* Home_Bottm_BG.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CB72A241B0CE5BB00E8B4F5 /* Home_Bottm_BG.png */; };
 		0CB72A2F1B0CEAB700E8B4F5 /* Home_Article_Dashboard.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CB72A271B0CEAB700E8B4F5 /* Home_Article_Dashboard.png */; };
 		0CB72A301B0CEAB700E8B4F5 /* Home_Article_Dashboard@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CB72A281B0CEAB700E8B4F5 /* Home_Article_Dashboard@2x.png */; };
@@ -306,6 +312,12 @@
 		0C5A3C6B1B752CEF00A4FCC8 /* LastSoleTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LastSoleTableViewCell.h; sourceTree = "<group>"; };
 		0C5A3C6C1B752CEF00A4FCC8 /* LastSoleTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LastSoleTableViewCell.m; sourceTree = "<group>"; };
 		0C5A3C6D1B752CEF00A4FCC8 /* LastSoleTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LastSoleTableViewCell.xib; sourceTree = "<group>"; };
+		0C60270F1B9181F0005637AA /* Add_To_Cart_Camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Add_To_Cart_Camera.png; sourceTree = "<group>"; };
+		0C6027101B9181F0005637AA /* Add_To_Cart_Camera@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Add_To_Cart_Camera@2x.png"; sourceTree = "<group>"; };
+		0C6027131B918DD8005637AA /* SynModelClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SynModelClass.h; sourceTree = "<group>"; };
+		0C6027141B918DD8005637AA /* SynModelClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SynModelClass.m; sourceTree = "<group>"; };
+		0C6027191B91E240005637AA /* Home_Account_Menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Home_Account_Menu.png; sourceTree = "<group>"; };
+		0C60271A1B91E240005637AA /* Home_Account_Menu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Home_Account_Menu@2x.png"; sourceTree = "<group>"; };
 		0C6224241AFF14D9004B6C3B /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		0C6224251AFF14D9004B6C3B /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		0C6224281AFF1628004B6C3B /* MainTabbarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainTabbarController.h; sourceTree = "<group>"; };
@@ -425,6 +437,8 @@
 		0C84B28D1B0FCCC000F0495C /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		0C98A22D1B77D85F009330EC /* ImagePreviewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImagePreviewViewController.h; sourceTree = "<group>"; };
 		0C98A22E1B77D85F009330EC /* ImagePreviewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImagePreviewViewController.m; sourceTree = "<group>"; };
+		0CA929A81B93730000EDC2C6 /* UINavigationController+Delegats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+Delegats.h"; sourceTree = "<group>"; };
+		0CA929A91B93730000EDC2C6 /* UINavigationController+Delegats.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+Delegats.m"; sourceTree = "<group>"; };
 		0CB72A241B0CE5BB00E8B4F5 /* Home_Bottm_BG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Home_Bottm_BG.png; sourceTree = "<group>"; };
 		0CB72A271B0CEAB700E8B4F5 /* Home_Article_Dashboard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Home_Article_Dashboard.png; sourceTree = "<group>"; };
 		0CB72A281B0CEAB700E8B4F5 /* Home_Article_Dashboard@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Home_Article_Dashboard@2x.png"; sourceTree = "<group>"; };
@@ -574,6 +588,8 @@
 		0C1B855B1B2CA4AE0001E0DB /* Sync */ = {
 			isa = PBXGroup;
 			children = (
+				0C6027131B918DD8005637AA /* SynModelClass.h */,
+				0C6027141B918DD8005637AA /* SynModelClass.m */,
 				0C1B855F1B2CA4AE0001E0DB /* SyncViewController.h */,
 				0C1B85601B2CA4AE0001E0DB /* SyncViewController.m */,
 				0C1B855C1B2CA4AE0001E0DB /* SyncableViewCell.xib */,
@@ -652,6 +668,8 @@
 			children = (
 				0C2243DC1B728B6900A4D864 /* Leather.png */,
 				0C2988181B6FE724008AD5DC /* CartDetail_BG.png */,
+				0C60270F1B9181F0005637AA /* Add_To_Cart_Camera.png */,
+				0C6027101B9181F0005637AA /* Add_To_Cart_Camera@2x.png */,
 			);
 			path = "Cart Details";
 			sourceTree = "<group>";
@@ -731,6 +749,8 @@
 		0C6224371AFF2CC3004B6C3B /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				0C6027191B91E240005637AA /* Home_Account_Menu.png */,
+				0C60271A1B91E240005637AA /* Home_Account_Menu@2x.png */,
 				0C2988171B6FE724008AD5DC /* Cart Details */,
 				0C623EFA1B6CD2A400BD4431 /* New Development */,
 				0C404BF61B2230B000F47E15 /* Add_To_Cart_icon.png */,
@@ -1133,6 +1153,8 @@
 				0C84B27F1B0FC8C200F0495C /* back_btn.png */,
 				0C84B2801B0FC8C200F0495C /* back_btn@2x.png */,
 				0CC8C2DD1B0A66D100C5228D /* CXTableView.h */,
+				0CA929A81B93730000EDC2C6 /* UINavigationController+Delegats.h */,
+				0CA929A91B93730000EDC2C6 /* UINavigationController+Delegats.m */,
 				0CC8C2DE1B0A66D100C5228D /* CXTableView.m */,
 				0CD65BE51ADC1E5E0053672E /* AppDelegate.h */,
 				0CD65BE61ADC1E5E0053672E /* AppDelegate.m */,
@@ -1279,6 +1301,7 @@
 				0C84B2731B0FC0E200F0495C /* Tabbar_Reports@2x.png in Resources */,
 				0CD3F7B81B10C83100800F66 /* Article_Related_Cell_BG.png in Resources */,
 				0CFC5B6D1B11A76E0037043A /* Zoom_Article@2x.png in Resources */,
+				0C60271B1B91E240005637AA /* Home_Account_Menu.png in Resources */,
 				0C84B2681B0FC0E200F0495C /* Tabbar_Cart_Selected.png in Resources */,
 				0CD3F7B51B10BC7000800F66 /* Article_Related_Drag@2x.png in Resources */,
 				0C5A3C681B750BF600A4FCC8 /* NewDevelopment_Camera_Icon.png in Resources */,
@@ -1289,6 +1312,7 @@
 				0C6224791AFF53F3004B6C3B /* Client_OR_Line@2x.png in Resources */,
 				0C830D3B1B262D560085917B /* Catalouge.sqlite in Resources */,
 				0C84B2621B0FC0E200F0495C /* Tabbar_Article.png in Resources */,
+				0C6027111B9181F0005637AA /* Add_To_Cart_Camera.png in Resources */,
 				0C6224811AFF63D5004B6C3B /* Article_Browse_Btn@2x.png in Resources */,
 				0CC8C2DA1B0A52E500C5228D /* ArticleCell.xib in Resources */,
 				0CB72A2F1B0CEAB700E8B4F5 /* Home_Article_Dashboard.png in Resources */,
@@ -1335,6 +1359,7 @@
 				0C6224411AFF2FF2004B6C3B /* keyboard_icon@2x.png in Resources */,
 				0C404BF81B2230B000F47E15 /* Add_To_Cart_icon.png in Resources */,
 				0C84B2841B0FC99300F0495C /* Demo@2x.png in Resources */,
+				0C6027121B9181F0005637AA /* Add_To_Cart_Camera@2x.png in Resources */,
 				0CC547401B0B8B40003725F1 /* Cart_Cell_View_Details@2x.png in Resources */,
 				0C08161F1B87B42F00728448 /* OrderCellTableViewCell.xib in Resources */,
 				0C84B26A1B0FC0E200F0495C /* Tabbar_Clients.png in Resources */,
@@ -1374,6 +1399,7 @@
 				0C1B856C1B2CA4C20001E0DB /* check_unsel@2x.png in Resources */,
 				0C6224541AFF3C56004B6C3B /* Home_Logo.png in Resources */,
 				0C2988151B6FD32C008AD5DC /* Home_Virola_Icon.png in Resources */,
+				0C60271C1B91E240005637AA /* Home_Account_Menu@2x.png in Resources */,
 				0C4348301B262BB700927D9F /* iTunesArtwork in Resources */,
 				0CC8C2DC1B0A538E00C5228D /* Test.png in Resources */,
 				0CC8C2CB1B0A423D00C5228D /* Account_Change_Pwd_BG.png in Resources */,
@@ -1430,6 +1456,7 @@
 				0CD65BEA1ADC1E5E0053672E /* ViewController.m in Sources */,
 				0C2243D51B725CAC00A4D864 /* PaymentTerms.m in Sources */,
 				0CC5474A1B0B9E56003725F1 /* HomeCollectionViewCell.m in Sources */,
+				0C6027151B918DD8005637AA /* SynModelClass.m in Sources */,
 				0C2243DA1B72896C00A4D864 /* LeatherLiningTableViewCell.m in Sources */,
 				0C830D411B262D560085917B /* ArticlesApiResponse.m in Sources */,
 				0CC547271B0B7F83003725F1 /* ClientTableViewCell.m in Sources */,
@@ -1453,6 +1480,7 @@
 				0C830D421B262D560085917B /* ArticlesRawmaterials.m in Sources */,
 				0C08161A1B87B06A00728448 /* OrderViewController.m in Sources */,
 				0C62242D1AFF18BE004B6C3B /* NSUserDefaults+UserDetail.m in Sources */,
+				0CA929AA1B93730000EDC2C6 /* UINavigationController+Delegats.m in Sources */,
 				0C2243D21B725CAC00A4D864 /* GetOtherDetailsApiResponse.m in Sources */,
 				0CB8AD821B7873B700C586D0 /* JTSImageViewController.m in Sources */,
 				0CB8AD851B7873B700C586D0 /* JTSAnimatedGIFUtility.m in Sources */,
@@ -1620,13 +1648,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Pankaj Mathur (5LRM65VA87)";
 				GCC_PREFIX_HEADER = Catalouge/Catalouge.pch;
 				INFOPLIST_FILE = Catalouge/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "f6d1caec-5a93-44a2-8d63-503418b41a65";
+				PROVISIONING_PROFILE = "a8f8495c-c309-4197-bd26-8db7d98f382f";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1636,13 +1664,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Pankaj Mathur (5LRM65VA87)";
 				GCC_PREFIX_HEADER = Catalouge/Catalouge.pch;
 				INFOPLIST_FILE = Catalouge/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "f6d1caec-5a93-44a2-8d63-503418b41a65";
+				PROVISIONING_PROFILE = "a8f8495c-c309-4197-bd26-8db7d98f382f";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
