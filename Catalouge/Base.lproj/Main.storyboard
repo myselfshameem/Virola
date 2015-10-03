@@ -72,6 +72,7 @@
             <string>MyriadPro-Regular</string>
             <string>MyriadPro-Regular</string>
             <string>MyriadPro-Regular</string>
+            <string>MyriadPro-Regular</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -450,6 +451,125 @@
             </objects>
             <point key="canvasLocation" x="-1654" y="3200"/>
         </scene>
+        <!--Change Password View Controller-->
+        <scene sceneID="rkM-Es-EKC">
+            <objects>
+                <viewController storyboardIdentifier="ChangePasswordViewController" id="Woa-TX-Poa" customClass="ChangePasswordViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="fSQ-zD-vfm"/>
+                        <viewControllerLayoutGuide type="bottom" id="ihJ-jA-ZHq"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="GTU-CS-hda">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="S7t-ex-qtr" userLabel="Name">
+                                <rect key="frame" x="16" y="104" width="288" height="42"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="keyboard_icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="i6M-ie-joF">
+                                        <rect key="frame" x="3" y="2" width="38" height="38"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="38" id="9HM-Vo-sTa"/>
+                                            <constraint firstAttribute="width" constant="38" id="Tu7-KK-M3J"/>
+                                        </constraints>
+                                    </imageView>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Please enter old password" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="TBn-bd-P4b">
+                                        <rect key="frame" x="49" y="0.0" width="239" height="42"/>
+                                        <fontDescription key="fontDescription" name="MyriadPro-Regular" family="Myriad Pro" pointSize="18"/>
+                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="search" enablesReturnKeyAutomatically="YES" secureTextEntry="YES"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="WNk-Yq-r1X" id="iWC-XL-kr6"/>
+                                        </connections>
+                                    </textField>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="i6M-ie-joF" firstAttribute="leading" secondItem="S7t-ex-qtr" secondAttribute="leading" constant="3" id="5Gk-9j-VeV"/>
+                                    <constraint firstAttribute="height" constant="42" id="6r1-lf-H93"/>
+                                    <constraint firstItem="TBn-bd-P4b" firstAttribute="top" secondItem="S7t-ex-qtr" secondAttribute="top" id="9O5-Uh-uLy"/>
+                                    <constraint firstItem="i6M-ie-joF" firstAttribute="top" secondItem="S7t-ex-qtr" secondAttribute="top" constant="2" id="RVq-Ks-rqT"/>
+                                    <constraint firstItem="TBn-bd-P4b" firstAttribute="leading" secondItem="i6M-ie-joF" secondAttribute="trailing" constant="8" id="YDO-V7-suT"/>
+                                    <constraint firstAttribute="trailing" secondItem="TBn-bd-P4b" secondAttribute="trailing" id="agP-W7-hpo"/>
+                                    <constraint firstAttribute="bottom" secondItem="TBn-bd-P4b" secondAttribute="bottom" id="tex-PG-94h"/>
+                                    <constraint firstAttribute="width" constant="288" id="wPo-yy-ZUu"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bsm-UE-mf3" userLabel="Name">
+                                <rect key="frame" x="16" y="154" width="288" height="42"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="keyboard_icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="CmT-rK-CKg">
+                                        <rect key="frame" x="3" y="2" width="38" height="38"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="38" id="G0B-Fn-0nG"/>
+                                            <constraint firstAttribute="height" constant="38" id="GTX-zL-Ltt"/>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="38" id="Kz8-8Q-Amn"/>
+                                            <constraint firstAttribute="width" constant="38" id="T59-xL-pus"/>
+                                        </constraints>
+                                    </imageView>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Please enter new password" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="rLN-r7-HkA">
+                                        <rect key="frame" x="49" y="0.0" width="239" height="42"/>
+                                        <fontDescription key="fontDescription" name="MyriadPro-Regular" family="Myriad Pro" pointSize="18"/>
+                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="search" enablesReturnKeyAutomatically="YES" secureTextEntry="YES"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="WNk-Yq-r1X" id="6Cc-Z7-Wu6"/>
+                                        </connections>
+                                    </textField>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="rLN-r7-HkA" firstAttribute="top" secondItem="Bsm-UE-mf3" secondAttribute="top" id="9DQ-6B-9Q5"/>
+                                    <constraint firstItem="CmT-rK-CKg" firstAttribute="leading" secondItem="Bsm-UE-mf3" secondAttribute="leading" constant="3" id="dS5-Hc-k2O"/>
+                                    <constraint firstAttribute="width" constant="288" id="ePv-am-0kg"/>
+                                    <constraint firstAttribute="height" constant="42" id="ep8-RU-mfq"/>
+                                    <constraint firstAttribute="trailing" secondItem="rLN-r7-HkA" secondAttribute="trailing" id="gan-pb-cSh"/>
+                                    <constraint firstItem="CmT-rK-CKg" firstAttribute="top" secondItem="Bsm-UE-mf3" secondAttribute="top" constant="2" id="iqy-Ls-Ecc"/>
+                                    <constraint firstAttribute="bottom" secondItem="rLN-r7-HkA" secondAttribute="bottom" id="slX-Gr-NfF"/>
+                                    <constraint firstItem="rLN-r7-HkA" firstAttribute="leading" secondItem="CmT-rK-CKg" secondAttribute="trailing" constant="8" id="u9t-9w-NFy"/>
+                                </constraints>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Yl-21-zGh">
+                                <rect key="frame" x="89" y="216" width="142" height="31"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="31" id="QBi-U5-TNJ"/>
+                                    <constraint firstAttribute="width" constant="142" id="prh-MB-KWR"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="MyriadPro-Regular" family="Myriad Pro" pointSize="15"/>
+                                <inset key="contentEdgeInsets" minX="2" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="Change Password" backgroundImage="Account_Change_Pwd_BG.png">
+                                    <color key="titleColor" red="0.96862745100000003" green="0.96862745100000003" blue="0.96862745100000003" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="changePassword:" destination="Woa-TX-Poa" eventType="touchUpInside" id="20G-CW-kR7"/>
+                                    <action selector="changePassword:" destination="2tK-4y-5Xe" eventType="touchUpInside" id="rF8-CT-WED"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="centerX" secondItem="8Yl-21-zGh" secondAttribute="centerX" id="3be-By-aON"/>
+                            <constraint firstItem="S7t-ex-qtr" firstAttribute="top" secondItem="fSQ-zD-vfm" secondAttribute="bottom" constant="40" id="8FB-kV-2La"/>
+                            <constraint firstItem="8Yl-21-zGh" firstAttribute="top" secondItem="Bsm-UE-mf3" secondAttribute="bottom" constant="20" id="8KL-r6-EB9"/>
+                            <constraint firstAttribute="centerX" secondItem="Bsm-UE-mf3" secondAttribute="centerX" id="afx-py-diO"/>
+                            <constraint firstItem="Bsm-UE-mf3" firstAttribute="top" secondItem="S7t-ex-qtr" secondAttribute="bottom" constant="8" id="li0-Mm-4BH"/>
+                            <constraint firstAttribute="centerX" secondItem="S7t-ex-qtr" secondAttribute="centerX" id="qHw-MV-bzd"/>
+                        </constraints>
+                    </view>
+                    <toolbarItems/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <nil key="simulatedBottomBarMetrics"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <connections>
+                        <outlet property="txt_NewPassword" destination="rLN-r7-HkA" id="S8j-bh-zd8"/>
+                        <outlet property="txt_OldPassword" destination="TBn-bd-P4b" id="bQB-lz-AX4"/>
+                        <outlet property="view_NewPassword" destination="Bsm-UE-mf3" id="r5G-l9-YED"/>
+                        <outlet property="view_OldPassword" destination="S7t-ex-qtr" id="zkU-xf-aeF"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="yWT-M1-gBZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1335" y="4282"/>
+        </scene>
         <!--View Controller-->
         <scene sceneID="d2U-5q-zn8">
             <objects>
@@ -753,6 +873,7 @@
                                             </imageView>
                                             <textField opaque="NO" clipsSubviews="YES" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Company" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="lv6-FC-2sG">
                                                 <rect key="frame" x="49" y="14" width="240" height="20"/>
+                                                <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="20" id="XBf-Rv-QXw"/>
                                                 </constraints>
@@ -970,6 +1091,8 @@
                                         <color key="backgroundColor" red="0.015686274510000001" green="0.2470588235" blue="0.46666666670000001" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="37" id="Dfc-Ai-RSg"/>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="37" id="TrE-VB-5HY"/>
+                                            <constraint firstAttribute="width" constant="300" id="tBm-Pb-6m6"/>
                                         </constraints>
                                         <state key="normal" title="  Add Client" image="Client_Add.png">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -983,7 +1106,8 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="gsy-PP-s3d" secondAttribute="bottom" constant="200" id="0dk-tN-gKs"/>
+                                    <constraint firstAttribute="bottom" secondItem="gsy-PP-s3d" secondAttribute="bottom" constant="320" id="0dk-tN-gKs"/>
+                                    <constraint firstAttribute="centerX" secondItem="gsy-PP-s3d" secondAttribute="centerX" id="0uo-Lc-DbL"/>
                                     <constraint firstItem="7er-QR-Jxo" firstAttribute="top" secondItem="Nbg-xY-lAO" secondAttribute="top" constant="10" id="16L-Sk-A1e"/>
                                     <constraint firstItem="x5f-OV-2Sr" firstAttribute="leading" secondItem="Nbg-xY-lAO" secondAttribute="leading" constant="10" id="1Dy-0E-l7c"/>
                                     <constraint firstAttribute="centerX" secondItem="7er-QR-Jxo" secondAttribute="centerX" id="3fJ-RL-Hdg"/>
@@ -1009,8 +1133,6 @@
                                     <constraint firstItem="KON-q7-5Qc" firstAttribute="top" secondItem="4M0-jx-jt1" secondAttribute="bottom" constant="10" id="myT-pE-zhD"/>
                                     <constraint firstItem="W2l-6f-1l0" firstAttribute="top" secondItem="x5f-OV-2Sr" secondAttribute="bottom" constant="10" id="mys-6E-KFu"/>
                                     <constraint firstItem="4M0-jx-jt1" firstAttribute="top" secondItem="7er-QR-Jxo" secondAttribute="bottom" constant="10" id="oRx-Gg-z17"/>
-                                    <constraint firstItem="gsy-PP-s3d" firstAttribute="leading" secondItem="Nbg-xY-lAO" secondAttribute="leading" constant="10" id="rAJ-ci-HuJ"/>
-                                    <constraint firstAttribute="trailing" secondItem="gsy-PP-s3d" secondAttribute="trailing" constant="10" id="ubU-1e-SJ1"/>
                                     <constraint firstAttribute="centerX" secondItem="fQO-PU-rGg" secondAttribute="centerX" id="wR9-2e-ULv"/>
                                     <constraint firstItem="KON-q7-5Qc" firstAttribute="leading" secondItem="Nbg-xY-lAO" secondAttribute="leading" constant="10" id="wdk-Wt-QIo"/>
                                     <constraint firstAttribute="centerX" secondItem="W2l-6f-1l0" secondAttribute="centerX" id="wkR-Uh-3iV"/>
@@ -2423,17 +2545,6 @@
                                             <action selector="doLogin:" destination="cRP-tq-J0C" eventType="touchUpInside" id="wax-ZE-0mR"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="center" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hyy-Td-pc7">
-                                        <rect key="frame" x="5" y="142" width="290" height="30"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <fontDescription key="fontDescription" name="MyriadPro-Regular" family="Myriad Pro" pointSize="14"/>
-                                        <state key="normal" title="Forgot your password?">
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="doForgetPwd:" destination="cRP-tq-J0C" eventType="touchUpInside" id="BL1-lm-4uv"/>
-                                        </connections>
-                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -2935,17 +3046,6 @@
                                         </state>
                                         <connections>
                                             <action selector="doLogin:" destination="XYf-CL-DjB" eventType="touchUpInside" id="HCk-tJ-QIJ"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="center" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hBn-ZP-N3X">
-                                        <rect key="frame" x="5" y="142" width="290" height="30"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <fontDescription key="fontDescription" name="MyriadPro-Regular" family="Myriad Pro" pointSize="14"/>
-                                        <state key="normal" title="Forgot your password?">
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="doForgetPwd:" destination="XYf-CL-DjB" eventType="touchUpInside" id="Pll-a9-v7w"/>
                                         </connections>
                                     </button>
                                 </subviews>

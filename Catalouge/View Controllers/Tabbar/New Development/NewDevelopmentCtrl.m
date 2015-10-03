@@ -478,6 +478,7 @@
        [[(BottomTableViewCell*)cell txt_Pair] setText:localTxr.qty_unit];
        [[(BottomTableViewCell*)cell txt_Size] setText:localTxr.size];
        [[(BottomTableViewCell*)cell txt_Remarks] setText:localTxr.remark];
+       
        [cell registerCallbackForQtyPairSize:^(__weak BottomTableViewCell *cell, NSInteger tag) {
            
            switch (tag) {

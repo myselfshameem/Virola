@@ -20,7 +20,6 @@
 
 - (NSString *)udid {
 
-    return @"12345";
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     if ([defaults objectForKey:@"kCXSiVendPOSUDID"]) {
         return [defaults objectForKey:@"kCXSiVendPOSUDID"];

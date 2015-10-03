@@ -13,6 +13,7 @@ NSString *const kArticlesRawmaterialsInsraw = @"insraw";
 NSString *const kArticlesRawmaterialsLeatherpriority = @"leatherpriority";
 NSString *const kArticlesRawmaterialsColorid = @"colorid";
 NSString *const kArticlesRawmaterialsRawmaterialid = @"rawmaterialid";
+NSString *const kArticlesRawmaterialsName = @"rawmaterialname";
 
 
 @interface ArticlesRawmaterials ()
@@ -28,7 +29,7 @@ NSString *const kArticlesRawmaterialsRawmaterialid = @"rawmaterialid";
 @synthesize leatherpriority = _leatherpriority;
 @synthesize colorid = _colorid;
 @synthesize rawmaterialid = _rawmaterialid;
-
+@synthesize rawmaterialname = _rawmaterialname;
 
 + (ArticlesRawmaterials *)modelObjectWithDictionary:(NSDictionary *)dict
 {
@@ -48,7 +49,8 @@ NSString *const kArticlesRawmaterialsRawmaterialid = @"rawmaterialid";
         self.leatherpriority = [self objectOrNilForKey:kArticlesRawmaterialsLeatherpriority fromDictionary:dict];
         self.colorid = [self objectOrNilForKey:kArticlesRawmaterialsColorid fromDictionary:dict];
         self.rawmaterialid = [self objectOrNilForKey:kArticlesRawmaterialsRawmaterialid fromDictionary:dict];
-        
+        self.rawmaterialname = [self objectOrNilForKey:kArticlesRawmaterialsName fromDictionary:dict];
+
     }
     
     return self;

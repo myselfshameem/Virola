@@ -290,7 +290,7 @@ CustomeAlert *alert;
                 NSString *successCode = [data objectForKey:@"errorcode"];
                 NSString *message = [data objectForKey:@"message"];
                 if (([successCode isEqualToString:@"200"] || [successCode isEqualToString:@"823"])) {
-                    [self syncClient];
+                    [self syncColor];
                 }else{
 
                     [self errorWhileSynching];
@@ -312,7 +312,7 @@ CustomeAlert *alert;
         }];
     }else{
         
-        [self syncClient];
+        [self syncColor];
     
     }
     
@@ -322,10 +322,69 @@ CustomeAlert *alert;
     
     
 }
-- (void)syncClient{
+
+- (void)syncColor{
+    
+    
     
     
     SynModelClass *synClass = [[self dataArray] objectAtIndex:2];
+    
+    if ([[synClass selectedFlag] boolValue]) {
+        
+        
+        
+        [[ApiHandler sharedApiHandler] getColorApiHandlerWithApiCallBlock:^(id data, NSError *error) {
+            
+            
+            if (error) {
+                [self errorWhileSynching];
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    alert = [[CustomeAlert alloc] init];
+                    [alert showAlertWithTitle:nil message:@"Error in Syncing." cancelButtonTitle:@"OK" otherButtonTitles:nil withButtonHandler:^(NSInteger buttonIndex) {
+                        
+                    }];
+                    
+                });
+                return ;
+            }else{
+                
+                
+                NSString *successCode = [data objectForKey:@"errorcode"];
+                NSString *message = [data objectForKey:@"message"];
+                if (([successCode isEqualToString:@"200"] || [successCode isEqualToString:@"823"])) {
+                    [self syncClient];
+                    
+                }else{
+                    
+                    [self errorWhileSynching];
+                    
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        alert = [[CustomeAlert alloc] init];
+                        [alert showAlertWithTitle:nil message:message cancelButtonTitle:@"OK" otherButtonTitles:nil withButtonHandler:^(NSInteger buttonIndex) {
+                            
+                        }];
+                        
+                    });
+                    return;
+                }
+                
+            }
+            
+        }];
+    }else{
+        
+        [self syncClient];
+    }
+    
+    
+    
+}
+
+- (void)syncClient{
+    
+    
+    SynModelClass *synClass = [[self dataArray] objectAtIndex:3];
     
     if ([[synClass selectedFlag] boolValue]) {
       
@@ -351,7 +410,7 @@ CustomeAlert *alert;
                 NSString *successCode = [data objectForKey:@"errorcode"];
                 NSString *message = [data objectForKey:@"message"];
                 if (([successCode isEqualToString:@"200"] || [successCode isEqualToString:@"823"])) {
-                    [self syncColor];
+                    [self downloadImages];
                 }else{
                     
                    
@@ -374,68 +433,12 @@ CustomeAlert *alert;
     }else{
     
     
-        [self syncColor];
+        [self downloadImages];
     }
   
     
 }
-- (void)syncColor{
-    
-    
-    
-    
-    SynModelClass *synClass = [[self dataArray] objectAtIndex:3];
-    
-    if ([[synClass selectedFlag] boolValue]) {
-        
-        
 
-        [[ApiHandler sharedApiHandler] getColorApiHandlerWithApiCallBlock:^(id data, NSError *error) {
-            
-
-            if (error) {
-                [self errorWhileSynching];
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    alert = [[CustomeAlert alloc] init];
-                    [alert showAlertWithTitle:nil message:@"Error in Syncing." cancelButtonTitle:@"OK" otherButtonTitles:nil withButtonHandler:^(NSInteger buttonIndex) {
-                        
-                    }];
-                    
-                });
-                return ;
-            }else{
-                
-                
-                NSString *successCode = [data objectForKey:@"errorcode"];
-                NSString *message = [data objectForKey:@"message"];
-                if (([successCode isEqualToString:@"200"] || [successCode isEqualToString:@"823"])) {
-                    [self downloadImages];
-                
-                }else{
-                    
-                    [self errorWhileSynching];
-
-                    dispatch_sync(dispatch_get_main_queue(), ^{
-                        alert = [[CustomeAlert alloc] init];
-                        [alert showAlertWithTitle:nil message:message cancelButtonTitle:@"OK" otherButtonTitles:nil withButtonHandler:^(NSInteger buttonIndex) {
-                            
-                        }];
-                        
-                    });
-                    return;
-                }
-                
-            }
-            
-        }];
-    }else{
-    
-        [self downloadImages];
-    }
-    
-   
-    
-}
 - (void)downloadImages{
     
     SynModelClass *synClass = [[self dataArray] objectAtIndex:4];
@@ -546,7 +549,6 @@ CustomeAlert *alert;
     
     
 }
-
 
 - (void)synOrders{
 

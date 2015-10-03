@@ -512,7 +512,7 @@ static CXSSqliteHelper *sqliteHelper = nil;
                                   [[articlesRawmaterial leatherpriority] checkEmptyString],@"leatherpriority",
                                   [[articlesRawmaterial colorid] checkEmptyString],@"colorid",
                                   [[articlesRawmaterial rawmaterialid] checkEmptyString],@"rawmaterialid",
-                                  
+                                  [[AppDataManager sharedAppDatamanager] validateString:[articlesRawmaterial rawmaterialname]],@"rawmaterialname",
                                   nil];
             
             [self insertInto:@"Article_Rawmaterials" ColumnsAndValues:dict];

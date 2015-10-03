@@ -111,15 +111,36 @@ CustomeAlert *alert;
     
     NSInteger order = [[self cartArr] count];
     
+    UITabBarItem *cartTabbarItem = [[[[self tabBarController]tabBar] items] objectAtIndex:3];
+    
     if (order !=0) {
-        [[self tabBarItem] setBadgeValue:[NSString stringWithFormat:@"%i",order]];
+        [cartTabbarItem setBadgeValue:[NSString stringWithFormat:@"%i",order]];
     }else{
-        [[self tabBarItem] setBadgeValue:@""];
+        [cartTabbarItem setBadgeValue:nil];
     }
+    
+    
+    
+    
+    
+    //
+    [self setPaymentTerms];
+    
+    
+    
+    
     
 }
 
+- (void)setPaymentTerms{
 
+    [[self txt_PaymentTerms] setText:[[[AppDataManager sharedAppDatamanager] paymentTerms] paymentTerm]];
+    [[self txt_PaymentTermsRemarks] setText:[[[AppDataManager sharedAppDatamanager] paymentTermRemakrs] paymentTermRemark]];
+    [[self txt_ShippingTerms] setText:[[[AppDataManager sharedAppDatamanager] shippingTerms] shippingTerm]];
+    [[self txt_ModeOfShipping] setText:[[[AppDataManager sharedAppDatamanager] modeofshipping] shippingMode]];
+    [[self txt_ShippingTermsRemarks] setText:[[AppDataManager sharedAppDatamanager] shippingTermsRemarks]];
+
+}
 
 - (NSArray*)fetchAllCartItems{
     NSString *sql = @"select * from TrxTransaction";
@@ -300,7 +321,8 @@ CustomeAlert *alert;
         [dict setObject:([trx.remark length] ? trx.remark : @"") forKey:@"remark"];
         [dict setObject:trx.size forKey:@"size"];
         [dict setObject:trx.soleid forKey:@"soleid"];
-        
+        [dict setObject:[trx.TransactionId stringByAppendingPathExtension:@"jpg"] forKey:@"image_name"];
+
         NSMutableArray *arrRawMaetrial = [self getRawMaterialsArr:trx];
         
         [dict setObject:arrRawMaetrial forKey:@"rawmaterials"];
@@ -400,7 +422,8 @@ CustomeAlert *alert;
     NSMutableURLRequest  *request = [NSMutableURLRequest requestWithURL:url];
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-    
+    [request setTimeoutInterval:180];
+
     NSString *postString = [NSString stringWithFormat:@"userid=%@&sessionid=%@&payload=%@",[[act user] userId],[act sessionId],payloadString];
     NSData *postData = [postString dataUsingEncoding:NSUTF8StringEncoding];
     [request setHTTPBody:postData];
@@ -494,7 +517,7 @@ CustomeAlert *alert;
             
             [request setCachePolicy:NSURLRequestReloadIgnoringCacheData];
             [request setHTTPShouldHandleCookies:NO];
-            [request setTimeoutInterval:360];
+            [request setTimeoutInterval:180];
             [request setHTTPMethod:@"POST"];
             
             NSString *boundary = @"unique-consistent-string";
@@ -506,15 +529,24 @@ CustomeAlert *alert;
             // post body
             NSMutableData *body = [NSMutableData data];
             
+            
             // add params (all params are strings)
-            //    [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-            //    [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=%@\r\n\r\n", @"imageCaption"] dataUsingEncoding:NSUTF8StringEncoding]];
-            //    [body appendData:[[NSString stringWithFormat:@"%@\r\n", @"Some Caption"] dataUsingEncoding:NSUTF8StringEncoding]];
+            
+            [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+            [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n\r\n", @"userid"] dataUsingEncoding:NSUTF8StringEncoding]];
+            [body appendData:[[NSString stringWithFormat:@"%@\r\n", [[[[AppDataManager sharedAppDatamanager] account] user] userId]] dataUsingEncoding:NSUTF8StringEncoding]];
+
+            [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+            [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n\r\n", @"sessionid"] dataUsingEncoding:NSUTF8StringEncoding]];
+            [body appendData:[[NSString stringWithFormat:@"%@\r\n", [[[AppDataManager sharedAppDatamanager] account] sessionId]] dataUsingEncoding:NSUTF8StringEncoding]];
+            
+            
+
             
             // add image data
             if (imageData) {
                 [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-                [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=%@; filename=%@.jpg\r\n", @"product_photo",[trx articleid]] dataUsingEncoding:NSUTF8StringEncoding]];
+                [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=%@; filename=%@.jpg\r\n", @"product_photo",[trx TransactionId]] dataUsingEncoding:NSUTF8StringEncoding]];
                 [body appendData:[@"Content-Type: image/jpeg\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
                 [body appendData:imageData];
                 [body appendData:[[NSString stringWithFormat:@"\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
@@ -548,6 +580,16 @@ CustomeAlert *alert;
         alert = [[CustomeAlert alloc] init];
         [alert showAlertWithTitle:nil message:@"Order placed successfully." cancelButtonTitle:@"OK" otherButtonTitles:nil withButtonHandler:^(NSInteger buttonIndex) {
             [self refreshUI];
+
+            //SET NIL
+            [[AppDataManager sharedAppDatamanager] setPaymentTerms:nil];
+            [[AppDataManager sharedAppDatamanager] setPaymentTermRemakrs:nil];
+            [[AppDataManager sharedAppDatamanager] setShippingTerms:nil];
+            [[AppDataManager sharedAppDatamanager] setModeofshipping:nil];
+            [[AppDataManager sharedAppDatamanager] setShippingTermsRemarks:nil];
+            [[AppDataManager sharedAppDatamanager] setSelectedClient:nil];
+            [[AppDataManager sharedAppDatamanager] setSelectedClient:nil];
+
             
             if ([[self tabBarController] selectedIndex] == 0) {
                 

@@ -69,7 +69,7 @@ static dispatch_once_t onceTokenForOrders;
     
     [[weakSelf localQueue] addOperationWithBlock:^{
         
-        NSString *sqlQuery = @"SELECT * FROM Orders";
+        NSString *sqlQuery = @"SELECT * FROM Orders order by rowid DESC";
         self.arr_ClientList = [NSMutableArray arrayWithArray:[[CXSSqliteHelper sharedSqliteHelper] runQuery:sqlQuery asObject:[Orders class]]];
         self.arr_Common_List = self.arr_ClientList;
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -179,11 +179,46 @@ static dispatch_once_t onceTokenForOrders;
     [[cell lbl_OrderNo] setText:[NSString stringWithFormat:@"Order No : %@",[order orderNo]]];
     [[cell lbl_OrderDate] setText:[NSString stringWithFormat:@"Order Date : %@",[[order orderDate] substringWithRange:NSMakeRange(0, 10)]]];
     [[cell lbl_ClientName] setText:[NSString stringWithFormat:@"Client Name : %@",[order company]]];
+    cell.tag = indexPath.row;
     
-    
-    [cell registerResendOrderCallBlock:^(NSString *orderId) {
+    [cell registerResendOrderCallBlock:^(NSInteger tag) {
        
         //Call Resend PHP
+
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            
+            [self showActivityIndicator:@"Re-Sending Order..."];
+            
+            Orders *order = [[self arr_Common_List] objectAtIndex:tag];
+            
+            [[ApiHandler sharedApiHandler] reSendOrderApiHandlerWithApiCallBlock:^(id data, NSError *error) {
+                
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    
+                    [self hideActivityIndicator];
+                });
+                
+                if (error) {
+                    //Error
+                    
+                }else{
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        
+                        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Virola" message:@"successfully Resent Order." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                        [alertView show];
+                        alertView = nil;
+                    });
+                    
+                }
+                
+                
+                
+            } withOrderId:[order orderID]];
+        });
+
+        
+        
         
     }];
     

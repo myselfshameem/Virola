@@ -221,10 +221,27 @@ CustomeAlert *alert;
 - (IBAction)newDevelopment:(id)sender{
 
     
-    NewDevelopmentCtrl *newDev = [[self storyboard] instantiateViewControllerWithIdentifier:@"NewDevelopmentCtrl"];
-    [[self navigationController] pushViewController:newDev animated:YES];
-    [[AppDataManager sharedAppDatamanager] newTransactionWithArticleId:@"" withNewDevelopment:YES];
-    newDev = nil;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+       
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self showActivityIndicator:@"Loading New Development..."];
+        });
+
+
+        
+        [[AppDataManager sharedAppDatamanager] newTransactionWithArticleId:@"" withNewDevelopment:YES];
+        
+        
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self hideActivityIndicator];
+            NewDevelopmentCtrl *newDev = [[self storyboard] instantiateViewControllerWithIdentifier:@"NewDevelopmentCtrl"];
+            [[self navigationController] pushViewController:newDev animated:YES];
+            newDev = nil;
+        });
+
+        
+    });
+    
 }
 
 - (IBAction)order:(id)sender{
@@ -255,5 +272,16 @@ CustomeAlert *alert;
 
 }
 
+- (void)showActivityIndicator:(NSString*)msg{
+    
+    [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [hud setLabelText:msg];
+    
+    
+}
 
+- (void)hideActivityIndicator{
+    [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
+}
 @end

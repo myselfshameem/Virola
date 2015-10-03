@@ -35,4 +35,9 @@ typedef void(^LoginApiCallBlock)(id data,NSError *error);
 - (void)addClientsApiHandlerWithApiCallBlock:(LoginApiCallBlock)logoutApiCallBlock withClient:(id)client;
 - (void)getPaymentShippingTermsApiHandlerWithApiCallBlock:(LoginApiCallBlock)logoutApiCallBlock;
 - (void)getOrdersApiHandlerWithApiCallBlock:(LoginApiCallBlock)logoutApiCallBlock;
+- (void)reSendOrderApiHandlerWithApiCallBlock:(LoginApiCallBlock)logoutApiCallBlock withOrderId:(NSString*)orderId;
+- (void)changePassword:(LoginApiCallBlock)logoutApiCallBlock withOldPassword:(NSString*)oldpassword andNewPassword:(NSString*)newpassword;
+
+- (NSString*)escapeChar:(NSString*)str;
+
 @end

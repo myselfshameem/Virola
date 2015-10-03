@@ -345,6 +345,62 @@ static ApiHandler *apiHandler;
     
 }
 
+
+- (void)reSendOrderApiHandlerWithApiCallBlock:(LoginApiCallBlock)logoutApiCallBlock withOrderId:(NSString*)orderId{
+    
+    
+    
+    [NSURLConnection sendAsynchronousRequest:[self getURLRequestForReSendOrderWithOrderId:orderId] queue:[self apiHandlerQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+        
+        if (connectionError) {
+            
+            logoutApiCallBlock(nil,connectionError);
+        }else{
+            
+            NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
+            NSInteger statusCode = [httpResponse statusCode];
+            if (statusCode == 200) {
+                logoutApiCallBlock(data,nil);
+            }else
+                logoutApiCallBlock(nil,connectionError);
+
+            
+        }
+        
+        
+    }];
+    
+    
+    
+}
+- (void)changePassword:(LoginApiCallBlock)logoutApiCallBlock withOldPassword:(NSString*)oldpassword andNewPassword:(NSString*)newpassword{
+    
+    
+    
+    [NSURLConnection sendAsynchronousRequest:[self getURLRequestForChangePassword:oldpassword newPassword:newpassword] queue:[self apiHandlerQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+        
+        if (connectionError) {
+            
+            logoutApiCallBlock(nil,connectionError);
+        }else{
+            
+            NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
+            NSInteger statusCode = [httpResponse statusCode];
+            if (statusCode == 200) {
+                logoutApiCallBlock(data,nil);
+            }else
+                logoutApiCallBlock(nil,connectionError);
+            
+            
+        }
+        
+        
+    }];
+    
+    
+    
+}
+
 #pragma mark - NSURLRequest
 
 - (NSURLRequest*)getURLRequestForLoginAPIWith:(NSString*)username andPassword:(NSString*)pwd{
@@ -352,6 +408,8 @@ static ApiHandler *apiHandler;
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",ROOT_API_PATH ,GET_LOG_IN_API]];
     
     NSMutableURLRequest  *request = [NSMutableURLRequest requestWithURL:url];
+    [request setTimeoutInterval:180];
+
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     NSString *postString = [NSString stringWithFormat:@"username=%@&password=%@&device_id=%@",username,pwd,[[UIDevice currentDevice]uniqueDeviceIdentifierWithOutEncription]];
@@ -366,6 +424,8 @@ static ApiHandler *apiHandler;
     
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",ROOT_API_PATH ,GET_LOG_OUT_API]];
     NSMutableURLRequest  *request = [NSMutableURLRequest requestWithURL:url];
+    [request setTimeoutInterval:180];
+
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     AppDataManager *sharedAppDatamanager = [AppDataManager sharedAppDatamanager];
@@ -382,6 +442,8 @@ static ApiHandler *apiHandler;
     
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",ROOT_API_PATH ,GET_ARTICLE_API]];
     NSMutableURLRequest  *request = [NSMutableURLRequest requestWithURL:url];
+    [request setTimeoutInterval:180];
+
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     AppDataManager *sharedAppDatamanager = [AppDataManager sharedAppDatamanager];
@@ -396,6 +458,8 @@ static ApiHandler *apiHandler;
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",ROOT_API_PATH ,GET_RAW_MATERIAL_API]];
     NSMutableURLRequest  *request = [NSMutableURLRequest requestWithURL:url];
     [request setHTTPMethod:@"POST"];
+    [request setTimeoutInterval:180];
+
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     AppDataManager *sharedAppDatamanager = [AppDataManager sharedAppDatamanager];
     NSString *postString = [NSString stringWithFormat:@"userid=%@&sessionid=%@",[[[sharedAppDatamanager account] user] userId],[[sharedAppDatamanager account] sessionId]];
@@ -409,6 +473,8 @@ static ApiHandler *apiHandler;
     
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",ROOT_API_PATH ,GET_COLOR_API]];
     NSMutableURLRequest  *request = [NSMutableURLRequest requestWithURL:url];
+    [request setTimeoutInterval:180];
+
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     AppDataManager *sharedAppDatamanager = [AppDataManager sharedAppDatamanager];
@@ -423,6 +489,8 @@ static ApiHandler *apiHandler;
     
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",ROOT_API_PATH ,GET_CLIENTS_API]];
     NSMutableURLRequest  *request = [NSMutableURLRequest requestWithURL:url];
+    [request setTimeoutInterval:180];
+
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     AppDataManager *sharedAppDatamanager = [AppDataManager sharedAppDatamanager];
@@ -438,6 +506,8 @@ static ApiHandler *apiHandler;
     
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",ROOT_API_PATH ,UPDATE_CLIENTS_API]];
     NSMutableURLRequest  *request = [NSMutableURLRequest requestWithURL:url];
+    [request setTimeoutInterval:180];
+
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     AppDataManager *sharedAppDatamanager = [AppDataManager sharedAppDatamanager];
@@ -471,11 +541,28 @@ static ApiHandler *apiHandler;
     
 }
 
-
+- (NSURLRequest*)getURLRequestForReSendOrderWithOrderId:(NSString*)orderId{
+    
+    
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",ROOT_API_PATH ,RE_RESEND_ORFDER_API]];
+    NSMutableURLRequest  *request = [NSMutableURLRequest requestWithURL:url];
+    [request setTimeoutInterval:180];
+    
+    [request setHTTPMethod:@"POST"];
+    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    AppDataManager *sharedAppDatamanager = [AppDataManager sharedAppDatamanager];
+    
+    NSString *postString = [NSString stringWithFormat:@"userid=%@&sessionid=%@&OrderId=%@",[[[sharedAppDatamanager account] user] userId],[[sharedAppDatamanager account] sessionId],orderId];
+    NSData *postData = [[self escapeChar:postString] dataUsingEncoding:NSUTF8StringEncoding];
+    [request setHTTPBody:postData];
+    return request;
+    
+}
 - (NSURLRequest*)getURLRequestForAddClients:(Clients*)client{
     
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",ROOT_API_PATH ,ADD_CLIENTS_API]];
     NSMutableURLRequest  *request = [NSMutableURLRequest requestWithURL:url];
+    [request setTimeoutInterval:180];
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     AppDataManager *sharedAppDatamanager = [AppDataManager sharedAppDatamanager];
@@ -509,7 +596,18 @@ static ApiHandler *apiHandler;
     
     
     NSString *postString = [NSString stringWithFormat:@"userid=%@&sessionid=%@&payload=%@",[[[sharedAppDatamanager account] user] userId],[[sharedAppDatamanager account] sessionId],aStr];
-    NSData *postData = [postString dataUsingEncoding:NSUTF8StringEncoding];
+    
+    
+    
+    NSString *escapedString = (__bridge_transfer NSString *)CFURLCreateStringByAddingPercentEscapes(
+                                                                                                    NULL,
+                                                                                                    (__bridge_retained CFStringRef)postString,
+                                                                                                    NULL,
+                                                                                                    (CFStringRef)@"!*'();:@&=+$,/?%#[]",
+                                                                                                    kCFStringEncodingUTF8);
+
+    
+    NSData *postData = [escapedString dataUsingEncoding:NSUTF8StringEncoding];
     [request setHTTPBody:postData];
     return request;
     
@@ -518,7 +616,10 @@ static ApiHandler *apiHandler;
 - (NSURLRequest*)getURLRequestForGetPaymentShippingTerms{
     
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",ROOT_API_PATH ,GET_PAYMENT_SHIPPING_TERMS]];
+    
     NSMutableURLRequest  *request = [NSMutableURLRequest requestWithURL:url];
+    [request setTimeoutInterval:180];
+
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     AppDataManager *sharedAppDatamanager = [AppDataManager sharedAppDatamanager];
@@ -532,6 +633,8 @@ static ApiHandler *apiHandler;
     
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",ROOT_API_PATH ,GET_Orders]];
     NSMutableURLRequest  *request = [NSMutableURLRequest requestWithURL:url];
+    [request setTimeoutInterval:180];
+
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     AppDataManager *sharedAppDatamanager = [AppDataManager sharedAppDatamanager];
@@ -540,5 +643,39 @@ static ApiHandler *apiHandler;
     [request setHTTPBody:postData];
     return request;
     
+}
+
+- (NSURLRequest*)getURLRequestForChangePassword:(NSString*)oldPassword newPassword:(NSString*)newPassword{
+    
+    AppDataManager *sharedAppDatamanager = [AppDataManager sharedAppDatamanager];
+    NSString *postString = [NSString stringWithFormat:@"userid=%@&sessionid=%@&oldpassword=%@&newpassword=%@",[[[sharedAppDatamanager account] user] userId],[[sharedAppDatamanager account] sessionId],oldPassword,newPassword];
+    
+
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@?%@",ROOT_API_PATH ,CHNAGE_PASSWORD,postString]];
+    NSMutableURLRequest  *request = [NSMutableURLRequest requestWithURL:url];
+    [request setTimeoutInterval:180];
+    
+    [request setHTTPMethod:@"GET"];
+
+    return request;
+    
+}
+
+#pragma mark-
+
+- (NSString*)escapeChar:(NSString*)str{
+
+
+    
+    
+    NSString *escapedString = (__bridge_transfer NSString *)CFURLCreateStringByAddingPercentEscapes(
+                                                                                                    NULL,
+                                                                                                    (__bridge_retained CFStringRef)str,
+                                                                                                    NULL,
+                                                                                                    (CFStringRef)@"!*'();:@&=+$,/?%#[]",
+                                                                                                    kCFStringEncodingUTF8);
+    
+    return escapedString;
+
 }
 @end

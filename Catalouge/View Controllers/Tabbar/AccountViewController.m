@@ -12,6 +12,7 @@
 #import "MBProgressHUD.h"
 #import "MainTabbarController.h"
 #import "LoginViewController.h"
+#import "ChangePasswordViewController.h"
 #define API_SUCCESS_CODE @"200"
 
 CustomeAlert *alert;
@@ -66,6 +67,8 @@ CustomeAlert *alert;
 
 - (IBAction)changePassword:(id)sender {
     
+    ChangePasswordViewController *password = [[self storyboard] instantiateViewControllerWithIdentifier:@"ChangePasswordViewController"];
+    [[self navigationController] pushViewController:password animated:YES];
     
 }
 

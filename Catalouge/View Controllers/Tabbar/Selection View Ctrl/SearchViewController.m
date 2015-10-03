@@ -142,7 +142,7 @@
                     strPredicate = [NSString stringWithFormat:@"self.name contains[c]'%@'",searchString];
 
                 }else{
-                    strPredicate = [NSString stringWithFormat:@"self.insraw contains[c]'%@'",searchString];
+                    strPredicate = [NSString stringWithFormat:@"self.rawmaterialname contains[c]'%@'",searchString];
 
                 }
                 predicate = [NSPredicate predicateWithFormat:strPredicate];
@@ -335,7 +335,7 @@
 
         }else{
             ArticlesRawmaterials *articlesRawmaterials = [self.arr_Common_List objectAtIndex:indexPath.row];
-            cell.lblClient_Name.text = [articlesRawmaterials insraw];
+            cell.lblClient_Name.text = [articlesRawmaterials rawmaterialname];
 
         }
         

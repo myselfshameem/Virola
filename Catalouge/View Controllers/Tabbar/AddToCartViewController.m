@@ -66,13 +66,7 @@
     
     [[self tbl_RawMatarial] setBackgroundColor:[UIColor whiteColor]];
     
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc]
-                                   initWithTitle: @"Back"
-                                   style:UIBarButtonItemStylePlain
-                                   target:self
-                                   action:@selector(backbtnPressed)];
-    self.navigationItem.backBarButtonItem = backButton;
-    
+    [[self navigationItem] setLeftBarButtonItem:[[AppDataManager sharedAppDatamanager] backBarButtonWithTitle:@"  Back" target:self selector:@selector(backbtnPressed)]];
     
     AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
     if(authStatus == AVAuthorizationStatusAuthorized) {
@@ -100,8 +94,7 @@
 - (void)backbtnPressed{
 
     [[[self navigationController] viewControllers] enumerateObjectsUsingBlock:^(UIViewController   *obj, NSUInteger idx, BOOL *stop) {
-        
-        
+        [[self navigationController] popToRootViewControllerAnimated:YES];
     }];
 }
 - (void)refreshUI{
@@ -619,7 +612,7 @@
             [[(LastSoleTableViewCell*)cell txt_SocksColors] setText:localTxr.socksMaterialNew.colors.colorname];
  
         }else{
-            [[(LastSoleTableViewCell*)cell txt_Socks] setText:localTxr.socksMaterial.insraw];
+            [[(LastSoleTableViewCell*)cell txt_Socks] setText:localTxr.socksMaterial.rawmaterialname];
             [[(LastSoleTableViewCell*)cell txt_SocksColors] setText:localTxr.socksMaterial.colors.colorname];
 
         }
@@ -877,14 +870,13 @@
             switch (tag) {
                     
                 case 1:{
-                    //Last
-                    
+
                     SearchViewController *search = [[self storyboard] instantiateViewControllerWithIdentifier:@"SearchViewController"];
                     search.tag = QTY_SELECTION;
                     search.arr_Common_List = [[AppDataManager sharedAppDatamanager] quantityOption];
                     [search registerOptionSelectionCallback:^(id selectedData) {
                         
-                        [[[AppDataManager sharedAppDatamanager] transaction] setLast:(Lasts*)selectedData];
+                        [[[AppDataManager sharedAppDatamanager] transaction] setQty:selectedData];
                         cell.txt_Qty.text = selectedData;
                         
                     }];
@@ -894,7 +886,7 @@
                 }
                     break;
                 case 2:{
-                    //Sole
+                    //PAIR_SELECTION
                     
                     SearchViewController *search = [[self storyboard] instantiateViewControllerWithIdentifier:@"SearchViewController"];
                     search.tag = PAIR_SELECTION;
@@ -902,7 +894,7 @@
                     search.arr_Common_List = [NSMutableArray arrayWithObjects:@"ODD",@"PAIR", nil];
                     [search registerOptionSelectionCallback:^(id selectedData) {
                         
-                        [[[AppDataManager sharedAppDatamanager] transaction] setSole:(Rawmaterials*)selectedData];
+                        [[[AppDataManager sharedAppDatamanager] transaction] setQty_unit:selectedData];
                         cell.txt_Pair.text = selectedData;
                     }];
                     
@@ -912,7 +904,7 @@
                 }
                     break;
                 case 3:{
-                    //Sole Color
+                    //SIZE_SELECTION
                     
                     SearchViewController *search = [[self storyboard] instantiateViewControllerWithIdentifier:@"SearchViewController"];
                     search.tag = SIZE_SELECTION;
@@ -1012,10 +1004,30 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    Articles *article = [[self arrArticles] objectAtIndex:indexPath.row];
-    [[AppDataManager sharedAppDatamanager] newTransactionWithArticleId:article.articleid withNewDevelopment:NO];
-    [self tapOnRelatedBtn:self.dargButton];
-    [self refreshUI];
+    
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self showActivityIndicator:@"Loading Article..."];
+        });
+        
+        Articles *article = [[self arrArticles] objectAtIndex:indexPath.row];
+        [[AppDataManager sharedAppDatamanager] setTransaction:nil];
+        [[AppDataManager sharedAppDatamanager] newTransactionWithArticleId:article.articleid withNewDevelopment:NO];
+        
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            
+            [self hideActivityIndicator];
+            [self tapOnRelatedBtn:self.dargButton];
+            [self refreshUI];
+        });
+        
+        
+    });
+
+    
+    
     
     
 }
@@ -1024,7 +1036,23 @@
 
 - (void)refreshArticleList:(NSString*)searchString{
     
-    NSString *sqlQuery =@"SELECT * FROM Article_Master";
+   TrxTransaction *localTrx =  [[AppDataManager sharedAppDatamanager] transaction];
+
+    NSString *soleName = @"";
+    if ([localTrx Sole]) {
+        soleName = [[[localTrx Sole] name] length] ? [[localTrx Sole] name] : @"";
+        
+    }
+    
+    NSString *lastName = @"";
+    
+    if ([localTrx last]) {
+        lastName = [[[localTrx last] lastname] length] ? [[localTrx last] lastname] : @"";
+        
+    }
+
+    
+    NSString *sqlQuery = [NSString stringWithFormat:@"SELECT * FROM Article_Master WHERE lastName == '%@' OR soleName = '%@'",lastName,soleName];
     self.arrArticles = [NSMutableArray arrayWithArray:[[CXSSqliteHelper sharedSqliteHelper] runQuery:sqlQuery asObject:[Articles class]]];
     [[self relatedProduct] reloadData];
     

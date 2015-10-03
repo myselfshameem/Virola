@@ -189,6 +189,7 @@
 		0CC547461B0B9270003725F1 /* Cart_Refresh@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CC547441B0B9270003725F1 /* Cart_Refresh@2x.png */; };
 		0CC5474A1B0B9E56003725F1 /* HomeCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CC547481B0B9E56003725F1 /* HomeCollectionViewCell.m */; };
 		0CC5474B1B0B9E56003725F1 /* HomeCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0CC547491B0B9E56003725F1 /* HomeCollectionViewCell.xib */; };
+		0CC7ABDA1BA13C6F006D63A1 /* ChangePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CC7ABD91BA13C6F006D63A1 /* ChangePasswordViewController.m */; };
 		0CC8C2CB1B0A423D00C5228D /* Account_Change_Pwd_BG.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CC8C2C71B0A423D00C5228D /* Account_Change_Pwd_BG.png */; };
 		0CC8C2CC1B0A423D00C5228D /* Account_Change_Pwd_BG@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CC8C2C81B0A423D00C5228D /* Account_Change_Pwd_BG@2x.png */; };
 		0CC8C2CD1B0A423D00C5228D /* Account_Logout_BG.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CC8C2C91B0A423D00C5228D /* Account_Logout_BG.png */; };
@@ -487,6 +488,8 @@
 		0CC547471B0B9E55003725F1 /* HomeCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeCollectionViewCell.h; sourceTree = "<group>"; };
 		0CC547481B0B9E56003725F1 /* HomeCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeCollectionViewCell.m; sourceTree = "<group>"; };
 		0CC547491B0B9E56003725F1 /* HomeCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HomeCollectionViewCell.xib; sourceTree = "<group>"; };
+		0CC7ABD81BA13C6F006D63A1 /* ChangePasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangePasswordViewController.h; sourceTree = "<group>"; };
+		0CC7ABD91BA13C6F006D63A1 /* ChangePasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangePasswordViewController.m; sourceTree = "<group>"; };
 		0CC8C2C71B0A423D00C5228D /* Account_Change_Pwd_BG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Account_Change_Pwd_BG.png; sourceTree = "<group>"; };
 		0CC8C2C81B0A423D00C5228D /* Account_Change_Pwd_BG@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Account_Change_Pwd_BG@2x.png"; sourceTree = "<group>"; };
 		0CC8C2C91B0A423D00C5228D /* Account_Logout_BG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Account_Logout_BG.png; sourceTree = "<group>"; };
@@ -1096,6 +1099,8 @@
 			children = (
 				0CC8C2D01B0A48BE00C5228D /* AccountViewController.h */,
 				0CC8C2D11B0A48BE00C5228D /* AccountViewController.m */,
+				0CC7ABD81BA13C6F006D63A1 /* ChangePasswordViewController.h */,
+				0CC7ABD91BA13C6F006D63A1 /* ChangePasswordViewController.m */,
 			);
 			name = Account;
 			sourceTree = "<group>";
@@ -1475,6 +1480,7 @@
 				0C830D471B262D560085917B /* Colors.m in Sources */,
 				0CBEDF501B71025100EDC08D /* UIImage+Resize.m in Sources */,
 				0C6224891AFFD876004B6C3B /* ArticleSelectionViewController.m in Sources */,
+				0CC7ABDA1BA13C6F006D63A1 /* ChangePasswordViewController.m in Sources */,
 				0CB8AD861B7873B700C586D0 /* UIImage+JTSImageEffects.m in Sources */,
 				0CF2BE061B6BC43E00C3FB17 /* RawMatarialCell.m in Sources */,
 				0C830D421B262D560085917B /* ArticlesRawmaterials.m in Sources */,
@@ -1648,13 +1654,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Pankaj Mathur (5LRM65VA87)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Virola International (H837T6743G)";
 				GCC_PREFIX_HEADER = Catalouge/Catalouge.pch;
 				INFOPLIST_FILE = Catalouge/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "a8f8495c-c309-4197-bd26-8db7d98f382f";
+				PROVISIONING_PROFILE = "f6d1caec-5a93-44a2-8d63-503418b41a65";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1664,13 +1670,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Pankaj Mathur (5LRM65VA87)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Virola International (H837T6743G)";
 				GCC_PREFIX_HEADER = Catalouge/Catalouge.pch;
 				INFOPLIST_FILE = Catalouge/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "a8f8495c-c309-4197-bd26-8db7d98f382f";
+				PROVISIONING_PROFILE = "f6d1caec-5a93-44a2-8d63-503418b41a65";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

@@ -58,6 +58,63 @@
        
         __block TrxTransaction *local = [[AppDataManager sharedAppDatamanager] transaction];
         
+       
+        BOOL isValidForAddToCart = NO;
+        
+        if ([local Sole]) {
+            
+            isValidForAddToCart = YES;
+        }
+        
+        if ([local SoleMaterial]) {
+            
+            isValidForAddToCart = YES;
+        }
+
+        
+        if ([local socksMaterial]) {
+            
+            isValidForAddToCart = YES;
+        }
+
+        
+        if ([local socksMaterialNew]) {
+            
+            isValidForAddToCart = YES;
+        }
+
+        
+        
+        
+        
+        if ([[local rawmaterialsForLeathers] count]){
+        
+            Rawmaterials *raw = [[local rawmaterialsForLeathers] firstObject];
+            if ([[raw rawmaterialid] length]) {
+                isValidForAddToCart = YES;
+            }
+            
+        }
+        
+        if ([[local rawmaterialsForLinings] count]){
+            
+            Rawmaterials *raw = [[local rawmaterialsForLinings] firstObject];
+            if ([[raw rawmaterialid] length]) {
+                isValidForAddToCart = YES;
+            }
+            
+        }
+        
+        
+        
+        if (!isValidForAddToCart) {
+            
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Virola" message:@"Please specify at least 1 Raw material." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            [alert show];
+            alert = nil;
+            return;
+        }
+        
         local.articleid = [local.articleid length] ? local.articleid : @"";
         
         
@@ -65,7 +122,14 @@
         local.size = [local.size length] ? local.size : @"";
         local.qty_unit = [local.qty_unit length] ? local.qty_unit : @"";
         local.remark = [local.remark length] ? local.remark : @"";
+        if (![local last])
+            local.lastid = @"";
+        else
         local.lastid = [local.last.lastid length] ? local.last.lastid : @"";
+
+        if (![local Sole])
+            local.soleid = @"";
+        else
         local.soleid = [local.Sole.rawmaterialid length] ? local.Sole.rawmaterialid : @"";
 
         
@@ -75,6 +139,8 @@
         NSString *sqlQury = [NSString stringWithFormat:@"INSERT INTO TrxTransaction (TransactionId,articleid,qty,qty_unit,size,remark,articlename,ischange,isnew,lastid,soleid) VALUES ('%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@')",local.TransactionId,local.articleid,local.qty,local.qty_unit,local.size,local.remark,[[AppDataManager sharedAppDatamanager] validateString:[[local article] articlename]],[[AppDataManager sharedAppDatamanager] validateString:isChange],[[AppDataManager sharedAppDatamanager] validateString:[local isnew]],[[AppDataManager sharedAppDatamanager] validateString:[[local last] lastid]],[[AppDataManager sharedAppDatamanager] validateString:[[local Sole] rawmaterialid]]];
         
         [[CXSSqliteHelper sharedSqliteHelper] runQuery:sqlQury asObject:[TrxTransaction class]];
+        
+        
         
         
         if ([[[[AppDataManager sharedAppDatamanager] transaction] isnew] isEqualToString:@"1"]) {
@@ -106,7 +172,8 @@
         }
         
         
-        
+        [[AppDataManager sharedAppDatamanager] insertIntoTrx_Rawmaterials:[local Sole] withTrx:local];
+
         [[AppDataManager sharedAppDatamanager] insertIntoTrx_Rawmaterials:[local SoleMaterial] withTrx:local];
         
         [[local rawmaterialsForLeathers] enumerateObjectsUsingBlock:^(Rawmaterials *obj, NSUInteger idx, BOOL *stop) {

@@ -29,7 +29,7 @@
 
     
     if (self.resendOrderBlock) {
-        self.resendOrderBlock(self.lbl_OrderNo.text);
+        self.resendOrderBlock(self.tag);
     }
 
 }

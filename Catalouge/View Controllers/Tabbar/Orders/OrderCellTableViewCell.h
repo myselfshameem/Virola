@@ -13,9 +13,9 @@
 @property(nonatomic,weak) IBOutlet UILabel *lbl_ClientName;
 @property(nonatomic,weak) IBOutlet UILabel *lbl_OrderDate;
 @property(nonatomic,weak) IBOutlet UIButton *btn_ResendEmail;
+@property(nonatomic,assign) NSInteger tag;
 
-
-typedef void (^ResendOrderBlock)(NSString *orderId);
+typedef void (^ResendOrderBlock)(NSInteger tag);
 @property(nonatomic,strong) ResendOrderBlock resendOrderBlock;
 
 

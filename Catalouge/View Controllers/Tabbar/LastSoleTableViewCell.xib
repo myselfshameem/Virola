@@ -350,7 +350,7 @@
                 <outlet property="vw_SoleColor" destination="07l-cj-ZBH" id="D1t-gw-8uE"/>
                 <outlet property="vw_SoleMatarial" destination="Hbh-UM-eKA" id="bLo-rK-K6T"/>
             </connections>
-            <point key="canvasLocation" x="415" y="213.5"/>
+            <point key="canvasLocation" x="415" y="180.5"/>
         </tableViewCell>
         <tableViewCell contentMode="scaleToFill" restorationIdentifier="RawMatarialCellIdentifier" selectionStyle="none" indentationWidth="10" reuseIdentifier="LastSoleCell" rowHeight="145" id="kGf-vc-3IN" customClass="LastSoleTableViewCell">
             <rect key="frame" x="0.0" y="0.0" width="640" height="210"/>

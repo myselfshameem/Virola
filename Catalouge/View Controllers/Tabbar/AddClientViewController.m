@@ -105,7 +105,11 @@ CustomeAlert *alert;
 
 
 #pragma mark -
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField{
 
+      [textField setTintColor:[UIColor blueColor]];
+    return YES;
+}       // return NO to disallow editing.
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{
     
     [textField resignFirstResponder];
@@ -127,11 +131,11 @@ CustomeAlert *alert;
             self.client.company = textField.text;
             break;
         case 2:
-             self.client.email = textField.text;
+             self.client.contactperson = textField.text;
 
             break;
         case 3:
-             self.client.contactperson = textField.text;
+             self.client.email = textField.text;
 
             break;
         case 6:
@@ -160,7 +164,9 @@ CustomeAlert *alert;
 
 #pragma mark - UITextView delegates
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView{
-    
+   
+    [textView setTintColor:[UIColor blueColor]];
+
     textView.inputAccessoryView = self.toolbar;
     return YES;
 }

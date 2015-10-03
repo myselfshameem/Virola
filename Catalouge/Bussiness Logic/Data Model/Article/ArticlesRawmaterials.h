@@ -16,6 +16,7 @@
 @property (nonatomic, strong) NSString *leatherpriority;
 @property (nonatomic, strong) NSString *colorid;
 @property (nonatomic, strong) NSString *rawmaterialid;
+@property (nonatomic, strong) NSString *rawmaterialname;
 @property (nonatomic, strong) Colors   *colors;
 + (ArticlesRawmaterials *)modelObjectWithDictionary:(NSDictionary *)dict;
 - (instancetype)initWithDictionary:(NSDictionary *)dict;

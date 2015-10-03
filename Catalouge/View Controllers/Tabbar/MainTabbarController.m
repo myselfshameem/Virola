@@ -42,7 +42,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
     [self configureTabbar];
     self.delegate = self;
     
@@ -111,6 +110,25 @@
 
     }
     
+    [self updateBadgeNumber];
+}
+
+
+- (void)updateBadgeNumber{
+
+    NSString *sql = @"select * from TrxTransaction";
+    NSArray *arr = [[CXSSqliteHelper sharedSqliteHelper] runQuery:sql asObject:[TrxTransaction class]];
+    NSInteger order = [arr count];
+    
+    UITabBarItem *cartTabbarItem = [[[self tabBar] items] objectAtIndex:3];
+    
+    if (order !=0) {
+        [cartTabbarItem setBadgeValue:[NSString stringWithFormat:@"%i",order]];
+    }else{
+        [cartTabbarItem setBadgeValue:nil];
+    }
+
+
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

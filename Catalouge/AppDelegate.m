@@ -47,42 +47,12 @@
     [tabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor colorWithRed:59/255 green:89/255 blue:152/255 alpha:1],NSForegroundColorAttributeName, nil] forState:UIControlStateSelected];
 
     
-    //
-    [self checkImageUpload];
-    
+
+
     
     return YES;
 }
 
-//- (void)checkImageUpload{
-//    
-//    
-//    
-//    NSData *imageData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"back_btn" ofType:@"png"]];
-//    NSString *boundary = @"---------------------------14737809831466499882746641449";
-//    
-//    
-//    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-//    [request setURL:[NSURL URLWithString:@"http://localhost/xampp/Messages.php"]];
-//    [request setHTTPMethod:@"POST"];
-//
-//    NSMutableData *body = [NSMutableData data];
-//    [body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-//    [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"fileToUpload\"; filename=\"test.png\"\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
-//    [body appendData:[[NSString stringWithFormat:@"Content-Type: image/jpeg\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
-//    [body appendData:imageData];
-//    [body appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-//    [request setHTTPBody:body];
-//    
-//        NSURLResponse *response ;
-//        NSError *error;
-//        NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-//        NSString * responseString = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
-//        NSLog(@"\n☀☀☀☀<response>: %@\n☀☀☀☀\n",responseString);
-//
-//    
-//    
-//}
 
 - (void)checkImageUpload{
     
@@ -158,6 +128,8 @@
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+    
+    
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {

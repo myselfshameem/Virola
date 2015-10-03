@@ -286,12 +286,28 @@ static dispatch_once_t onceToken;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
 
-    Articles *article = [[self arr_Common_List] objectAtIndex:indexPath.row];
+    
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self showActivityIndicator:@"Loading Article..."];
+        });
 
-    AddToCartViewController *addToCartViewController = [[self storyboard] instantiateViewControllerWithIdentifier:@"AddToCartViewController"];
-    [[AppDataManager sharedAppDatamanager] setTransaction:nil];
-    [[AppDataManager sharedAppDatamanager] newTransactionWithArticleId:article.articleid withNewDevelopment:NO];
-    [self.navigationController pushViewController:addToCartViewController animated:YES];
+        Articles *article = [[self arr_Common_List] objectAtIndex:indexPath.row];
+        [[AppDataManager sharedAppDatamanager] setTransaction:nil];
+        [[AppDataManager sharedAppDatamanager] newTransactionWithArticleId:article.articleid withNewDevelopment:NO];
+
+        dispatch_sync(dispatch_get_main_queue(), ^{
+
+            [self hideActivityIndicator];
+            AddToCartViewController *addToCartViewController = [[self storyboard] instantiateViewControllerWithIdentifier:@"AddToCartViewController"];
+            [self.navigationController pushViewController:addToCartViewController animated:YES];
+        });
+
+    
+    });
+    
     
     
 }

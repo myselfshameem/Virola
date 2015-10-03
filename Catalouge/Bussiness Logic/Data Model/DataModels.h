@@ -55,9 +55,9 @@ typedef enum : NSUInteger {
 #import "Orders.h"
 #import "GetOrdersApiResponse.h"
 
-#define ROOT_API_PATH                           @"http://demo.dselva.info/virolainternational/api/mobile/v2"
+//#define ROOT_API_PATH                           @"http://demo.dselva.info/virolainternational/api/mobile/v2"
 
-//#define ROOT_API_PATH                           @"http://103.237.173.71/virolainternational/api/mobile/v2/"
+#define ROOT_API_PATH                           @"http://103.237.173.71/virolainternational/api/mobile/v2"
 #define GET_LOG_IN_API                          @"login.php"
 #define GET_LOG_OUT_API                         @"logout.php"
 #define GET_RAW_MATERIAL_API                    @"getrawmaterials.php"
@@ -69,7 +69,9 @@ typedef enum : NSUInteger {
 #define ADD_ORDER_API                           @"addorder.php"
 #define GET_PAYMENT_SHIPPING_TERMS              @"getotherdetails.php"
 #define GET_Orders                              @"getOrder.php"
-#define UPLOAD_Image_API                            @"uploadPhoto.php"
+#define UPLOAD_Image_API                        @"uploadPhoto.php"
+#define RE_RESEND_ORFDER_API                    @"sendemail.php"
+#define CHNAGE_PASSWORD                         @"changepassword.php"
 
 
 #define isIPad()                ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)

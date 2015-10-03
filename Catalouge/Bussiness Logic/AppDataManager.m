@@ -308,14 +308,18 @@ static AppDataManager *appdataManager;
     
     if (rawmaterial) {
         
-        
+
         rawmaterial.rawmaterialid = [rawmaterial.rawmaterialid length] ? rawmaterial.rawmaterialid : @"";
         rawmaterial.rawmaterialgroupid = [rawmaterial.rawmaterialgroupid length] ? rawmaterial.rawmaterialgroupid : @"";
-        rawmaterial.insraw = [rawmaterial.insraw length] ? rawmaterial.insraw : @"";
-        rawmaterial.colorid = [rawmaterial.colorid length] ? rawmaterial.colorid : @"";
 
-        NSString *sqlQury = [NSString stringWithFormat:@"INSERT INTO Trx_Rawmaterials (TransactionId,rawmaterialid,rawmaterialgroupid,leatherpriority,colorid,insraw) VALUES ('%@','%@','%@','%@','%@','%@')",local.TransactionId,rawmaterial.rawmaterialid,rawmaterial.rawmaterialgroupid,@"0",rawmaterial.colorid,rawmaterial.insraw];
-        [[CXSSqliteHelper sharedSqliteHelper] runQuery:sqlQury asObject:[Trx_Rawmaterials class]];
+        if ([rawmaterial.rawmaterialid length] && [rawmaterial.rawmaterialgroupid length]) {
+            rawmaterial.insraw = [rawmaterial.insraw length] ? rawmaterial.insraw : @"";
+            rawmaterial.colorid = [rawmaterial.colorid length] ? rawmaterial.colorid : @"";
+            
+            NSString *sqlQury = [NSString stringWithFormat:@"INSERT INTO Trx_Rawmaterials (TransactionId,rawmaterialid,rawmaterialgroupid,leatherpriority,colorid,insraw) VALUES ('%@','%@','%@','%@','%@','%@')",local.TransactionId,rawmaterial.rawmaterialid,rawmaterial.rawmaterialgroupid,@"0",rawmaterial.colorid,rawmaterial.insraw];
+            [[CXSSqliteHelper sharedSqliteHelper] runQuery:sqlQury asObject:[Trx_Rawmaterials class]];
+
+        }
     }
     
     
@@ -359,41 +363,140 @@ static AppDataManager *appdataManager;
     if ([[[self transaction] isnew] isEqualToString:@"1"])
         isChange =  @"0";
     else{
+       
         //TODO::
         NSString *sqlQuery = [NSString stringWithFormat:@"SELECT * FROM Article_Master WHERE articleid = '%@'",self.transaction.articleid];
         Articles *article = [[[CXSSqliteHelper sharedSqliteHelper] runQuery:sqlQuery asObject:[Articles class]] firstObject];
     
-        if (![[article soleid] isEqualToString:[[[self transaction] Sole] rawmaterialid]]) {
+        if ([[article soleid] length]) {
             
-            isChange =  @"1";
-            return isChange;
+            if (([[article soleid] isEqualToString:[[[self transaction] Sole] rawmaterialid]])) {
+                
+                
+            }else{
+            
+                isChange =  @"1";
+                return isChange;
 
+            }
+            
+
+            
+        }else{
+        
+            if ([[self transaction] Sole] != nil) {
+                
+                isChange =  @"1";
+                return isChange;
+
+            }
+            
         }
         
         
-        if (![[article lastid] isEqualToString:[[[self transaction] last] lastid]]) {
+        
+        if ([[article lastid] length]) {
             
-            isChange =  @"1";
-            return isChange;
+            if (([[article lastid] isEqualToString:[[[self transaction] last] lastid]])) {
+                
+                
+            }else{
+                
+                isChange =  @"1";
+                return isChange;
+                
+            }
+            
+            
+            
+        }else{
+            
+            if ([[self transaction] last] != nil) {
+                
+                isChange =  @"1";
+                return isChange;
+                
+            }
+            
         }
+        
+        
+        
 
-
+        //SOLE MATERIAL
         NSString *qy = [NSString stringWithFormat:@"select rawmaterialid from Article_Rawmaterials  where  rawmaterialgroupid = '23' AND articleid = '%@'",[[self transaction] articleid]];
         NSArray *soleMaterialArt = [[CXSSqliteHelper sharedSqliteHelper] runQuery:qy asObject:[ArticlesRawmaterials class]];
         
-        Rawmaterials *sloeMaerialOriginal = [soleMaterialArt lastObject];
-        
-        if (![[sloeMaerialOriginal rawmaterialid] isEqualToString:[[[self transaction] SoleMaterial] rawmaterialid]]) {
+        if ([soleMaterialArt count]) {
             
-            isChange =  @"1";
-            return isChange;
+            Rawmaterials *sloeMaerialOriginal = [soleMaterialArt lastObject];
+
+            if (([[sloeMaerialOriginal rawmaterialid] isEqualToString:[[[self transaction] SoleMaterial] rawmaterialid]])) {
+                
+                
+            }else{
+                
+                isChange =  @"1";
+                return isChange;
+                
+            }
+
+            
+            
+        }else{
+        
+            if ([[self transaction] SoleMaterial] != nil) {
+                
+                isChange =  @"1";
+                return isChange;
+                
+            }
 
         }
+        
+        
+        
+        //SOCKS MATERIAL
+
+        NSString *socksQuery = [NSString stringWithFormat:@"SELECT * FROM Article_Rawmaterials WHERE articleid = '%@' AND rawmaterialgroupid = '12' AND (insraw = 'SOCK FULL' OR insraw = 'SOCK HALF' OR insraw = 'SOCK FULL - PRINTED LEATHER HOLE OPTIC' OR insraw = 'SOCK HALF - PRINTED LEATHER HOLE OPTIC' OR insraw = 'INSOLE COVER')",_transaction.articleid];
+        NSArray *SocksArr = [[CXSSqliteHelper sharedSqliteHelper] runQuery:socksQuery asObject:[ArticlesRawmaterials class]];
+        
+//        NSString *query = [NSString stringWithFormat:@"SELECT * FROM Article_Rawmaterials WHERE articleid = '%@' AND rawmaterialgroupid = '12' AND (insraw != 'SOCK FULL' AND insraw != 'SOCK HALF' AND insraw != 'SOCK FULL - PRINTED LEATHER HOLE OPTIC' AND insraw != 'SOCK HALF - PRINTED LEATHER HOLE OPTIC' AND insraw != 'INSOLE COVER')",articleId];
+
+        if ([SocksArr count]) {
+            
+            ArticlesRawmaterials *sloeMaerialOriginal = [SocksArr lastObject];
+            
+            if (([[sloeMaerialOriginal insraw] isEqualToString:[[[self transaction] socksMaterial] insraw]])) {
+                
+                
+            }else{
+                
+                isChange =  @"1";
+                return isChange;
+                
+            }
+            
+            
+            
+        }else{
+            
+            if ([[self transaction] socksMaterial] != nil) {
+                
+                isChange =  @"1";
+                return isChange;
+                
+            }
+            
+        }
+        
+        
+        
         
 
         NSString *liningIds = [[[[self transaction] rawmaterialsForLinings] valueForKey:@"rawmaterialid"] componentsJoinedByString:@"-"];
         
-        NSArray *liningArt = [[CXSSqliteHelper sharedSqliteHelper] runQuery:@"select rawmaterialid from Article_Rawmaterials  where  rawmaterialgroupid = '12'" asObject:[ArticlesRawmaterials class]];
+        NSArray *liningArt = [[CXSSqliteHelper sharedSqliteHelper] runQuery:@"select rawmaterialid from Article_Rawmaterials  where  rawmaterialgroupid = '12' AND (insraw != 'SOCK FULL' AND insraw != 'SOCK HALF' AND insraw != 'SOCK FULL - PRINTED LEATHER HOLE OPTIC' AND insraw != 'SOCK HALF - PRINTED LEATHER HOLE OPTIC' AND insraw != 'INSOLE COVER')" asObject:[ArticlesRawmaterials class]];
         NSString *liningIdOriginal = [[liningArt valueForKey:@"rawmaterialid"] componentsJoinedByString:@"-"];
 
         if (![liningIds isEqualToString:liningIdOriginal]) {
