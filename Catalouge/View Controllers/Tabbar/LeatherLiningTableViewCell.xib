@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="15A284" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
@@ -27,6 +27,7 @@
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Leather 1" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iYB-dV-VKF">
                                 <rect key="frame" x="8" y="0.0" width="304" height="23"/>
+                                <animations/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="23" id="zLL-5P-BGu"/>
                                 </constraints>
@@ -39,6 +40,7 @@
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Dropdown.png" translatesAutoresizingMaskIntoConstraints="NO" id="wAc-o6-DoX">
                                         <rect key="frame" x="5" y="10" width="21" height="20"/>
+                                        <animations/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="7c7-7N-pJO"/>
                                             <constraint firstAttribute="width" constant="21" id="Tfj-x1-q07"/>
@@ -46,11 +48,13 @@
                                     </imageView>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Y2j-2u-Noi">
                                         <rect key="frame" x="31" y="0.0" width="273" height="40"/>
+                                        <animations/>
                                         <fontDescription key="fontDescription" name="MyriadPro-Regular" family="Myriad Pro" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eLL-ac-bbL">
                                         <rect key="frame" x="0.0" y="0.0" width="304" height="40"/>
+                                        <animations/>
                                         <state key="normal">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -59,6 +63,7 @@
                                         </connections>
                                     </button>
                                 </subviews>
+                                <animations/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="eLL-ac-bbL" firstAttribute="top" secondItem="bZb-NR-0QF" secondAttribute="top" id="Qjv-Oy-Qxp"/>
@@ -75,6 +80,7 @@
                                 </constraints>
                             </view>
                         </subviews>
+                        <animations/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="bZb-NR-0QF" secondAttribute="bottom" id="7ap-u8-Pqr"/>
@@ -91,6 +97,7 @@
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Leather 1" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ero-EQ-9mw">
                                 <rect key="frame" x="8" y="0.0" width="304" height="23"/>
+                                <animations/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="23" id="bjt-lb-CkB"/>
                                 </constraints>
@@ -103,6 +110,7 @@
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="zkl-5D-nOP">
                                         <rect key="frame" x="31" y="0.0" width="273" height="40"/>
+                                        <animations/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="qZ0-9c-Nc8"/>
                                         </constraints>
@@ -111,6 +119,7 @@
                                     </textField>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Dropdown.png" translatesAutoresizingMaskIntoConstraints="NO" id="SBP-Zk-XRQ">
                                         <rect key="frame" x="5" y="10" width="21" height="20"/>
+                                        <animations/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="21" id="HvQ-ZB-Cyd"/>
                                             <constraint firstAttribute="height" constant="20" id="tDg-NH-aNS"/>
@@ -118,6 +127,7 @@
                                     </imageView>
                                     <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="21O-xt-DLa">
                                         <rect key="frame" x="0.0" y="0.0" width="304" height="40"/>
+                                        <animations/>
                                         <state key="normal">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -126,6 +136,7 @@
                                         </connections>
                                     </button>
                                 </subviews>
+                                <animations/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="zkl-5D-nOP" firstAttribute="leading" secondItem="SBP-Zk-XRQ" secondAttribute="trailing" constant="5" id="9Tv-YZ-1Hu"/>
@@ -141,6 +152,7 @@
                                 </constraints>
                             </view>
                         </subviews>
+                        <animations/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="Uub-xo-gG4" secondAttribute="trailing" constant="8" id="2HH-Vl-Rkd"/>
@@ -153,6 +165,7 @@
                         </constraints>
                     </view>
                 </subviews>
+                <animations/>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 <constraints>
                     <constraint firstItem="pP6-kH-ihd" firstAttribute="top" secondItem="x2I-tU-wpe" secondAttribute="bottom" id="3fM-9j-ZG4"/>
@@ -163,6 +176,7 @@
                     <constraint firstItem="pP6-kH-ihd" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="rrS-Z4-2cF"/>
                 </constraints>
             </tableViewCellContentView>
+            <animations/>
             <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
             <connections>
                 <outlet property="lbl_Title1" destination="iYB-dV-VKF" id="uNk-Gf-Daf"/>

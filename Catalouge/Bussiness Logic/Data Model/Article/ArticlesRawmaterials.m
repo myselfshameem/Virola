@@ -109,7 +109,16 @@ NSString *const kArticlesRawmaterialsName = @"rawmaterialname";
     
     if (!_colors) {
         if ([[self colorid] length]) {
-            NSArray *arr = [[CXSSqliteHelper sharedSqliteHelper] runQuery:[NSString stringWithFormat:@"SELECT * FROM Colors WHERE colorid = '%@'",[self colorid]] asObject:[Colors class]];
+            
+            NSArray *arr = nil;
+
+            if ([[self colorid] isEqualToString:@"0"]) {
+                
+                arr = [[CXSSqliteHelper sharedSqliteHelper] runQuery:[NSString stringWithFormat:@"select * from Colors where colorid = (select colorid from Rawmaterial_Master where rawmaterialid = '%@' limit 1) limit 1",[self rawmaterialid]] asObject:[Colors class]];
+            }else{
+                arr = [[CXSSqliteHelper sharedSqliteHelper] runQuery:[NSString stringWithFormat:@"SELECT * FROM Colors WHERE colorid = '%@' limit 1",[self colorid]] asObject:[Colors class]];
+                
+            }
             [arr count] ? _colors = [arr firstObject] : nil;
         }
     }

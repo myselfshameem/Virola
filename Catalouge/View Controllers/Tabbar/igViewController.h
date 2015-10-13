@@ -12,6 +12,7 @@
 typedef void(^BarcodeScanned)(NSString *barcodeString);
 
 @property(nonatomic,strong) BarcodeScanned barcodeScanned;
+@property (assign, nonatomic) BAR_CODE_TYPE barcodeTYpe;
 
 - (void)barcodeScanned:(BarcodeScanned)barcodeScanned;
 @end

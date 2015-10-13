@@ -62,7 +62,7 @@ CustomeAlert *alert;
     
     [self.txtField_barcode setPlaceholder:@"ENTER BARCODE"];
     [self.txtField_QRCode setPlaceholder:@"ENTER QR CODE"];
-    [self.txtField_ArticleId setPlaceholder:@"ENTER ARTICLE NUMBER"];
+    [self.txtField_ArticleId setPlaceholder:@"ENTER ARTICLE NAME"];
     [self.txtField_Last setPlaceholder:@"ENTER LAST"];
     [self.txtField_Sole setPlaceholder:@"ENTER SOLE"];
 
@@ -104,11 +104,13 @@ CustomeAlert *alert;
 - (IBAction)barcodeScanner:(id)sender{
 
 
-    
+    BAR_CODE_TYPE barcodeType = _2DBAR_CODE;
     if ([sender tag] == 1) {
         self.common_TxtField = [self txtField_barcode];
+        barcodeType = _2DBAR_CODE;
     }else if ([sender tag] == 2){
         self.common_TxtField = [self txtField_QRCode];
+        barcodeType = QR_CODE;
     }else if ([sender tag] == 3){
         self.common_TxtField = [self txtField_Last];
     }else if ([sender tag] == 4){
@@ -116,6 +118,7 @@ CustomeAlert *alert;
     }
 
     __block igViewController *IgViewController = [[self storyboard] instantiateViewControllerWithIdentifier:@"igViewController"];
+    IgViewController.barcodeTYpe = barcodeType;
     [[self navigationController] pushViewController:IgViewController animated:YES];
 
     

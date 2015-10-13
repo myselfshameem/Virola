@@ -16,5 +16,5 @@
 @property (strong, nonatomic) NSMutableArray *arr_Common_List;
 @property (strong, nonatomic) NSString *strSearchString;
 @property (strong, nonatomic) NSString *searchCriteria;
-
+@property (strong, nonatomic) NSString *parentScreenName;
 @end

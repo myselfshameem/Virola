@@ -52,7 +52,7 @@ static AppDataManager *appdataManager;
     _transaction.articleid = articleId;
 
     
-    _transaction.size = _transaction.article.sizefrom;
+    _transaction.size = _transaction.article ? _transaction.article.sizefrom : @"40";
     _transaction.qty = @"1";
     _transaction.qty_unit = @"PAIR";
     _transaction.remark = @"";
@@ -64,18 +64,33 @@ static AppDataManager *appdataManager;
    
     
     //Socks Material
-    if (!flag) {
+    if ([articleId length]) {
         
         NSString *socksQuery = [NSString stringWithFormat:@"SELECT * FROM Article_Rawmaterials WHERE articleid = '%@' AND rawmaterialgroupid = '12' AND (insraw = 'SOCK FULL' OR insraw = 'SOCK HALF' OR insraw = 'SOCK FULL - PRINTED LEATHER HOLE OPTIC' OR insraw = 'SOCK HALF - PRINTED LEATHER HOLE OPTIC' OR insraw = 'INSOLE COVER')",_transaction.articleid];
         NSArray *SocksArr = [[CXSSqliteHelper sharedSqliteHelper] runQuery:socksQuery asObject:[ArticlesRawmaterials class]];
+        if (flag) {
+            
+            if ([SocksArr count]) {
+                
+                ArticlesRawmaterials *articlesRawmaterial = [SocksArr firstObject];
+                NSString *RawmaterialQuery = [NSString stringWithFormat:@"SELECT * FROM Rawmaterial_Master WHERE rawmaterialid = '%@'",articlesRawmaterial.rawmaterialid];
+                NSArray *RawmaterialArr = [[CXSSqliteHelper sharedSqliteHelper] runQuery:RawmaterialQuery asObject:[Rawmaterials class]];
 
-        [SocksArr count] ? _transaction.socksMaterial = [SocksArr firstObject] : @"";
+                [RawmaterialArr count] ? _transaction.socksMaterialNew = [RawmaterialArr firstObject] : nil;
+
+            }
+            
+        }else{
+            [SocksArr count] ? _transaction.socksMaterial = [SocksArr firstObject] : nil;
+            
+        }
+        
     }
     
     
     
     //Leather
-    if (flag) {
+    if ([articleId length] == 0) {
         [[_transaction rawmaterialsForLeathers] addObject:[[Rawmaterials alloc] init]];
     }else{
         NSString *query = [NSString stringWithFormat:@"SELECT * FROM Article_Rawmaterials WHERE articleid = '%@' AND rawmaterialgroupid = '1'",articleId];
@@ -97,7 +112,7 @@ static AppDataManager *appdataManager;
     
     //Leather Lining
 
-    if (flag) {
+    if ([articleId length] == 0) {
         [[_transaction rawmaterialsForLinings] addObject:[[Rawmaterials alloc] init]];
     }else{
     
@@ -154,7 +169,7 @@ static AppDataManager *appdataManager;
     
     
     
-    if (!flag && [_transaction.article.images count]) {
+    if ([articleId length] && [_transaction.article.images count]) {
         //Copy and move Product Image to NewDev Dir
         Article_Image *image = [_transaction.article.images firstObject];
         NSString *oldFilePath = [[self imageDirPath] stringByAppendingPathComponent:[[image imagePath] lastPathComponent]];

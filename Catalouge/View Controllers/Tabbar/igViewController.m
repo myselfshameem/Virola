@@ -100,7 +100,41 @@ CustomeAlert *alert;
             
             [_session stopRunning];
 
-            _label.text = detectionString;
+            //_label.text = detectionString;
+            
+            if (self.barcodeTYpe == QR_CODE) {
+                
+                NSArray *arr = [detectionString componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+                if ([arr count]) {
+                    
+                    NSArray *newArr = [[arr lastObject] componentsSeparatedByString:@":"];
+                    if ([newArr count]) {
+                        detectionString = [[newArr lastObject] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                        _label.text = detectionString;
+                    }else{
+                    
+                        alert = [[CustomeAlert alloc] init];
+                        [alert showAlertWithTitle:nil message:[NSString stringWithFormat:@"Article not found for Scanned Barcode : [%@]",detectionString] cancelButtonTitle:@"OK" otherButtonTitles:nil withButtonHandler:^(NSInteger buttonIndex) {
+                            
+                            [[self navigationController] popViewControllerAnimated:YES];
+                            
+                        }];
+
+                        
+                    }
+
+                }else{
+                
+                    alert = [[CustomeAlert alloc] init];
+                    [alert showAlertWithTitle:nil message:[NSString stringWithFormat:@"Article not found for Scanned Barcode : [%@]",detectionString] cancelButtonTitle:@"OK" otherButtonTitles:nil withButtonHandler:^(NSInteger buttonIndex) {
+                        
+                        [[self navigationController] popViewControllerAnimated:YES];
+                        
+                    }];
+
+                    
+                }
+            }
             
             NSArray *arr = [[CXSSqliteHelper sharedSqliteHelper]runQuery:[NSString stringWithFormat:@"SELECT * FROM Article_Master WHERE articleid='%@'",detectionString] asObject:[Articles class]];
             

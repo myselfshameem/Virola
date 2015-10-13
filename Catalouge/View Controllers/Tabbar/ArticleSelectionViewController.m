@@ -68,7 +68,7 @@ static dispatch_once_t onceToken;
         
         if ([[self searchCriteria] isEqualToString:@"ARTICLE"]) {
             
-            sqlQuery = [NSString stringWithFormat:@"SELECT * FROM Article_Master WHERE (articleid like '%%%@%%') order by articleid",self.strSearchString];
+            sqlQuery = [NSString stringWithFormat:@"SELECT * FROM Article_Master WHERE (articlename like '%%%@%%') order by articleid",self.strSearchString];
             
         }else if ([[self searchCriteria] isEqualToString:@"LAST"]){
         
@@ -124,11 +124,11 @@ static dispatch_once_t onceToken;
             
         }else if ([[self searchCriteria] isEqualToString:@"LAST"]){
             
-            strPredicate = [NSString stringWithFormat:@"articleid contains[c]'%@' OR soleName contains[c]'%@'",searchString,searchString];
+            strPredicate = [NSString stringWithFormat:@"articlename contains[c]'%@' OR soleName contains[c]'%@'",searchString,searchString];
             
         }else if ([[self searchCriteria] isEqualToString:@"SOLE"]){
             
-            strPredicate = [NSString stringWithFormat:@"articleid contains[c]'%@' OR lastName contains[c]'%@'",searchString,searchString];
+            strPredicate = [NSString stringWithFormat:@"articlename contains[c]'%@' OR lastName contains[c]'%@'",searchString,searchString];
         }
         
         predicate = [NSPredicate predicateWithFormat:strPredicate];
@@ -287,26 +287,57 @@ static dispatch_once_t onceToken;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
 
     
+     ArticleSelectionViewController __weak *weakRef = self;
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    if ([self.parentScreenName isEqualToString:@"NEW_DEVELOPMENT"]) {
         
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            [self showActivityIndicator:@"Loading Article..."];
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                [weakRef showActivityIndicator:@"Loading Article..."];
+            });
+            
+            Articles *article = [[weakRef arr_Common_List] objectAtIndex:indexPath.row];
+
+            [[AppDataManager sharedAppDatamanager] setTransaction:nil];
+            [[AppDataManager sharedAppDatamanager] newTransactionWithArticleId:article.articleid withNewDevelopment:YES];
+            
+            
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                [weakRef hideActivityIndicator];
+                [[weakRef navigationController] popViewControllerAnimated:YES];
+            });
+            
+            
         });
 
-        Articles *article = [[self arr_Common_List] objectAtIndex:indexPath.row];
-        [[AppDataManager sharedAppDatamanager] setTransaction:nil];
-        [[AppDataManager sharedAppDatamanager] newTransactionWithArticleId:article.articleid withNewDevelopment:NO];
-
-        dispatch_sync(dispatch_get_main_queue(), ^{
-
-            [self hideActivityIndicator];
-            AddToCartViewController *addToCartViewController = [[self storyboard] instantiateViewControllerWithIdentifier:@"AddToCartViewController"];
-            [self.navigationController pushViewController:addToCartViewController animated:YES];
-        });
-
+        
+        
+    }else{
     
-    });
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                [weakRef showActivityIndicator:@"Loading Article..."];
+            });
+            
+            Articles *article = [[weakRef arr_Common_List] objectAtIndex:indexPath.row];
+            [[AppDataManager sharedAppDatamanager] setTransaction:nil];
+            [[AppDataManager sharedAppDatamanager] newTransactionWithArticleId:article.articleid withNewDevelopment:NO];
+            
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                
+                [weakRef hideActivityIndicator];
+                AddToCartViewController *addToCartViewController = [[weakRef storyboard] instantiateViewControllerWithIdentifier:@"AddToCartViewController"];
+                [weakRef.navigationController pushViewController:addToCartViewController animated:YES];
+            });
+            
+            
+        });
+        
+    }
+   
     
     
     

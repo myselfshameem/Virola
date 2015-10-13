@@ -566,6 +566,12 @@ CustomeAlert *alert;
 
             NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
             NSString * responseString = [[NSString alloc]initWithData:responseData encoding:NSUTF8StringEncoding];
+           
+            NSInteger statusCode = [(NSHTTPURLResponse*)response statusCode];
+            if (statusCode == 200) {
+                //Delete Image
+                [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+            }
             NSLog(@"\n☀☀☀☀<response>: %@\n☀☀☀☀\n",responseString);
             
         }

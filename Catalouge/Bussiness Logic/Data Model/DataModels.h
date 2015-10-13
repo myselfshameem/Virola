@@ -12,6 +12,11 @@ typedef enum : NSUInteger {
     TransactionTypeArticle = 1,
 } TransactionType;
 
+typedef enum : NSUInteger {
+    QR_CODE = 0,
+    _2DBAR_CODE = 1,
+} BAR_CODE_TYPE;
+
 
 #import "ShippingTerms.h"
 #import "PaymentTermRemarks.h"

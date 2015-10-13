@@ -26,6 +26,9 @@
 
 #import "JTSImageInfo.h"
 #import "JTSImageViewController.h"
+#import "ArticleSelectionViewController.h"
+#import "ArticleMasterViewController.h"
+
 #define TRY_AN_ANIMATED_GIF 0
 
 
@@ -93,9 +96,31 @@
 }
 - (void)backbtnPressed{
 
+    __block BOOL  isArticleSelectionViewControllerPresent = NO;
+    
     [[[self navigationController] viewControllers] enumerateObjectsUsingBlock:^(UIViewController   *obj, NSUInteger idx, BOOL *stop) {
-        [[self navigationController] popToRootViewControllerAnimated:YES];
+
+        if ([obj isKindOfClass:[ArticleSelectionViewController class]]) {
+            isArticleSelectionViewControllerPresent = YES;
+            [[self navigationController] popToViewController:obj animated:YES];
+            *stop = YES;
+        }
+        
     }];
+    
+    if (!isArticleSelectionViewControllerPresent) {
+        
+        [[[self navigationController] viewControllers] enumerateObjectsUsingBlock:^(UIViewController   *obj, NSUInteger idx, BOOL *stop) {
+            if ([obj isKindOfClass:[ArticleMasterViewController class]]) {
+                [[self navigationController] popToViewController:obj animated:YES];
+                *stop = YES;
+            }
+            
+        }];
+
+
+    }
+    
 }
 - (void)refreshUI{
     
@@ -316,7 +341,7 @@
         
     }else if(tableView == [self tblLining]){
         
-        NSInteger count = [[localTrx rawmaterialsForLinings] count];
+        NSInteger count = [[localTrx rawmaterialsForLinings] count]+1;
         return count;
         
     }
@@ -332,7 +357,7 @@
     
     TrxTransaction *localTrx = [[AppDataManager sharedAppDatamanager] transaction];
     
-    NSInteger liningCount = [[localTrx rawmaterialsForLinings] count];
+    NSInteger liningCount = [[localTrx rawmaterialsForLinings] count]+1;
     NSInteger leatherCount = [[localTrx rawmaterialsForLeathers] count];
     NSInteger totalCount = 0;
     if (liningCount == 0 && leatherCount == 0) {
@@ -355,7 +380,7 @@
     if (tableView == [self tbl_RawMatarial]) {
         
         if (indexPath.row == 0) {
-            return 210;
+            return 145;
         }else if (indexPath.row == 1){
             return [self calculateHeightOfRow];
         }else if (indexPath.row == 2){
@@ -479,77 +504,186 @@
             [cell initilizeCell];
         }
         
-        Rawmaterials *rawMaterial = [[[[AppDataManager sharedAppDatamanager] transaction] rawmaterialsForLinings] objectAtIndex:indexPath.row];
-        cell.lbl_Title1.text = [NSString stringWithFormat:@"Lining %i",indexPath.row+1];
-        cell.lbl_Title2.text = [NSString stringWithFormat:@"Lining %i Color",indexPath.row+1];
-        cell.txt_1.placeholder = [NSString stringWithFormat:@"Lining %i",indexPath.row+1];
-        cell.txt_2.placeholder = [NSString stringWithFormat:@"Lining %i Color",indexPath.row+1];
-        cell.txt_1.text = rawMaterial.name;
-        cell.txt_2.text = rawMaterial.colors.colorname;
-        cell.rawmaterials = rawMaterial;
-        cell.indexOfCell = indexPath.row;
-        [cell callbackForDropdown:^(LeatherLiningTableViewCell *__weak cell , NSInteger tag, NSInteger indexOfCell) {
+        
+        if ((indexPath.row) == [[[[AppDataManager sharedAppDatamanager] transaction] rawmaterialsForLinings] count]) {
             
             
+            ArticlesRawmaterials *articlesRawmaterials = [[[AppDataManager sharedAppDatamanager] transaction] socksMaterial];
             
-            __block TrxTransaction *local = [[AppDataManager sharedAppDatamanager] transaction];
-            Rawmaterials *rawMaterial = [[local rawmaterialsForLinings] objectAtIndex:indexOfCell];
+            cell.lbl_Title1.text = @"Socks";
+            cell.lbl_Title2.text = @"Socks Color";
+            cell.txt_1.placeholder = @"Socks";
+            cell.txt_2.placeholder = @"Socks Color";
+            cell.txt_1.text = articlesRawmaterials.insraw;
+            cell.txt_2.text = articlesRawmaterials.colors.colorname;
+            cell.rawmaterials = articlesRawmaterials;
+            cell.indexOfCell = indexPath.row;
             
-            
-            SearchViewController *search = [[self storyboard] instantiateViewControllerWithIdentifier:@"SearchViewController"];
-            
-            if (tag == 1) {
-                
-                [search registerOptionSelectionCallback:^(id selectedData) {
-                    
-                    [[local rawmaterialsForLinings] replaceObjectAtIndex:indexOfCell withObject:selectedData];
-                    
-                    cell.txt_1.text = [(Rawmaterials*)selectedData name];
-                    cell.txt_2.text = [[(Rawmaterials*)selectedData colors] colorname];
-                    
-                }];
+            [cell callbackForDropdown:^(LeatherLiningTableViewCell *__weak cell , NSInteger tag, NSInteger indexOfCell) {
                 
                 
-                
-                [self showActivityIndicator:@"Fetching Linings..."];
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                if (tag == 1) {
                     
-                    search.tag = LEATHER_SELECTION;
-                    search.arr_Common_List = [[[CXSSqliteHelper sharedSqliteHelper] runQuery:@"SELECT * FROM Rawmaterial_Master WHERE rawmaterialgroupid = '12' GROUP BY name" asObject:[Rawmaterials class]] mutableCopy];
-
-                    dispatch_async(dispatch_get_main_queue(), ^{
+                    //SOCK_SELECTION
+                    [self showActivityIndicator:@"Fetching Socks..."];
+                    
+                    SearchViewController *search = [[self storyboard] instantiateViewControllerWithIdentifier:@"SearchViewController"];
+                    
+                    [search registerOptionSelectionCallback:^(id selectedData) {
                         
-                        [self hideActivityIndicator];
-                        [[self navigationController] pushViewController:search animated:YES];
+                        [[[AppDataManager sharedAppDatamanager] transaction] setSocksMaterial:selectedData];
+                        cell.txt_1.text = [(ArticlesRawmaterials*)selectedData insraw];
                         
+                        //TODO::
+                        cell.txt_2.text = [[(ArticlesRawmaterials*)selectedData colors] colorname];
                         
+                    }];
+                    
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                        
+                        search.tag = SOCK_SELECTION;
+                        
+                        NSString *sqlQuery = [NSString stringWithFormat:@"SELECT distinct * FROM Article_Rawmaterials WHERE (articleid = '%@' AND rawmaterialgroupid = '12' AND (insraw = 'SOCK FULL' OR insraw = 'SOCK HALF' OR insraw = 'SOCK FULL - PRINTED LEATHER HOLE OPTIC' OR insraw = 'SOCK HALF - PRINTED LEATHER HOLE OPTIC' OR insraw = 'INSOLE COVER'))",[[[AppDataManager sharedAppDatamanager] transaction] articleid]];
+                        search.arr_Common_List = [[[CXSSqliteHelper sharedSqliteHelper] runQuery:sqlQuery asObject:[ArticlesRawmaterials class]] mutableCopy];
+                        
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            
+                            [self hideActivityIndicator];
+                            [[self navigationController] pushViewController:search animated:YES];
+                            
+                            
+                        });
                     });
-                });
-
-                
-                
-                
-            }else{
-                search.tag = LEATHER_COLOR_SELECTION;
-                
-                NSString *query = [NSString stringWithFormat:@"SELECT * FROM Rawmaterial_Master WHERE rawmaterialgroupid = '12' and name = '%@' ",[rawMaterial name]];
-                search.arr_Common_List = [[[CXSSqliteHelper sharedSqliteHelper] runQuery:query asObject:[Rawmaterials class]] mutableCopy];
-                [search registerOptionSelectionCallback:^(id selectedData) {
                     
-                    [[local rawmaterialsForLinings] replaceObjectAtIndex:indexOfCell withObject:selectedData];
-                    cell.txt_2.text = [[(Rawmaterials*)selectedData colors] colorname];
                     
-                }];
-                [[self navigationController] pushViewController:search animated:YES];
+                }else{
+                    
+                    
+                    if (![[[AppDataManager sharedAppDatamanager] transaction] socksMaterial]) {
+                        
+                        return ;
+                    }
+                    
+                    
+                    
+                    //SOCK_COLOR_SELECTION
+                    [self showActivityIndicator:@"Fetching Socks Colors..."];
+                    
+                    SearchViewController *search = [[self storyboard] instantiateViewControllerWithIdentifier:@"SearchViewController"];
+                    
+                    [search registerOptionSelectionCallback:^(id selectedData) {
+                        
+                        [[[AppDataManager sharedAppDatamanager] transaction] setSocksMaterial:selectedData];
+                        cell.txt_1.text = [(ArticlesRawmaterials*)selectedData insraw];
+                        cell.txt_2.text = [[(ArticlesRawmaterials*)selectedData colors] colorname];
+                        
+                    }];
+                    
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                        
+                        search.tag = SOCK_COLOR_SELECTION;
+                        
+                        //TODO::
+                        ArticlesRawmaterials *sockMaterials = [[[AppDataManager sharedAppDatamanager] transaction] socksMaterial];
+                        
+                        NSString *colorQuery = [NSString stringWithFormat:@"SELECT DISTINCT * FROM Article_Rawmaterials WHERE (articleid = '%@' AND rawmaterialid = '%@' AND insraw = '%@')",[[[AppDataManager sharedAppDatamanager] transaction] articleid],[sockMaterials rawmaterialid],[sockMaterials insraw]];
+                        search.arr_Common_List = [[[CXSSqliteHelper sharedSqliteHelper] runQuery:colorQuery asObject:[ArticlesRawmaterials class]] mutableCopy];
+                        
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            
+                            [self hideActivityIndicator];
+                            [[self navigationController] pushViewController:search animated:YES];
+                            
+                            
+                        });
+                    });
+                    
+                    
+                }
+                
+            }];
+            
+        }else{
+        
+            Rawmaterials *rawMaterial = [[[[AppDataManager sharedAppDatamanager] transaction] rawmaterialsForLinings] objectAtIndex:indexPath.row];
+            cell.lbl_Title1.text = [NSString stringWithFormat:@"Lining %i",indexPath.row+1];
+            cell.lbl_Title2.text = [NSString stringWithFormat:@"Lining %i Color",indexPath.row+1];
+            cell.txt_1.placeholder = [NSString stringWithFormat:@"Lining %i",indexPath.row+1];
+            cell.txt_2.placeholder = [NSString stringWithFormat:@"Lining %i Color",indexPath.row+1];
+            cell.txt_1.text = rawMaterial.name;
+            cell.txt_2.text = rawMaterial.colors.colorname;
+            cell.rawmaterials = rawMaterial;
+            cell.indexOfCell = indexPath.row;
+            [cell callbackForDropdown:^(LeatherLiningTableViewCell *__weak cell , NSInteger tag, NSInteger indexOfCell) {
+                
+                
+                
+                __block TrxTransaction *local = [[AppDataManager sharedAppDatamanager] transaction];
+                Rawmaterials *rawMaterial = [[local rawmaterialsForLinings] objectAtIndex:indexOfCell];
+                
+                
+                SearchViewController *search = [[self storyboard] instantiateViewControllerWithIdentifier:@"SearchViewController"];
+                
+                if (tag == 1) {
+                    
+                    [search registerOptionSelectionCallback:^(id selectedData) {
+                        
+                        [[local rawmaterialsForLinings] replaceObjectAtIndex:indexOfCell withObject:selectedData];
+                        
+                        cell.txt_1.text = [(Rawmaterials*)selectedData name];
+                        cell.txt_2.text = [[(Rawmaterials*)selectedData colors] colorname];
+                        
+                    }];
+                    
+                    
+                    
+                    [self showActivityIndicator:@"Fetching Linings..."];
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                        
+                        search.tag = LEATHER_SELECTION;
+                        search.arr_Common_List = [[[CXSSqliteHelper sharedSqliteHelper] runQuery:@"SELECT * FROM Rawmaterial_Master WHERE rawmaterialgroupid = '12' GROUP BY name" asObject:[Rawmaterials class]] mutableCopy];
+                        
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            
+                            [self hideActivityIndicator];
+                            [[self navigationController] pushViewController:search animated:YES];
+                            
+                            
+                        });
+                    });
+                    
+                    
+                    
+                    
+                }else{
+                    search.tag = LEATHER_COLOR_SELECTION;
+                    
+                    NSString *query = [NSString stringWithFormat:@"SELECT * FROM Rawmaterial_Master WHERE rawmaterialgroupid = '12' and name = '%@' ",[rawMaterial name]];
+                    search.arr_Common_List = [[[CXSSqliteHelper sharedSqliteHelper] runQuery:query asObject:[Rawmaterials class]] mutableCopy];
+                    [search registerOptionSelectionCallback:^(id selectedData) {
+                        
+                        [[local rawmaterialsForLinings] replaceObjectAtIndex:indexOfCell withObject:selectedData];
+                        cell.txt_2.text = [[(Rawmaterials*)selectedData colors] colorname];
+                        
+                    }];
+                    [[self navigationController] pushViewController:search animated:YES];
+                    
+                }
+                
+                
+                
+                
+                
+                
+            }];
+            
 
-            }
             
-            
-            
-            
-            
-            
-        }];
+        }
+        
+        
+        
+        
         
         return cell;
     }else{
@@ -597,7 +731,7 @@
         cell = [tableView dequeueReusableCellWithIdentifier:@"LastSoleCell"];
         
         if (!cell) {
-            cell = [[[NSBundle mainBundle] loadNibNamed:@"LastSoleTableViewCell" owner:self options:nil] objectAtIndex:1];
+            cell = [[[NSBundle mainBundle] loadNibNamed:@"LastSoleTableViewCell" owner:self options:nil] objectAtIndex:0];
             [cell initilizeCell];
         }
         
@@ -767,7 +901,8 @@
                         
                         search.tag = SOCK_SELECTION;
                         
-                        search.arr_Common_List = [[[CXSSqliteHelper sharedSqliteHelper] runQuery:@"SELECT distinct * FROM Article_Rawmaterials WHERE (rawmaterialgroupid = '12' AND (insraw = 'SOCK FULL' OR insraw = 'SOCK HALF' OR insraw = 'SOCK FULL - PRINTED LEATHER HOLE OPTIC' OR insraw = 'SOCK HALF - PRINTED LEATHER HOLE OPTIC' OR insraw = 'INSOLE COVER'))" asObject:[ArticlesRawmaterials class]] mutableCopy];
+                        NSString *sqlQuery = [NSString stringWithFormat:@"SELECT distinct * FROM Article_Rawmaterials WHERE (articleid = '%@' AND rawmaterialgroupid = '12' AND (insraw = 'SOCK FULL' OR insraw = 'SOCK HALF' OR insraw = 'SOCK FULL - PRINTED LEATHER HOLE OPTIC' OR insraw = 'SOCK HALF - PRINTED LEATHER HOLE OPTIC' OR insraw = 'INSOLE COVER'))",[localTxr articleid]];
+                        search.arr_Common_List = [[[CXSSqliteHelper sharedSqliteHelper] runQuery:sqlQuery asObject:[ArticlesRawmaterials class]] mutableCopy];
                         
                         dispatch_async(dispatch_get_main_queue(), ^{
                             

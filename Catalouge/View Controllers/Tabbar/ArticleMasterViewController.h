@@ -16,6 +16,7 @@
 @property (strong, nonatomic) IBOutlet UITextField *txtField_Sole;
 
 @property (assign, nonatomic) UITextField *common_TxtField;
+
 - (IBAction)barcodeScanner:(id)sender;
 - (IBAction)browseArticle:(id)sender;
 @end
