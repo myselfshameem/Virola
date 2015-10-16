@@ -311,7 +311,7 @@ CustomeAlert *alert;
     [[self cartArr] enumerateObjectsUsingBlock:^(TrxTransaction *trx, NSUInteger idx, BOOL *stop) {
         
         NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-        [dict setObject:trx.articleid forKey:@"articleid"];
+        [dict setObject:[trx.articleid length] == 0 ? trx.TransactionId : trx.articleid forKey:@"articleid"];
         [dict setObject:trx.articlename forKey:@"articlename"];
         [dict setObject:trx.ischange forKey:@"ischange"];
         [dict setObject:trx.isnew forKey:@"isnew"];
@@ -449,7 +449,7 @@ CustomeAlert *alert;
             
             NSError *jsonError = nil;
             id responsedData = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&jsonError];
-            
+            NSLog(@"LOG = %@",[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
             if ([[responsedData objectForKey:@"errorcode"] isEqualToString:@"200"]) {
                 
                 //Upload Article Images

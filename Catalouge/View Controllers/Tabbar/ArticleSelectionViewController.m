@@ -307,6 +307,7 @@ static dispatch_once_t onceToken;
             dispatch_sync(dispatch_get_main_queue(), ^{
                 [weakRef hideActivityIndicator];
                 [[weakRef navigationController] popViewControllerAnimated:YES];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadArticle" object:nil];
             });
             
             

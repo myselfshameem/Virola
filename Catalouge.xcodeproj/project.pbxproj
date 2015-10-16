@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0C033BBE1BCD016C00098C32 /* SocksCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C033BBC1BCD016C00098C32 /* SocksCell.m */; };
+		0C033BBF1BCD016C00098C32 /* SocksCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0C033BBD1BCD016C00098C32 /* SocksCell.xib */; };
 		0C08161A1B87B06A00728448 /* OrderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C0816191B87B06A00728448 /* OrderViewController.m */; };
 		0C08161E1B87B42F00728448 /* OrderCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C08161C1B87B42F00728448 /* OrderCellTableViewCell.m */; };
 		0C08161F1B87B42F00728448 /* OrderCellTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0C08161D1B87B42F00728448 /* OrderCellTableViewCell.xib */; };
@@ -238,6 +240,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0C033BBB1BCD016C00098C32 /* SocksCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SocksCell.h; path = "View Controllers/SocksCell.h"; sourceTree = "<group>"; };
+		0C033BBC1BCD016C00098C32 /* SocksCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SocksCell.m; path = "View Controllers/SocksCell.m"; sourceTree = "<group>"; };
+		0C033BBD1BCD016C00098C32 /* SocksCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SocksCell.xib; path = "View Controllers/SocksCell.xib"; sourceTree = "<group>"; };
 		0C0816181B87B06A00728448 /* OrderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderViewController.h; sourceTree = "<group>"; };
 		0C0816191B87B06A00728448 /* OrderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderViewController.m; sourceTree = "<group>"; };
 		0C08161B1B87B42F00728448 /* OrderCellTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderCellTableViewCell.h; sourceTree = "<group>"; };
@@ -1167,6 +1172,9 @@
 				0CD65BE91ADC1E5E0053672E /* ViewController.m */,
 				0CD3F7AF1B10AED000800F66 /* MyCustomeButton.h */,
 				0CD3F7B01B10AED000800F66 /* MyCustomeButton.m */,
+				0C033BBB1BCD016C00098C32 /* SocksCell.h */,
+				0C033BBC1BCD016C00098C32 /* SocksCell.m */,
+				0C033BBD1BCD016C00098C32 /* SocksCell.xib */,
 				0C1AB5D41B6A542D00AA7463 /* Device Id */,
 				0C830D081B262D560085917B /* Bussiness Logic */,
 				0C6224221AFF149E004B6C3B /* View Controllers */,
@@ -1410,6 +1418,7 @@
 				0CC8C2CB1B0A423D00C5228D /* Account_Change_Pwd_BG.png in Resources */,
 				0C251AA41B2845F60096D15A /* PickerAccessoryView.xib in Resources */,
 				0C6224741AFF5043004B6C3B /* Client_BarCode.png in Resources */,
+				0C033BBF1BCD016C00098C32 /* SocksCell.xib in Resources */,
 				0C6224501AFF36BF004B6C3B /* AddClientTableViewCell.xib in Resources */,
 				0C6224641AFF421B004B6C3B /* Login_Button_BG.png in Resources */,
 				0CD3F7671B1055F500800F66 /* Common_Selection_Icon@2x.png in Resources */,
@@ -1492,6 +1501,7 @@
 				0CB8AD851B7873B700C586D0 /* JTSAnimatedGIFUtility.m in Sources */,
 				0CC8C2DF1B0A66D100C5228D /* CXTableView.m in Sources */,
 				0C830D3C1B262D560085917B /* CustomeAlert.m in Sources */,
+				0C033BBE1BCD016C00098C32 /* SocksCell.m in Sources */,
 				0C2988081B6FA8B8008AD5DC /* ClientsApiResponse.m in Sources */,
 				0CB8AD841B7873B700C586D0 /* JTSSimpleImageDownloader.m in Sources */,
 				0CD3F7B11B10AED000800F66 /* MyCustomeButton.m in Sources */,

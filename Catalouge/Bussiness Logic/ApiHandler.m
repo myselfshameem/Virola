@@ -560,11 +560,8 @@ static ApiHandler *apiHandler;
 }
 - (NSURLRequest*)getURLRequestForAddClients:(Clients*)client{
     
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",ROOT_API_PATH ,ADD_CLIENTS_API]];
-    NSMutableURLRequest  *request = [NSMutableURLRequest requestWithURL:url];
-    [request setTimeoutInterval:180];
-    [request setHTTPMethod:@"POST"];
-    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    
+    
     AppDataManager *sharedAppDatamanager = [AppDataManager sharedAppDatamanager];
     
     
@@ -581,7 +578,7 @@ static ApiHandler *apiHandler;
     
     
     NSDictionary *mainDict = [NSDictionary dictionaryWithObjectsAndKeys:dict,@"client" ,nil];
-
+    
     NSError *error;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:mainDict
                                                        options:NSJSONWritingPrettyPrinted
@@ -593,22 +590,30 @@ static ApiHandler *apiHandler;
     //
     
     
-    
-    
-    NSString *postString = [NSString stringWithFormat:@"userid=%@&sessionid=%@&payload=%@",[[[sharedAppDatamanager account] user] userId],[[sharedAppDatamanager account] sessionId],aStr];
-    
-    
-    
     NSString *escapedString = (__bridge_transfer NSString *)CFURLCreateStringByAddingPercentEscapes(
                                                                                                     NULL,
-                                                                                                    (__bridge_retained CFStringRef)postString,
+                                                                                                    (__bridge_retained CFStringRef)aStr,
                                                                                                     NULL,
                                                                                                     (CFStringRef)@"!*'();:@&=+$,/?%#[]",
                                                                                                     kCFStringEncodingUTF8);
 
     
-    NSData *postData = [escapedString dataUsingEncoding:NSUTF8StringEncoding];
-    [request setHTTPBody:postData];
+    NSString *postString = [NSString stringWithFormat:@"userid=%@&sessionid=%@&payload=%@",[[[sharedAppDatamanager account] user] userId],[[sharedAppDatamanager account] sessionId],escapedString];
+    
+    
+    
+
+    
+    
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@?%@",ROOT_API_PATH ,ADD_CLIENTS_API,postString]];
+    NSMutableURLRequest  *request = [NSMutableURLRequest requestWithURL:url];
+    [request setTimeoutInterval:180];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+
+    
+//    NSData *postData = [escapedString dataUsingEncoding:NSUTF8StringEncoding];
+//    [request setHTTPBody:postData];
     return request;
     
 }
