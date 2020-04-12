@@ -13,6 +13,8 @@
     BOOL            _priorInsetSaved;
     BOOL            _keyboardVisible;
     CGRect          _keyboardRect;
+    
+    
 }
 
 - (void)adjustOffsetToIdealIfNeeded;
